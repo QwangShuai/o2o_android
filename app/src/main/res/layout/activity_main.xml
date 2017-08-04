@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="activity.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_main_set"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" />
+
+    <View style="@style/v_split" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y35"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_main_first_page"
+            style="@style/rl_main">
+
+            <LinearLayout style="@style/ll_main">
+
+                <ImageView
+                    android:id="@+id/iv_main_first_page"
+                    style="@style/iv_main"
+                    android:src="@mipmap/first_page_choosed" />
+
+                <TextView
+                    android:id="@+id/tv_main_first_page"
+                    style="@style/tv_main"
+                    android:text="首页"
+                    android:textColor="@color/tv_main_choosed" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_main_worker_manage"
+            style="@style/rl_main">
+
+            <LinearLayout style="@style/ll_main">
+
+                <ImageView
+                    android:id="@+id/iv_main_worker_manage"
+                    style="@style/iv_main"
+                    android:src="@mipmap/work_manage_default" />
+
+                <TextView
+                    android:id="@+id/tv_main_worker_manage"
+                    style="@style/tv_main"
+                    android:text="工作管理"
+                    android:textColor="@color/tv_main_default" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_main_discount"
+            style="@style/rl_main">
+
+            <LinearLayout style="@style/ll_main">
+
+                <ImageView
+                    android:id="@+id/iv_main_discount"
+                    style="@style/iv_main"
+                    android:src="@mipmap/discount_default" />
+
+                <TextView
+                    android:id="@+id/tv_main_discount"
+                    style="@style/tv_main"
+                    android:text="优惠"
+                    android:textColor="@color/tv_main_default" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_main_mine"
+            style="@style/rl_main">
+
+            <LinearLayout style="@style/ll_main">
+
+                <ImageView
+                    android:id="@+id/iv_main_mine"
+                    style="@style/iv_main"
+                    android:src="@mipmap/mine_default" />
+
+                <TextView
+                    android:id="@+id/tv_main_mine"
+                    style="@style/tv_main"
+                    android:text="我的"
+                    android:textColor="@color/tv_main_default" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

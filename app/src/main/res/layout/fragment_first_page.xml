@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <RelativeLayout style="@style/rl_top_bar">
+
+        <RelativeLayout
+            android:id="@+id/rl_first_page_city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_press_or_not"
+            android:clickable="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="哈尔滨"
+                    android:textColor="@color/tv_main_default"
+                    android:textSize="@dimen/x15" />
+
+                <ImageView
+                    android:layout_width="@dimen/x10"
+                    android:layout_height="@dimen/x10"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/arrow_b" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/tv_top_title"
+            android:text="钢建众工" />
+
+        <RelativeLayout
+            android:id="@+id/rl_first_page_msg"
+            style="@style/rl_return"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                style="@style/iv_return"
+                android:src="@mipmap/message" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <View style="@style/v_split" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_first_page_find_workder"
+                style="@style/iv_first_page"
+                android:src="@mipmap/find_worker" />
+
+            <ImageView
+                android:id="@+id/iv_first_page_find_job"
+                style="@style/iv_first_page"
+                android:src="@mipmap/find_job" />
+
+            <ImageView
+                android:id="@+id/iv_first_page_send_job"
+                style="@style/iv_first_page"
+                android:src="@mipmap/send_job" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

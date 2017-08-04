@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <!--首页底部按钮文字颜色-->
+    <color name="tv_main_default">#2681FC</color>
+    <color name="tv_main_choosed">#FF3E50</color>
+    <!--主题背景颜色-->
+    <color name="background">#C4CED3</color>
+    <!--边线颜色-->
+    <color name="side">#A0A0A0</color>
+    <!--按压颜色-->
+    <color name="press">#E5E5E5</color>
+    <!--红色-->
+    <color name="red">#FF3E50</color>
+    <!--自定义进度对话框北京颜色-->
+    <color name="dialog_cprogress_background">#3C3F41</color>
+    <!--自定义ListView头布局文字颜色-->
+    <color name="tv_head_clistview">#00B3CA</color>
+</resources>
