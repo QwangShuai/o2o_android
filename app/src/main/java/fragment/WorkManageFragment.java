@@ -13,8 +13,9 @@ import com.gjzg.R;
 
 import activity.EmployerManageActivity;
 import activity.PersonManageActivity;
+import activity.RechargeActivity;
+import activity.SendJobActivity;
 import activity.WorkerManageActivity;
-import utils.Utils;
 
 /**
  * 创建日期：2017/7/28 on 13:52
@@ -61,10 +62,12 @@ public class WorkManageFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_work_manage_prepaid:
-                Utils.toast(getActivity(), "充值");
+                Intent rechargeIntent = new Intent(getActivity(), RechargeActivity.class);
+                startActivity(rechargeIntent);
                 break;
             case R.id.rl_work_manage_send_job:
-                Utils.toast(getActivity(), "发布工作");
+                Intent sendJobIntent = new Intent(getActivity(), SendJobActivity.class);
+                startActivity(sendJobIntent);
                 break;
             case R.id.rl_work_manage_worker:
                 Intent workerManageIntent = new Intent(getActivity(), WorkerManageActivity.class);

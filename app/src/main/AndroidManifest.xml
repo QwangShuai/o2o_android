@@ -41,7 +41,12 @@
         <activity android:name="activity.PersonManageActivity" />
         <activity android:name="activity.JobActivity" />
         <activity android:name="activity.SettingActivity" />
-        <activity android:name="activity.ServiceClauseActivity"></activity>
+        <activity android:name="activity.ServiceClauseActivity" />
+        <activity android:name="activity.LoginActivity" />
+        <activity
+            android:name="activity.RechargeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name="activity.SendJobActivity"></activity>
     </application>
 
 </manifest>

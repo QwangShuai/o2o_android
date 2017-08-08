@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import activity.LoginActivity;
 import activity.ServiceClauseActivity;
 import activity.SettingActivity;
 import utils.Utils;
@@ -119,10 +120,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 Utils.toast(getActivity(), "客服");
                 break;
             case R.id.tv_mine_login:
-                loginTv.setVisibility(View.INVISIBLE);
-                headShotIv.setImageResource(R.mipmap.redbag);
-                userNameTv.setVisibility(View.VISIBLE);
-                sexIv.setVisibility(View.VISIBLE);
+//                loginTv.setVisibility(View.INVISIBLE);
+//                headShotIv.setImageResource(R.mipmap.redbag);
+//                userNameTv.setVisibility(View.VISIBLE);
+//                sexIv.setVisibility(View.VISIBLE);
+                Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(loginIntent);
                 break;
         }
     }

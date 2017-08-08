@@ -14,6 +14,10 @@
     <color name="press">#E5E5E5</color>
     <!--红色-->
     <color name="red">#FF3E50</color>
+    <!--黄色-->
+    <color name="yellow">#FFC822</color>
+    <!--蓝色深-->
+    <color name="blue_d">#2681FC</color>
     <!--自定义进度对话框北京颜色-->
     <color name="dialog_cprogress_background">#3C3F41</color>
     <!--自定义ListView头布局文字颜色-->
