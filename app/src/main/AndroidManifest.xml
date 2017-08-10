@@ -42,11 +42,19 @@
         <activity android:name="activity.JobActivity" />
         <activity android:name="activity.SettingActivity" />
         <activity android:name="activity.ServiceClauseActivity" />
-        <activity android:name="activity.LoginActivity" />
+        <activity
+            android:name="activity.LoginActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name="activity.RechargeActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name="activity.SendJobActivity"></activity>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name="activity.SendJobActivity" />
+        <activity android:name="activity.CollectActivity" />
+        <activity android:name="activity.EvaluateActivity" />
+        <activity android:name="activity.WalletActivity" />
+        <activity android:name="activity.DetailActivity" />
+        <activity android:name="activity.InviteActivity" />
+        <activity android:name="activity.WithDrawActivity" />
     </application>
 
 </manifest>

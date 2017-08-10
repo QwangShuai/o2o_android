@@ -24,8 +24,6 @@
 
     </RelativeLayout>
 
-    <View style="@style/v_split" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/y225">
@@ -58,12 +56,12 @@
             android:orientation="horizontal">
 
             <view.CImageView
-                android:layout_width="@dimen/y37"
-                android:layout_height="@dimen/y37"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/y10"
                 android:scaleType="fitXY"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/person_face_default" />
 
             <LinearLayout
                 android:layout_width="0dp"

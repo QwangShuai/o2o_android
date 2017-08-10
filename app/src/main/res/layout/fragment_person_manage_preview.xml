@@ -4,12 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout style="@style/rl_top_bar">
-
-        <TextView
-            style="@style/tv_top_title"
-            android:text="优惠信息" />
-
-    </RelativeLayout>
+    <ListView
+        android:id="@+id/lv_person_manage_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null" />
 
 </LinearLayout>

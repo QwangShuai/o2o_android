@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_worker"
+    android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="activity.WorkerActivity">
+    tools:context="activity.DetailActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
         <RelativeLayout
-            android:id="@+id/rl_worker_return"
+            android:id="@+id/rl_detail_return"
             style="@style/rl_return">
 
             <ImageView style="@style/iv_return" />
@@ -20,26 +20,16 @@
 
         <TextView
             style="@style/tv_top_title"
-            android:text="工人信息" />
-
-        <RelativeLayout
-            android:id="@+id/rl_worker_screen"
-            style="@style/rl_return"
-            android:layout_alignParentRight="true">
-
-            <ImageView
-                style="@style/iv_return"
-                android:src="@mipmap/screen" />
-
-        </RelativeLayout>
+            android:text="账户明细" />
 
     </RelativeLayout>
 
-    <view.CListView
-        android:id="@+id/clv_worker"
+    <ListView
+        android:id="@+id/lv_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y5"
-        android:divider="@null" />
+        android:layout_marginTop="@dimen/y1"
+        android:divider="@color/background"
+        android:dividerHeight="@dimen/y1" />
 
 </LinearLayout>

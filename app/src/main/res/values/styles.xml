@@ -67,7 +67,7 @@
     <style name="ll_mine_service_out">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/x10</item>
+        <item name="android:layout_marginTop">@dimen/y5</item>
         <item name="android:orientation">vertical</item>
         <item name="android:background">@android:color/white</item>
     </style>
@@ -126,5 +126,22 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+    <!--雇主工作管理-->
+    <style name="rl_manage">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/selector_press_or_not</item>
+    </style>
 
+    <style name="tv_manage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_marginTop">@dimen/y5</item>
+        <item name="android:layout_marginBottom">@dimen/y5</item>
+        <item name="android:textColor">@color/side</item>
+        <item name="android:textSize">@dimen/x15</item>
+    </style>
 </resources>

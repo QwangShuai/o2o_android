@@ -56,7 +56,7 @@ public class WorkerAdapter extends BaseAdapter {
         }
         Worker worker = list.get(position);
         if (worker != null) {
-            holder.imageIv.setImageResource(R.mipmap.ic_launcher);
+            holder.imageIv.setImageResource(R.mipmap.person_face_default);
             holder.stateIv.setImageResource(R.mipmap.worker_leisure);
             holder.collectIv.setImageResource(R.mipmap.collect_gray);
             holder.nameTv.setText(worker.getName());

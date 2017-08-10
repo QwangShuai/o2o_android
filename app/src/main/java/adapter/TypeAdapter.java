@@ -48,7 +48,7 @@ public class TypeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_job, null);
+            convertView = View.inflate(context, R.layout.item_type, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -68,8 +68,8 @@ public class TypeAdapter extends BaseAdapter {
         private TextView nameTv;
 
         public ViewHolder(View itemView) {
-            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_job_image);
-            nameTv = (TextView) itemView.findViewById(R.id.tv_item_job_name);
+            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_type_image);
+            nameTv = (TextView) itemView.findViewById(R.id.tv_item_type_name);
         }
     }
 }

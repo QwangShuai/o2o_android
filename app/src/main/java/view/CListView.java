@@ -116,7 +116,7 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) ev.getY();
-                int diff = (moveY - downY) / 2;
+                int diff = (moveY - downY) / 4;
                 int paddingTop = -headViewHeight + diff;
                 if (firstVisibleItemPosition == 0 && -headViewHeight < paddingTop) {
                     if (paddingTop > 0 && currentState == DOWN_PULL_REFRESH) {

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_message"
+    android:id="@+id/activity_collect"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="activity.MessageActivity">
+    tools:context="activity.CollectActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
         <RelativeLayout
-            android:id="@+id/rl_message_return"
+            android:id="@+id/rl_collect_return"
             style="@style/rl_return">
 
             <ImageView style="@style/iv_return" />
@@ -20,7 +20,7 @@
 
         <TextView
             style="@style/tv_top_title"
-            android:text="我的消息" />
+            android:text="我的收藏" />
 
     </RelativeLayout>
 
@@ -32,7 +32,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/rl_message_offer"
+            android:id="@+id/rl_collect_job"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,20 +40,20 @@
             android:clickable="true">
 
             <TextView
-                android:id="@+id/tv_message_offer"
+                android:id="@+id/tv_collect_job"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="@dimen/y10"
                 android:layout_marginTop="@dimen/y10"
-                android:text="工作邀约"
+                android:text="收藏的工作"
                 android:textColor="@color/red"
                 android:textSize="@dimen/x15" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_message_msg"
+            android:id="@+id/rl_collect_worker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -61,13 +61,13 @@
             android:clickable="true">
 
             <TextView
-                android:id="@+id/tv_message_msg"
+                android:id="@+id/tv_collect_worker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="@dimen/y10"
                 android:layout_marginTop="@dimen/y10"
-                android:text="系统消息"
+                android:text="收藏的工人"
                 android:textColor="@color/side"
                 android:textSize="@dimen/x15" />
 
@@ -76,7 +76,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_message_sit"
+        android:id="@+id/ll_collect_sit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" />

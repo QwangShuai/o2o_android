@@ -7,9 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/x10"
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginTop="@dimen/x10"
+        android:layout_marginBottom="@dimen/y5"
+        android:layout_marginLeft="@dimen/y5"
+        android:layout_marginRight="@dimen/y5"
         android:background="@drawable/selector_item_job"
         android:orientation="horizontal">
 
@@ -21,7 +21,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/x10"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/person_face_default" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -74,14 +74,15 @@
                 <ImageView
                     android:id="@+id/iv_item_worker_state"
                     android:layout_width="@dimen/x40"
-                    android:layout_height="@dimen/x20"
+                    android:layout_height="@dimen/y15"
                     android:layout_gravity="center_vertical"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/worker_leisure"/>
 
                 <ImageView
                     android:id="@+id/iv_item_worker_collect"
-                    android:layout_width="@dimen/x20"
-                    android:layout_height="@dimen/x20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/x10"
                     android:scaleType="fitXY" />

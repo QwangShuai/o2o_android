@@ -2,11 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:orientation="vertical">
 
-    <RelativeLayout
-        style="@style/rl_top_bar">
+    <RelativeLayout style="@style/rl_top_bar">
 
         <TextView
             style="@style/tv_top_title"
@@ -14,14 +12,10 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/x1"
-        android:background="@color/side" />
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/y5">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,16 +87,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/x10"
+                android:layout_marginTop="@dimen/y5"
                 android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:clickable="true"
                     android:id="@+id/rl_work_manage_worker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not">
+                    android:background="@drawable/selector_press_or_not"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -129,16 +123,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/x10"
+                android:layout_marginTop="@dimen/y5"
                 android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:clickable="true"
                     android:id="@+id/rl_work_manage_employer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not">
+                    android:background="@drawable/selector_press_or_not"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -165,16 +159,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/x10"
+                android:layout_marginTop="@dimen/y5"
                 android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:clickable="true"
                     android:id="@+id/rl_work_manage_person"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not">
+                    android:background="@drawable/selector_press_or_not"
+                    android:clickable="true">
 
                     <TextView
                         android:layout_width="wrap_content"

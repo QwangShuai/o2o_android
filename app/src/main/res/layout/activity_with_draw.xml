@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_job"
+    android:id="@+id/activity_with_draw"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="activity.TypeActivity">
+    tools:context="activity.WithDrawActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
         <RelativeLayout
-            android:id="@+id/rl_type_return"
+            android:id="@+id/rl_withdraw_return"
             style="@style/rl_return">
 
             <ImageView style="@style/iv_return" />
@@ -20,15 +20,8 @@
 
         <TextView
             style="@style/tv_top_title"
-            android:text="选择工种" />
+            android:text="提现" />
 
     </RelativeLayout>
-
-    <view.CListView
-        android:id="@+id/clv_type"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y5"
-        android:divider="@null" />
 
 </LinearLayout>

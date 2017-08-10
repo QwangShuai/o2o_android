@@ -4,12 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout style="@style/rl_top_bar">
-
-        <TextView
-            style="@style/tv_top_title"
-            android:text="优惠信息" />
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_evaluate_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -22,8 +22,98 @@
             style="@style/tv_top_title"
             android:text="雇主工作管理" />
 
+        <RelativeLayout
+            android:id="@+id/rl_employer_manage_draft"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/selector_press_or_not"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginRight="@dimen/x10"
+                android:text="草稿箱"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
-    <View style="@style/v_split" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/y5"
+        android:layout_marginTop="@dimen/y5"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_employer_manage_all"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_employer_manage_all"
+                style="@style/tv_manage"
+                android:text="全部"
+                android:textColor="@color/red" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_employer_manage_wait_contact"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_employer_manage_wait_contact"
+                style="@style/tv_manage"
+                android:text="待联系" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_employer_manage_contacting"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_employer_manage_contacting"
+                style="@style/tv_manage"
+                android:text="洽谈中" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_employer_manage_under_way"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_employer_manage_under_way"
+                style="@style/tv_manage"
+                android:text="进行中" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_employer_manage_finished"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_employer_manage_finished"
+                style="@style/tv_manage"
+                android:text="已结束" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_employer_manage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null" />
 
 </LinearLayout>
