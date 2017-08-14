@@ -15,7 +15,7 @@
             android:layout_width="@dimen/x20"
             android:layout_height="@dimen/x20"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/refreshing" />
 
         <TextView
             android:id="@+id/tv_foot_clistview"

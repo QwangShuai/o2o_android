@@ -1,11 +1,12 @@
 package view;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,7 +29,7 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
     private ImageView headIv, footIv;
     private TextView headTv, footTv;
     private int headViewHeight, footViewHeight;
-    private ObjectAnimator headAnim, footAnim;
+    private Animation rotateAnim;
 
     private int firstVisibleItemPosition, downY;
     private final int DOWN_PULL_REFRESH = 0;
@@ -75,29 +76,25 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
     }
 
     private void initAnim() {
-        headAnim = ObjectAnimator.ofFloat(headIv, "rotation", 0.0f, 359.0f);
-        headAnim.setDuration(500);
-        headAnim.setRepeatCount(-1);
-        headAnim.setInterpolator(new LinearInterpolator());
-        footAnim = ObjectAnimator.ofFloat(footIv, "rotation", 0.0f, 359.0f);
-        footAnim.setDuration(500);
-        footAnim.setRepeatCount(-1);
-        footAnim.setInterpolator(new LinearInterpolator());
+        rotateAnim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnim.setDuration(500);
+        rotateAnim.setRepeatCount(-1);
+        rotateAnim.setInterpolator(new LinearInterpolator());
     }
 
     public void hideHeadView() {
-        headAnim.cancel();
         headView.setPadding(0, -headViewHeight, 0, 0);
         headTv.setText(TextConfig.pull);
-        headIv.setImageResource(R.mipmap.ic_launcher);
+        headIv.setImageResource(R.mipmap.pull);
         currentState = DOWN_PULL_REFRESH;
+        rotateAnim.cancel();
     }
 
     public void hideFootView() {
-        footAnim.cancel();
         footView.setPadding(0, -footViewHeight, 0, 0);
-        footIv.setImageResource(R.mipmap.ic_launcher);
+        footIv.setImageResource(R.mipmap.refreshing);
         isLoadingMore = false;
+        rotateAnim.cancel();
     }
 
     private void initData() {
@@ -151,13 +148,16 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
         switch (currentState) {
             case DOWN_PULL_REFRESH:
                 headTv.setText(TextConfig.pull);
+                headIv.setImageResource(R.mipmap.pull);
                 break;
             case RELEASE_REFRESH:
                 headTv.setText(TextConfig.release);
+                headIv.setImageResource(R.mipmap.release);
                 break;
             case REFRESHING:
                 headTv.setText(TextConfig.refreshing);
-                headAnim.start();
+                headIv.setImageResource(R.mipmap.refreshing);
+                headIv.startAnimation(rotateAnim);
                 break;
             default:
                 break;
@@ -176,7 +176,7 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
                 footView.setPadding(0, 0, 0, 0);
                 this.setSelection(this.getCount());
                 if (mOnRefreshListener != null) {
-                    footAnim.start();
+                    footIv.startAnimation(rotateAnim);
                     mOnRefreshListener.onLoadingMore();
                 }
             }

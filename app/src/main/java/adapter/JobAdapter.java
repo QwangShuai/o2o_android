@@ -1,75 +1,96 @@
 package adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gjzg.R;
 
 import java.util.List;
 
-import bean.Job;
-
 /**
- * 创建日期：2017/7/31 on 13:46
+ * 创建日期：2017/8/13 on 15:24
  * 作者:孙明明
- * 描述:工种适配器
+ * 描述:
  */
 
-public class JobAdapter extends BaseAdapter {
+public class JobAdapter extends RecyclerView.Adapter<JobAdapter.MyViewHolder> {
 
     private Context context;
-    private List<Job> list;
-    private ViewHolder holder;
+    private List<String> list;
+    private MyViewHolder holder;
 
-    public JobAdapter(Context context, List<Job> list) {
+    public JobAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }
 
+    public interface OnItemClickLitener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, int position);
+    }
+
+    private OnItemClickLitener mOnItemClickLitener;
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
+        this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+
+    public void addData(int position) {
+        list.add(position, "Insert One");
+        notifyItemInserted(position);
+    }
+
+    public void removeData(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
-    public int getCount() {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        holder = new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_job, parent, false));
+        return holder;
+    }
+
+    @Override
+    public int getItemCount() {
         return list.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        holder.tv.setText(list.get(position));
+        if (mOnItemClickLitener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = holder.getPosition();
+                    mOnItemClickLitener.onItemClick(holder.itemView, pos);
+                }
+            });
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_job, null);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int pos = holder.getPosition();
+                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos);
+                    return false;
+                }
+            });
         }
-        Job job = list.get(position);
-        if (job != null) {
-            holder.imageIv.setImageResource(R.mipmap.ic_launcher);
-            holder.nameTv.setText(job.getName());
-        }
-        return convertView;
     }
 
-    private class ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageIv;
-        private TextView nameTv;
+        TextView tv;
 
-        public ViewHolder(View itemView) {
-            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_job_image);
-            nameTv = (TextView) itemView.findViewById(R.id.tv_item_job_name);
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            tv = (TextView) itemView.findViewById(R.id.tv_item_job_name);
         }
     }
 }
