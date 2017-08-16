@@ -31,12 +31,15 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
     private int headViewHeight, footViewHeight;
     private Animation rotateAnim;
 
-    private int firstVisibleItemPosition, downY;
+    private int downY;
     private final int DOWN_PULL_REFRESH = 0;
     private final int RELEASE_REFRESH = 1;
     private final int REFRESHING = 2;
     private int currentState;
-    private boolean isScrolltoBottom, isLoadingMore;
+    private boolean isLoadingMore;
+    private boolean flag;
+
+    private int firstVisibleItem, lastVisibleItem, totalItemCount, scrollState;
 
     private OnRefreshListener mOnRefreshListener;
 
@@ -115,7 +118,7 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
                 int moveY = (int) ev.getY();
                 int diff = (moveY - downY) / 4;
                 int paddingTop = -headViewHeight + diff;
-                if (firstVisibleItemPosition == 0 && -headViewHeight < paddingTop) {
+                if (firstVisibleItem == 0 && -headViewHeight < paddingTop) {
                     if (paddingTop > 0 && currentState == DOWN_PULL_REFRESH) {
                         currentState = RELEASE_REFRESH;
                         refreshHeaderView();
@@ -170,8 +173,14 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_FLING) {
-            if (isScrolltoBottom && !isLoadingMore) {
+        this.scrollState = scrollState;
+        if (headView.getPaddingTop() == -headViewHeight) {
+            flag = true;
+        } else {
+            flag = false;
+        }
+        if (totalItemCount == lastVisibleItem && flag && scrollState == SCROLL_STATE_IDLE) {
+            if (!isLoadingMore) {
                 isLoadingMore = true;
                 footView.setPadding(0, 0, 0, 0);
                 this.setSelection(this.getCount());
@@ -185,11 +194,8 @@ public class CListView extends ListView implements AbsListView.OnScrollListener 
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        firstVisibleItemPosition = firstVisibleItem;
-        if (getLastVisiblePosition() == (totalItemCount - 1)) {
-            isScrolltoBottom = true;
-        } else {
-            isScrolltoBottom = false;
-        }
+        this.firstVisibleItem = firstVisibleItem;
+        this.lastVisibleItem = firstVisibleItem + visibleItemCount;
+        this.totalItemCount = totalItemCount;
     }
 }

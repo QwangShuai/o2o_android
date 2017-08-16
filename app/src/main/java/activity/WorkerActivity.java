@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,27 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.PersonAdapter;
 import bean.Kind;
 import bean.Person;
+import bean.Screen;
+import cache.LruJsonCache;
+import config.CodeConfig;
+import config.NetConfig;
+import config.StateConfig;
 import listener.OnRefreshListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import utils.Utils;
 import view.CListView;
 import view.CProgressDialog;
@@ -37,6 +52,12 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
     private List<Person> personList;
     private PersonAdapter personAdapter;
 
+    private OkHttpClient okHttpClient;
+    private LruJsonCache lruJsonCache;
+    private String cacheData;
+
+    private int LOAD_STATE;
+
     private Kind kind;
 
     private Handler handler = new Handler() {
@@ -46,16 +67,23 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
             if (msg != null) {
                 stopAnim();
                 switch (msg.what) {
-                    case 0:
+                    case StateConfig.LOAD_NO_NET:
                         noNet();
                         break;
-                    case 1:
+                    case StateConfig.LOAD_DONE:
                         notifyData();
                         break;
                 }
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeMessages(StateConfig.LOAD_NO_NET);
+        handler.removeMessages(StateConfig.LOAD_DONE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +139,8 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
         kind = (Kind) intent.getSerializableExtra("kind");
         personList = new ArrayList<>();
         personAdapter = new PersonAdapter(this, personList);
+        okHttpClient = new OkHttpClient();
+        lruJsonCache = LruJsonCache.get(this);
     }
 
     private void setData() {
@@ -126,30 +156,113 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadData() {
-        listView.setVisibility(View.INVISIBLE);
         startAnim();
-        for (int i = 0; i < 10; i++) {
-            Person person = new Person();
-            person.setImage("");
-            person.setName(kind.getName() + "-" + i);
-            person.setPlay("精通刮大白");
-            person.setShow("十年刮大白经验");
-            person.setState(1);
-            person.setCollect(false);
-            person.setDistance("距离3公里");
-            personList.add(person);
+        if (checkLocalData()) {
+            loadLocalData();
+        } else {
+            loadNetData();
         }
-        handler.sendEmptyMessageDelayed(1, 1000);
+    }
+
+    private boolean checkLocalData() {
+        cacheData = lruJsonCache.getAsString("worker");
+        if (!TextUtils.isEmpty(cacheData)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void loadLocalData() {
+        if (parseJson(cacheData)) {
+            Utils.toast(this, "读取缓存");
+            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+        }
+    }
+
+    private void loadNetData() {
+        Request request = new Request.Builder().url(NetConfig.testUrl).get().build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    if (!TextUtils.isEmpty(json)) {
+                        lruJsonCache.put("worker", json, 10);
+                        switch (LOAD_STATE) {
+                            case StateConfig.LOAD_REFRESH:
+                                personList.clear();
+                                break;
+                        }
+                        if (parseJson(json)) {
+                            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void notifyData() {
         personAdapter.notifyDataSetChanged();
-        listView.setVisibility(View.VISIBLE);
         listView.setEmptyView(noDataEmptyView);
+        switch (LOAD_STATE) {
+            case StateConfig.LOAD_REFRESH:
+                listView.hideHeadView();
+                Utils.toast(this, StateConfig.loadRefreshSuccess);
+                break;
+            case StateConfig.LOAD_LOAD:
+                listView.hideFootView();
+                Utils.toast(this, StateConfig.loadLoadSuccess);
+                break;
+        }
     }
 
     private void noNet() {
-        listView.setEmptyView(noNetEmptyView);
+        switch (LOAD_STATE) {
+            case StateConfig.LOAD_NO_NET:
+                personList.clear();
+                listView.setEmptyView(noNetEmptyView);
+                break;
+            case StateConfig.LOAD_REFRESH:
+                listView.hideHeadView();
+                Utils.toast(this, StateConfig.loadRefreshFailure);
+                break;
+            case StateConfig.LOAD_LOAD:
+                listView.hideFootView();
+                Utils.toast(this, StateConfig.loadLoadFailure);
+                break;
+        }
+    }
+
+    private boolean parseJson(String json) {
+        boolean result = false;
+        try {
+            JSONObject objBean = new JSONObject(json);
+            if (objBean.optInt("code") == 200) {
+                for (int i = 0; i < 5; i++) {
+                    Person person = new Person();
+                    person.setImage("");
+                    person.setName(kind.getName() + "-" + i);
+                    person.setPlay("精通刮大白");
+                    person.setShow("十年刮大白经验");
+                    person.setState(1);
+                    person.setCollect(false);
+                    person.setDistance("距离3公里");
+                    personList.add(person);
+                }
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
@@ -159,24 +272,26 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.rl_worker_screen:
-                Utils.toast(this, "筛选");
-                personList.clear();
-                handler.sendEmptyMessage(0);
+                startActivityForResult(new Intent(this, ScreenActivity.class), CodeConfig.screenRequestCode);
                 break;
             case R.id.tv_empty_no_net_refresh:
-                loadData();
+                startAnim();
+                LOAD_STATE = StateConfig.LOAD_REFRESH;
+                loadNetData();
                 break;
         }
     }
 
     @Override
     public void onDownPullRefresh() {
-        listView.hideHeadView();
+        LOAD_STATE = StateConfig.LOAD_REFRESH;
+        loadNetData();
     }
 
     @Override
     public void onLoadingMore() {
-        listView.hideFootView();
+        LOAD_STATE = StateConfig.LOAD_LOAD;
+        loadNetData();
     }
 
     @Override
@@ -184,5 +299,17 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = new Intent(this, TalkActivity.class);
         intent.putExtra("worker", personList.get(position - 1));
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CodeConfig.screenRequestCode && resultCode == CodeConfig.screenResultCode && data != null) {
+            Screen screen = (Screen) data.getSerializableExtra("screen");
+            if (screen != null) {
+                int a = screen.getState();
+                Utils.toast(this, a + "");
+            }
+        }
     }
 }

@@ -63,10 +63,10 @@ public class FirstPageAdapter extends BaseAdapter {
             } else {
                 switch (firstPage.getId()) {
                     case 0:
-                        holder.imgIv.setImageResource(R.mipmap.find_job);
+                        holder.imgIv.setImageResource(R.mipmap.find_worker);
                         break;
                     case 1:
-                        holder.imgIv.setImageResource(R.mipmap.find_worker);
+                        holder.imgIv.setImageResource(R.mipmap.find_job);
                         break;
                     case 2:
                         holder.imgIv.setImageResource(R.mipmap.send_job);

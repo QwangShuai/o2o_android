@@ -55,6 +55,7 @@
         <activity android:name="activity.DetailActivity" />
         <activity android:name="activity.InviteActivity" />
         <activity android:name="activity.WithDrawActivity" />
+        <activity android:name="activity.ScreenActivity"></activity>
     </application>
 
 </manifest>
