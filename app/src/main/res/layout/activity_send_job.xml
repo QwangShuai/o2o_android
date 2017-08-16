@@ -4,7 +4,7 @@
     android:id="@+id/activity_send_job"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/background"
     android:orientation="vertical"
     tools:context="activity.SendJobActivity">
 
@@ -23,8 +23,6 @@
             android:text="发布工作" />
 
     </RelativeLayout>
-
-    <View style="@style/v_split" />
 
     <ScrollView
         android:layout_width="match_parent"

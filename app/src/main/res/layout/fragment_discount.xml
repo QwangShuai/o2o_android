@@ -12,4 +12,11 @@
 
     </RelativeLayout>
 
+    <view.CListView
+        android:id="@+id/lv_discount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/background"
+        android:dividerHeight="@dimen/y5" />
+
 </LinearLayout>

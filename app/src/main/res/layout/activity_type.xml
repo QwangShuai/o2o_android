@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="activity.TypeActivity">
+    tools:context="activity.KindActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 

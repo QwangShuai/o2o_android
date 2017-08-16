@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:listDivider">@drawable/shape_divider</item>
     </style>
     <!--主页底部按钮RelativeLayout样式-->
     <style name="rl_main">
@@ -55,14 +54,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/y1</item>
         <item name="android:background">@color/side</item>
-    </style>
-    <!--首页图片样式-->
-    <style name="iv_first_page">
-        <item name="android:layout_width">@dimen/x300</item>
-        <item name="android:layout_height">@dimen/y100</item>
-        <item name="android:layout_marginTop">@dimen/y5</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:scaleType">fitXY</item>
     </style>
     <!--我的客服LinearLayout外部样式-->
     <style name="ll_mine_service_out">

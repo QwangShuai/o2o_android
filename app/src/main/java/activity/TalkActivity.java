@@ -25,7 +25,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.gjzg.R;
 
-import bean.Worker;
+import bean.Person;
 import config.PermissionConfig;
 
 public class TalkActivity extends AppCompatActivity implements View.OnClickListener {
@@ -42,7 +42,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private MapStatusUpdate mapStatusUpdate;
     private double latitude, longitude;
 
-    private Worker worker;
+    private Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initData() {
         Intent intent = getIntent();
-        worker = (Worker) intent.getSerializableExtra("worker");
+        person = (Person) intent.getSerializableExtra("person");
         latitude = 39.963175;
         longitude = 116.400244;
     }

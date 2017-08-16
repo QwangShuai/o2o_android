@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
+            android:src="@mipmap/no_net" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="当前网络不可用，请检查您的网络"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/x15"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_empty_no_net_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/selector_tv_no_net_refresh"
+            android:clickable="true"
+            android:padding="@dimen/x5"
+            android:text="重新刷新"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/x15" />
+
+    </LinearLayout>
+
+</RelativeLayout>

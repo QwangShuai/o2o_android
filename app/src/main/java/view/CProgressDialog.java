@@ -31,9 +31,9 @@ public class CProgressDialog extends Dialog {
     private void initDialog() {
         dialogView = View.inflate(mContext, R.layout.dialog_cprogress, null);
         imageIv = (ImageView) dialogView.findViewById(R.id.iv_dialog_cprogress);
-        animator = ObjectAnimator.ofFloat(imageIv, "rotation", 0f, 359f);
+        animator = ObjectAnimator.ofFloat(imageIv, "rotation", 0f, -359f);
         animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(500);
+        animator.setDuration(800);
         animator.setRepeatCount(-1);
         this.setContentView(dialogView);
         this.setCanceledOnTouchOutside(false);

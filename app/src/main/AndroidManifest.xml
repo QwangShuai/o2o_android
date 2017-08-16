@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="activity.TypeActivity" />
+        <activity android:name="activity.KindActivity" />
         <activity android:name="activity.WorkerActivity" />
         <activity android:name="activity.MessageActivity" />
         <activity android:name="activity.CityActivity" />
