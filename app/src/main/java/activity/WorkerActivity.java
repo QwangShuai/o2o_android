@@ -167,14 +167,13 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
     private boolean checkLocalData() {
         cacheData = lruJsonCache.getAsString("worker");
         if (!TextUtils.isEmpty(cacheData)) {
-            return true;
+            return false;
         }
         return false;
     }
 
     private void loadLocalData() {
         if (parseJson(cacheData)) {
-            Utils.toast(this, "读取缓存");
             handler.sendEmptyMessage(StateConfig.LOAD_DONE);
         }
     }
@@ -272,7 +271,7 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.rl_worker_screen:
-                startActivityForResult(new Intent(this, ScreenActivity.class), CodeConfig.screenRequestCode);
+                startActivityForResult(new Intent(this, ScreenWorkerActivity.class), CodeConfig.screenRequestCode);
                 break;
             case R.id.tv_empty_no_net_refresh:
                 startAnim();

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="activity.ScreenActivity">
+    tools:context="activity.ScreenWorkerActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -41,6 +41,7 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/et_screen_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/x10"
@@ -156,5 +157,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_screen_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/y5"
+        android:divider="@color/background"
+        android:dividerHeight="@dimen/y5" />
 
 </LinearLayout>

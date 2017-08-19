@@ -22,13 +22,41 @@
             style="@style/tv_top_title"
             android:text="账户明细" />
 
+        <LinearLayout
+            android:id="@+id/ll_detail_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/selector_press_or_not"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/y5"
+            android:paddingRight="@dimen/y5">
+
+            <TextView
+                android:id="@+id/tv_detail_menu_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="全部"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitXY"
+                android:src="@mipmap/arrow_b" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
-    <ListView
+    <view.CListView
         android:id="@+id/lv_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y1"
         android:divider="@color/background"
         android:dividerHeight="@dimen/y1" />
 

@@ -39,7 +39,7 @@
         android:id="@+id/clv_worker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y5"
-        android:divider="@null" />
+        android:divider="@color/background"
+        android:dividerHeight="@dimen/y5" />
 
 </LinearLayout>

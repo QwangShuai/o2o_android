@@ -29,7 +29,7 @@ import config.CodeConfig;
 import listener.ListItemClickHelp;
 import utils.Utils;
 
-public class ScreenActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, ListItemClickHelp {
+public class ScreenWorkerActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, ListItemClickHelp {
 
     private View rootView, headView, dialogView;
     private RelativeLayout closeRl, searchRl;
@@ -317,6 +317,7 @@ public class ScreenActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void delHis(int p) {
+        lruJsonCache.remove("screenHistory");
         screenList.remove(p);
         screenHistoryAdapter.notifyDataSetChanged();
         screenHistory.setScreenList(screenList);

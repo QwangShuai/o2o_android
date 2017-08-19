@@ -55,7 +55,10 @@
         <activity android:name="activity.DetailActivity" />
         <activity android:name="activity.InviteActivity" />
         <activity android:name="activity.WithDrawActivity" />
-        <activity android:name="activity.ScreenActivity"></activity>
+        <activity
+            android:name="activity.ScreenWorkerActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name="activity.ScreenJobActivity"></activity>
     </application>
 
 </manifest>

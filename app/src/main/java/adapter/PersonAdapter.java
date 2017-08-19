@@ -58,7 +58,11 @@ public class PersonAdapter extends BaseAdapter {
         if (person != null) {
             holder.imageIv.setImageResource(R.mipmap.person_face_default);
             holder.stateIv.setImageResource(R.mipmap.worker_leisure);
-            holder.collectIv.setImageResource(R.mipmap.collect_gray);
+            if (person.isCollect()) {
+                holder.collectIv.setImageResource(R.mipmap.collect_yellow);
+            } else {
+                holder.collectIv.setImageResource(R.mipmap.collect_gray);
+            }
             holder.nameTv.setText(person.getName());
             holder.playTv.setText(person.getPlay());
             holder.showTv.setText(person.getShow());

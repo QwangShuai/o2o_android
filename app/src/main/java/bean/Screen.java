@@ -10,7 +10,18 @@ import java.io.Serializable;
 
 public class Screen implements Serializable {
 
+    private String name;
     private int state;
+    private String dis;
+    private String kind;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getState() {
         return state;
@@ -18,5 +29,31 @@ public class Screen implements Serializable {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getDis() {
+        return dis;
+    }
+
+    public void setDis(String dis) {
+        this.dis = dis;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    @Override
+    public String toString() {
+        return "Screen{" +
+                "name='" + name + '\'' +
+                ", state=" + state +
+                ", dis='" + dis + '\'' +
+                ", kind='" + kind + '\'' +
+                '}';
     }
 }

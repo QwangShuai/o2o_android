@@ -149,14 +149,13 @@ public class KindActivity extends AppCompatActivity implements View.OnClickListe
     private boolean checkLocalData() {
         cacheData = lruJsonCache.getAsString("kind");
         if (!TextUtils.isEmpty(cacheData)) {
-            return true;
+            return false;
         }
         return false;
     }
 
     private void loadLocalData() {
         if (parseJson(cacheData)) {
-            Utils.toast(this, "读取缓存");
             handler.sendEmptyMessage(StateConfig.LOAD_DONE);
         }
     }
