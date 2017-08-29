@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_screen_job"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context="activity.JobScnActivity">
+
+    <RelativeLayout style="@style/rl_top_bar">
+
+        <RelativeLayout
+            android:id="@+id/rl_screen_job_return"
+            style="@style/rl_return">
+
+            <ImageView
+                style="@style/iv_return"
+                android:src="@mipmap/close" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_screen_job_search"
+            style="@style/rl_return"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                style="@style/iv_return"
+                android:src="@mipmap/search" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_scn_job_cdt"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/white" />
+
+</LinearLayout>

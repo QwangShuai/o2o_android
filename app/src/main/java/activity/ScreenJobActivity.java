@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.gjzg.R;
@@ -14,6 +15,9 @@ public class ScreenJobActivity extends AppCompatActivity implements View.OnClick
 
     private View rootView;
     private RelativeLayout returnRl, searchRl;
+    private ListView screenConditionsLv;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,7 @@ public class ScreenJobActivity extends AppCompatActivity implements View.OnClick
     private void initView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_screen_job_return);
         searchRl = (RelativeLayout) rootView.findViewById(R.id.rl_screen_job_search);
+        screenConditionsLv = (ListView) rootView.findViewById(R.id.lv_screen_job_conditions);
     }
 
     private void setListener() {

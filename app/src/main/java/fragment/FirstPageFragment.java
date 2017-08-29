@@ -20,11 +20,12 @@ import java.util.List;
 
 import activity.CityActivity;
 import activity.JobActivity;
-import activity.MessageActivity;
+import activity.MsgActivity;
 import activity.SendJobActivity;
 import activity.KindActivity;
 import adapter.FirstPageAdapter;
 import bean.FirstPage;
+import config.IntentConfig;
 import utils.Utils;
 import view.CProgressDialog;
 
@@ -148,7 +149,8 @@ public class FirstPageFragment extends Fragment implements View.OnClickListener,
                 startActivity(cityIntent);
                 break;
             case R.id.rl_first_page_msg:
-                Intent msgIntent = new Intent(getActivity(), MessageActivity.class);
+                Intent msgIntent = new Intent(getActivity(), MsgActivity.class);
+                msgIntent.putExtra(IntentConfig.intentName, IntentConfig.MESSAGE);
                 startActivity(msgIntent);
                 break;
         }

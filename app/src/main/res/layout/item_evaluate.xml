@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/y5"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_item_evaluate_num_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/y5">
+
+            <TextView
+                android:id="@+id/tv_item_evaluate_num_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我收到的评价（2）" />
+
+            <View style="@style/v_split" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/y5">
+
+            <ImageView
+                android:id="@+id/iv_item_evaluate_icon"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/x50"
+                android:scaleType="fitXY"
+                android:src="@mipmap/person_face_default" />
+
+            <TextView
+                android:id="@+id/tv_item_evaluate_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y5"
+                android:layout_toRightOf="@+id/iv_item_evaluate_icon"
+                android:text="小伙子干活特麻利，必须好评" />
+
+            <ImageView
+                android:id="@+id/iv_item_evaluate_praise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/iv_item_evaluate_icon"
+                android:layout_marginLeft="@dimen/y5"
+                android:layout_toRightOf="@+id/iv_item_evaluate_icon"
+                android:scaleType="fitXY"
+                android:src="@mipmap/praise_none" />
+
+            <TextView
+                android:id="@+id/tv_item_evaluate_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/iv_item_evaluate_icon"
+                android:layout_alignParentRight="true"
+                android:text="2017年5月4日 17:25" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

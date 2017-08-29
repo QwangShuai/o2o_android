@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.ColorConfig;
-import fragment.MessageMsgFragment;
-import fragment.MessageOfferFragment;
+import fragment.SysMsgFragment;
+import fragment.JobOfferFragment;
 
 public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,10 +56,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initData() {
-        MessageOfferFragment messageOfferFragment = new MessageOfferFragment();
-        MessageMsgFragment messageMsgFragment = new MessageMsgFragment();
-        fragmentList.add(messageOfferFragment);
-        fragmentList.add(messageMsgFragment);
+        JobOfferFragment jobOfferFragment = new JobOfferFragment();
+        SysMsgFragment sysMsgFragment = new SysMsgFragment();
+        fragmentList.add(jobOfferFragment);
+        fragmentList.add(sysMsgFragment);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.ll_message_sit, fragmentList.get(curPosition));
         transaction.commit();

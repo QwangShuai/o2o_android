@@ -9,6 +9,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 创建日期：2017/7/28 on 13:38
  * 作者:孙明明
@@ -59,4 +62,11 @@ public class Utils {
         gridview.setLayoutParams(params);
     }
 
+    //手机号
+    public static boolean isPhonenumber(String str) {
+        String regularStr = "^(13[0-9]|14[57]|15[0-35-9]|17[6-8]|18[0-9])[0-9]{8}$";
+        Pattern p = Pattern.compile(regularStr);
+        Matcher m = p.matcher(str);
+        return m.matches();
+    }
 }

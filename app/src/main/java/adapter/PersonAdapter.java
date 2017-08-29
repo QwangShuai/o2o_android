@@ -23,7 +23,6 @@ public class PersonAdapter extends BaseAdapter {
 
     private Context context;
     private List<Person> list;
-    private ViewHolder holder;
 
     public PersonAdapter(Context context, List<Person> list) {
         this.context = context;
@@ -32,7 +31,7 @@ public class PersonAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
 
     @Override
@@ -47,6 +46,7 @@ public class PersonAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_worker, null);
             holder = new ViewHolder(convertView);

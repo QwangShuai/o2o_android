@@ -12,12 +12,25 @@ import android.widget.ListView;
 
 import com.gjzg.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import activity.PersonManageActivity;
 import adapter.PersonPrivewAdapter;
 import bean.PersonPreview;
 import bean.Role;
+import config.NetConfig;
+import config.StateConfig;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import utils.Utils;
 import view.CProgressDialog;
 
 /**
@@ -32,8 +45,12 @@ public class PersonManagePreviewFragment extends Fragment {
     private ListView listView;
     private CProgressDialog progressDialog;
 
-    private List<PersonPreview> personPreviewList;
+    private PersonPreview personPreview;
     private PersonPrivewAdapter personPrivewAdapter;
+
+    private OkHttpClient okHttpClient;
+
+    private Handler personPreviewHandler;
 
     private Handler handler = new Handler() {
         @Override
@@ -41,66 +58,11 @@ public class PersonManagePreviewFragment extends Fragment {
             super.handleMessage(msg);
             if (msg != null) {
                 switch (msg.what) {
-                    case 1:
-                        progressDialog.dismiss();
-                        PersonPreview personPreview0 = new PersonPreview();
-                        personPreview0.setType(0);
-                        personPreview0.setName("赵铁柱");
-                        PersonPreview personPreview1 = new PersonPreview();
-                        personPreview1.setType(0);
-                        personPreview1.setSex("男");
-                        PersonPreview personPreview2 = new PersonPreview();
-                        personPreview2.setType(0);
-                        personPreview2.setBirth("1992/03/24");
-                        PersonPreview personPreview3 = new PersonPreview();
-                        personPreview3.setType(0);
-                        personPreview3.setIdNumber("23023028402839274");
-                        PersonPreview personPreview4 = new PersonPreview();
-                        personPreview4.setType(0);
-                        personPreview4.setAddress("哈尔滨 道外区");
-                        PersonPreview personPreview5 = new PersonPreview();
-                        personPreview5.setType(0);
-                        personPreview5.setBrief("啥都会");
-                        PersonPreview personPreview6 = new PersonPreview();
-                        personPreview6.setType(0);
-                        personPreview6.setPhoneNumber("166666666");
-                        PersonPreview personPreview7 = new PersonPreview();
-                        personPreview7.setType(0);
-                        personPreview7.setRole("");
-                        PersonPreview personPreview8 = new PersonPreview();
-                        personPreview8.setType(1);
-                        List<Role> list = new ArrayList<>();
-                        Role role1 = new Role();
-                        role1.setId("1");
-                        role1.setContent("水泥工");
-                        Role role2 = new Role();
-                        role2.setId("2");
-                        role2.setContent("水暖工");
-                        Role role3 = new Role();
-                        role3.setId("3");
-                        role3.setContent("瓦工");
-                        Role role4 = new Role();
-                        role4.setId("4");
-                        role4.setContent("木工");
-                        Role role5 = new Role();
-                        role5.setId("5");
-                        role5.setContent("刮大白");
-                        list.add(role1);
-                        list.add(role2);
-                        list.add(role3);
-                        list.add(role4);
-                        list.add(role5);
-                        personPreview8.setRoleList(list);
-                        personPreviewList.add(personPreview0);
-                        personPreviewList.add(personPreview1);
-                        personPreviewList.add(personPreview2);
-                        personPreviewList.add(personPreview3);
-                        personPreviewList.add(personPreview4);
-                        personPreviewList.add(personPreview5);
-                        personPreviewList.add(personPreview6);
-                        personPreviewList.add(personPreview7);
-                        personPreviewList.add(personPreview8);
-                        personPrivewAdapter.notifyDataSetChanged();
+                    case StateConfig.LOAD_NO_NET:
+                        notifyNoNet();
+                        break;
+                    case StateConfig.LOAD_DONE:
+                        notifyData();
                         break;
                 }
             }
@@ -110,7 +72,8 @@ public class PersonManagePreviewFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeMessages(1);
+        handler.removeMessages(StateConfig.LOAD_NO_NET);
+        handler.removeMessages(StateConfig.LOAD_DONE);
     }
 
     @Nullable
@@ -138,8 +101,10 @@ public class PersonManagePreviewFragment extends Fragment {
     }
 
     private void initData() {
-        personPreviewList = new ArrayList<>();
-        personPrivewAdapter = new PersonPrivewAdapter(getActivity(), personPreviewList);
+        personPreviewHandler = ((PersonManageActivity) getActivity()).handler;
+        personPreview = new PersonPreview();
+        personPrivewAdapter = new PersonPrivewAdapter(getActivity(), personPreview);
+        okHttpClient = new OkHttpClient();
     }
 
     private void setData() {
@@ -148,6 +113,84 @@ public class PersonManagePreviewFragment extends Fragment {
 
     private void loadData() {
         progressDialog.show();
-        handler.sendEmptyMessageDelayed(1, 500);
+        loadNetData();
+    }
+
+    private void loadNetData() {
+        Request request = new Request.Builder().url(NetConfig.testUrl).get().build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String result = response.body().string();
+                    parseJson(result);
+                }
+            }
+        });
+    }
+
+    private void parseJson(String json) {
+        try {
+            JSONObject objBean = new JSONObject(json);
+            if (objBean.optInt("code") == 200) {
+                personPreview.setNameTitle("姓名");
+                personPreview.setNameContent("无");
+                personPreview.setSexTitle("性别");
+                personPreview.setSexContent("无");
+                personPreview.setIdNumberTitle("身份证号");
+                personPreview.setIdNumberContent("无");
+                personPreview.setAddressTitle("现居地");
+                personPreview.setAddressContent("无");
+                personPreview.setBriefTitle("个人简介");
+                personPreview.setBriefContent("无");
+                personPreview.setPhoneNumberTitle("手机号码（已绑定）");
+                personPreview.setPhoneNumberContent("无");
+                personPreview.setRoleTitle("角色选择");
+                personPreview.setRoleContent("我是工人");
+                List<Role> list = new ArrayList<>();
+                for (int i = 0; i < 20; i++) {
+                    Role r = new Role();
+                    r.setId("1");
+                    r.setContent("水泥工");
+                    list.add(r);
+                }
+//                Role role1 = new Role();
+//                role1.setId("1");
+//                role1.setContent("水泥工");
+//                Role role2 = new Role();
+//                role2.setId("2");
+//                role2.setContent("水暖工");
+//                Role role3 = new Role();
+//                role3.setId("3");
+//                role3.setContent("瓦工");
+//                list.add(role1);
+//                list.add(role2);
+//                list.add(role3);
+                personPreview.setRoleList(list);
+                handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("PersonPreview", personPreview);
+                Message msg = new Message();
+                msg.setData(bundle);
+                personPreviewHandler.sendMessage(msg);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void notifyNoNet() {
+        progressDialog.dismiss();
+        Utils.toast(getActivity(), "网络异常");
+    }
+
+    private void notifyData() {
+        progressDialog.dismiss();
+        personPrivewAdapter.notifyDataSetChanged();
     }
 }

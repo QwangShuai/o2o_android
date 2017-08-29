@@ -35,11 +35,23 @@
 
     </RelativeLayout>
 
-    <view.CListView
-        android:id="@+id/lv_job"
+    <refreshload.PullToRefreshLayout
+        android:id="@+id/ptrl_job"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/background"
-        android:dividerHeight="@dimen/y5" />
+        android:layout_marginTop="@dimen/y5">
+
+        <include layout="@layout/refresh_head" />
+
+        <refreshload.PullableListView
+            android:id="@+id/lv_job"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/background"
+            android:dividerHeight="@dimen/y5" />
+
+        <include layout="@layout/load_more" />
+
+    </refreshload.PullToRefreshLayout>
 
 </LinearLayout>

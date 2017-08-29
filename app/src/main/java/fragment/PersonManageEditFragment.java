@@ -7,15 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.gjzg.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import activity.PersonManageActivity;
 import adapter.EditAdapter;
-import bean.Edit;
-import bean.Role;
+import bean.PersonPreview;
+import listener.EditClickHelp;
+import utils.Utils;
 
 /**
  * 创建日期：2017/8/10 on 14:32
@@ -23,12 +23,16 @@ import bean.Role;
  * 描述:编辑信息
  */
 
-public class PersonManageEditFragment extends Fragment {
+public class PersonManageEditFragment extends Fragment implements EditClickHelp{
 
     private View rootView;
     private ListView listView;
 
-    private List<Edit> editList;
+    //尾视图
+    private View editFootView;
+    private TextView editFootSumitTv;
+
+    private PersonPreview personPreview;
     private EditAdapter editAdapter;
 
     @Nullable
@@ -38,57 +42,59 @@ public class PersonManageEditFragment extends Fragment {
         initView();
         initData();
         setData();
-        loadData();
         return rootView;
     }
 
     private void initView() {
         initRootView();
+        initFootView();
     }
 
     private void initRootView() {
         listView = (ListView) rootView.findViewById(R.id.lv_person_manage_edit);
     }
 
+    private void initFootView() {
+        editFootView = View.inflate(getActivity(), R.layout.foot_person_edit, null);
+        editFootSumitTv = (TextView) editFootView.findViewById(R.id.tv_foot_person_edit_submit);
+        editFootSumitTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.toast(getActivity(), personPreview.toString());
+            }
+        });
+        listView.addFooterView(editFootView);
+    }
+
     private void initData() {
-        editList = new ArrayList<>();
-        editAdapter = new EditAdapter(getActivity(), editList);
+        personPreview = ((PersonManageActivity) getActivity()).personPreview;
+        Utils.toast(getActivity(), personPreview.toString());
+        editAdapter = new EditAdapter(getActivity(), personPreview,this);
     }
 
     private void setData() {
         listView.setAdapter(editAdapter);
     }
 
-    private void loadData() {
-        Edit edit0 = new Edit();
-        Edit edit1 = new Edit();
-        edit1.setMale(true);
-        Edit edit2 = new Edit();
-        edit2.setBirth("选择出生日期");
-        Edit edit3 = new Edit();
-        Edit edit4 = new Edit();
-        edit4.setAddress("选择现居地");
-        Edit edit5 = new Edit();
-        Edit edit6 = new Edit();
-        edit6.setPhoneNumber("11311414");
-        Edit edit7 = new Edit();
-        edit7.setWorker(true);
-        Edit edit8 = new Edit();
-        List<Role> list = new ArrayList<>();
-        Role role0 = new Role();
-        role0.setId("0");
-        role0.setContent("水泥工");
-        list.add(role0);
-        edit8.setRoleList(list);
-        editList.add(edit0);
-        editList.add(edit1);
-        editList.add(edit2);
-        editList.add(edit3);
-        editList.add(edit4);
-        editList.add(edit5);
-        editList.add(edit6);
-        editList.add(edit7);
-        editList.add(edit8);
-        editAdapter.notifyDataSetChanged();
+    @Override
+    public void onClick(View view, View parent, int position, int id, String hasInput) {
+        switch (id){
+            //et
+            case R.id.et_item_person_manage_edit_type_2_content:
+                switch (position){
+                    case 0:
+                        personPreview.setNameContent(hasInput);
+                        break;
+                    case 2:
+                        personPreview.setIdNumberContent(hasInput);
+                        break;
+                    case 4:
+                        personPreview.setBriefContent(hasInput);
+                        break;
+                }
+                editAdapter.notifyDataSetChanged();
+                Utils.toast(getActivity(),personPreview.toString());
+                break;
+        }
     }
 }

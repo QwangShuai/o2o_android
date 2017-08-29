@@ -1,7 +1,6 @@
 package adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,8 +8,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.gjzg.R;
-
-import java.util.List;
 
 import bean.PersonPreview;
 import utils.Utils;
@@ -24,18 +21,16 @@ import utils.Utils;
 public class PersonPrivewAdapter extends BaseAdapter {
 
     private Context context;
-    private List<PersonPreview> list;
-    private ViewHolder1 holder1;
-    private ViewHolder2 holder2;
+    private PersonPreview personPreview;
 
-    public PersonPrivewAdapter(Context context, List<PersonPreview> list) {
+    public PersonPrivewAdapter(Context context, PersonPreview personPreview) {
         this.context = context;
-        this.list = list;
+        this.personPreview = personPreview;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 8) {
+        if (position == 7) {
             return 1;
         } else {
             return 0;
@@ -49,12 +44,12 @@ public class PersonPrivewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        return personPreview == null ? 0 : 8;
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return personPreview;
     }
 
     @Override
@@ -64,6 +59,10 @@ public class PersonPrivewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder1 holder1;
+        ViewHolder2 holder2;
+        String title = "";
+        String content = "";
         if (getItemViewType(position) == 0) {
             if (convertView == null) {
                 convertView = View.inflate(context, R.layout.item_person_manage_preview_type_1, null);
@@ -72,72 +71,39 @@ public class PersonPrivewAdapter extends BaseAdapter {
             } else {
                 holder1 = (ViewHolder1) convertView.getTag();
             }
-            PersonPreview personPreview = list.get(position);
             if (personPreview != null) {
-                if (personPreview.getType() == 0) {
-                    switch (position) {
-                        case 0:
-                            holder1.titleTv.setText("姓名");
-                            if (!TextUtils.isEmpty(personPreview.getName())) {
-                                holder1.contentTv.setText(personPreview.getName());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 1:
-                            holder1.titleTv.setText("性别");
-                            if (!TextUtils.isEmpty(personPreview.getSex())) {
-                                holder1.contentTv.setText(personPreview.getSex());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 2:
-                            holder1.titleTv.setText("出生日期");
-                            if (!TextUtils.isEmpty(personPreview.getBirth())) {
-                                holder1.contentTv.setText(personPreview.getBirth());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 3:
-                            holder1.titleTv.setText("身份证号");
-                            if (!TextUtils.isEmpty(personPreview.getIdNumber())) {
-                                holder1.contentTv.setText(personPreview.getIdNumber());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 4:
-                            holder1.titleTv.setText("现居地");
-                            if (!TextUtils.isEmpty(personPreview.getAddress())) {
-                                holder1.contentTv.setText(personPreview.getAddress());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 5:
-                            holder1.titleTv.setText("个人简介");
-                            if (!TextUtils.isEmpty(personPreview.getBrief())) {
-                                holder1.contentTv.setText(personPreview.getBrief());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 6:
-                            holder1.titleTv.setText("手机号码（已绑定）");
-                            if (!TextUtils.isEmpty(personPreview.getPhoneNumber())) {
-                                holder1.contentTv.setText(personPreview.getPhoneNumber());
-                            } else {
-                                holder1.contentTv.setText("");
-                            }
-                            break;
-                        case 7:
-                            holder1.titleTv.setText("角色选择");
-                            holder1.contentTv.setText("");
-                            break;
-                    }
+                switch (position) {
+                    case 0:
+                        title = personPreview.getNameTitle();
+                        content = personPreview.getNameContent();
+                        break;
+                    case 1:
+                        title = personPreview.getSexTitle();
+                        content = personPreview.getSexContent();
+                        break;
+                    case 2:
+                        title = personPreview.getIdNumberTitle();
+                        content = personPreview.getIdNumberContent();
+                        break;
+                    case 3:
+                        title = personPreview.getAddressTitle();
+                        content = personPreview.getAddressContent();
+                        break;
+                    case 4:
+                        title = personPreview.getBriefTitle();
+                        content = personPreview.getBriefContent();
+                        break;
+                    case 5:
+                        title = personPreview.getPhoneNumberTitle();
+                        content = personPreview.getPhoneNumberContent();
+                        break;
+                    case 6:
+                        title = personPreview.getRoleTitle();
+                        content = personPreview.getRoleContent();
+                        break;
                 }
+                holder1.titleTv.setText(title);
+                holder1.contentTv.setText(content);
             }
         } else if (getItemViewType(position) == 1) {
             if (convertView == null) {
@@ -147,14 +113,11 @@ public class PersonPrivewAdapter extends BaseAdapter {
             } else {
                 holder2 = (ViewHolder2) convertView.getTag();
             }
-            PersonPreview personPreview = list.get(position);
-            if (position == 8) {
-                if (personPreview != null) {
-                    if (personPreview.getType() == 1) {
-                        if (personPreview.getRoleList() != null && personPreview.getRoleList().size() != 0) {
-                            holder2.gridView.setAdapter(new RoleAdapter(context, personPreview.getRoleList()));
-                            Utils.setGridViewHeight(holder2.gridView, 4);
-                        }
+            if (personPreview != null) {
+                if (position == 7) {
+                    if (personPreview.getRoleList() != null && personPreview.getRoleList().size() != 0) {
+                        holder2.gridView.setAdapter(new RoleAdapter(context, 0, personPreview.getRoleList()));
+                        Utils.setGridViewHeight(holder2.gridView, 4);
                     }
                 }
             }

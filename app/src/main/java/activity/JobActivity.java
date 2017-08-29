@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
@@ -23,22 +22,23 @@ import adapter.PersonAdapter;
 import bean.Person;
 import config.NetConfig;
 import config.StateConfig;
-import listener.OnRefreshListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import utils.Utils;
-import view.CListView;
+import refreshload.PullToRefreshLayout;
+import refreshload.PullableListView;
 import view.CProgressDialog;
 
-public class JobActivity extends AppCompatActivity implements View.OnClickListener, OnRefreshListener {
+public class JobActivity extends AppCompatActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
 
+    private PullToRefreshLayout ptrl;
+    private PullableListView lv;
     private View rootView, noNetEmptyView, noDataEmptyView;
+
     private RelativeLayout returnRl, screenRl;
     private CProgressDialog progressDialog;
-    private CListView listView;
 
     private List<Person> personList;
     private PersonAdapter personAdapter;
@@ -55,10 +55,15 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
                 stopAnim();
                 switch (msg.what) {
                     case StateConfig.LOAD_NO_NET:
-                        notifyNoNet();
                         break;
                     case StateConfig.LOAD_DONE:
-                        notifyData();
+                        personAdapter.notifyDataSetChanged();
+                        break;
+                    case 110:
+                        ptrl.refreshFinish(PullToRefreshLayout.SUCCEED);
+                        break;
+                    case 120:
+                        ptrl.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                         break;
                 }
             }
@@ -93,7 +98,8 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_job_return);
         screenRl = (RelativeLayout) rootView.findViewById(R.id.rl_job_screen);
-        listView = (CListView) rootView.findViewById(R.id.lv_job);
+        ptrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl_job);
+        lv = (PullableListView) rootView.findViewById(R.id.lv_job);
     }
 
     private void initDialogView() {
@@ -107,13 +113,13 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setData() {
-        listView.setAdapter(personAdapter);
+        lv.setAdapter(personAdapter);
     }
 
     private void setListener() {
         returnRl.setOnClickListener(this);
         screenRl.setOnClickListener(this);
-        listView.setOnRefreshListener(this);
+        ptrl.setOnRefreshListener(this);
     }
 
     private void loadData() {
@@ -199,41 +205,6 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
         return b;
     }
 
-    private void notifyNoNet() {
-        switch (LOAD_STATE) {
-            case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                tip = StateConfig.loadRefreshFailure;
-                break;
-            case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                tip = StateConfig.loadLoadFailure;
-                break;
-        }
-        showTip(tip);
-    }
-
-    private void notifyData() {
-        personAdapter.notifyDataSetChanged();
-        switch (LOAD_STATE) {
-            case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                tip = StateConfig.loadRefreshSuccess;
-                break;
-            case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                tip = StateConfig.loadLoadSuccess;
-                break;
-        }
-        showTip(tip);
-    }
-
-    private void showTip(String tip) {
-        if (!TextUtils.isEmpty(tip)) {
-            Utils.toast(this, tip);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -241,20 +212,18 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.rl_job_screen:
-                startActivity(new Intent(this, ScreenJobActivity.class));
+                startActivity(new Intent(this, JobScnActivity.class));
                 break;
         }
     }
 
     @Override
-    public void onDownPullRefresh() {
-        LOAD_STATE = StateConfig.LOAD_REFRESH;
-        loadNetData();
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        handler.sendEmptyMessageDelayed(110, 2000);
     }
 
     @Override
-    public void onLoadingMore() {
-        LOAD_STATE = StateConfig.LOAD_LOAD;
-        loadNetData();
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        handler.sendEmptyMessageDelayed(120, 2000);
     }
 }

@@ -4,11 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <GridView
-        android:id="@+id/gv_item_person_manage_edit_type_4"
+    <LinearLayout
+        android:id="@+id/ll_item_person_manage_edit_type_4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/y5"
-        android:numColumns="4" />
+        android:orientation="vertical">
+
+        <GridView
+            android:id="@+id/gv_item_person_manage_edit_type_4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/y5"
+            android:layout_weight="1"
+            android:numColumns="4" />
+
+        <TextView
+            android:id="@+id/tv_item_person_edit_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/y5"
+            android:background="@drawable/selector_foot_person_edit"
+            android:padding="@dimen/y5"
+            android:text="点击添加更多工种" />
+
+    </LinearLayout>
 
 </LinearLayout>

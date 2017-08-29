@@ -1,10 +1,10 @@
 package adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gjzg.R;
@@ -22,11 +22,12 @@ import bean.Role;
 public class RoleAdapter extends BaseAdapter {
 
     private Context context;
+    private int state;
     private List<Role> list;
-    private ViewHolder holder;
 
-    public RoleAdapter(Context context, List<Role> list) {
+    public RoleAdapter(Context context, int state, List<Role> list) {
         this.context = context;
+        this.state = state;
         this.list = list;
     }
 
@@ -47,6 +48,7 @@ public class RoleAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_gridview_role, null);
             holder = new ViewHolder(convertView);
@@ -56,11 +58,12 @@ public class RoleAdapter extends BaseAdapter {
         }
         Role role = list.get(position);
         if (role != null) {
-            if (!TextUtils.isEmpty(role.getContent())) {
-                holder.contentTv.setText(role.getContent());
-            } else {
-                holder.contentTv.setText("");
-            }
+            holder.contentTv.setText(role.getContent());
+        }
+        if (state == 0) {
+            holder.delIv.setVisibility(View.GONE);
+        } else if (state == 1) {
+            holder.delIv.setVisibility(View.VISIBLE);
         }
         return convertView;
     }
@@ -68,9 +71,11 @@ public class RoleAdapter extends BaseAdapter {
     private class ViewHolder {
 
         private TextView contentTv;
+        private ImageView delIv;
 
         public ViewHolder(View itemView) {
             contentTv = (TextView) itemView.findViewById(R.id.tv_item_gridview_role_content);
+            delIv = (ImageView) itemView.findViewById(R.id.iv_item_gridview_role_del);
         }
     }
 }

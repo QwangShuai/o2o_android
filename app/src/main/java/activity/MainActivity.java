@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView firstPageIv, workerManageIv, discountIv, mineIv;
     private TextView firstPageTv, workerManageTv, discountTv, mineTv;
 
-    private List<Fragment> cFragmentList = new ArrayList<>();
-    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private List<Fragment> cFragmentList;
+    private FragmentManager fragmentManager;
     private int curIndex;
 
     @Override
@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
+        cFragmentList = new ArrayList<>();
+        fragmentManager = getSupportFragmentManager();
         FirstPageFragment firstPageFragment = new FirstPageFragment();
         WorkManageFragment workManageFragment = new WorkManageFragment();
         DiscountFragment discountInfoFragment = new DiscountFragment();

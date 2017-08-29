@@ -1,11 +1,14 @@
 package activity;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
@@ -16,6 +19,7 @@ import com.gjzg.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import bean.PersonPreview;
 import config.ColorConfig;
 import fragment.PersonManageEditFragment;
 import fragment.PersonManagePreviewFragment;
@@ -23,14 +27,48 @@ import fragment.PersonManageRecordFragment;
 
 public class PersonManageActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //根视图
     private View rootView;
-    private RelativeLayout returnRl, previewRl, editRl, recordRl;
-    private TextView previewTv, editTv, recordTv;
+    //返回视图
+    private RelativeLayout returnRl;
+    //信息预览视图
+    private RelativeLayout previewRl;
+    private TextView previewTv;
+    //编辑信息视图
+    private RelativeLayout editRl;
+    private TextView editTv;
+    //投递记录视图
+    private RelativeLayout recordRl;
+    private TextView recordTv;
+    //编辑信息对话框视图
+    private AlertDialog editDialog;
+    private View editDialogView;
+    private TextView editDialogYesTv;
+    private TextView editDialogNotv;
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private List<Fragment> fragmentList = new ArrayList<>();
 
-    private int curPosition;
+    private int curPosition = 0;
+    private int tarPosition = -1;
+
+    public PersonPreview personPreview;
+
+    public Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg != null) {
+                personPreview = (PersonPreview) (msg.getData()).getSerializable("PersonPreview");
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(personPreview);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +83,7 @@ public class PersonManageActivity extends AppCompatActivity implements View.OnCl
 
     private void initView() {
         initRootView();
+        initDialogView();
     }
 
     private void initRootView() {
@@ -55,6 +94,27 @@ public class PersonManageActivity extends AppCompatActivity implements View.OnCl
         previewTv = (TextView) rootView.findViewById(R.id.tv_person_manage_preview);
         editTv = (TextView) rootView.findViewById(R.id.tv_person_manage_edit);
         recordTv = (TextView) rootView.findViewById(R.id.tv_person_manage_record);
+    }
+
+    private void initDialogView() {
+        editDialogView = View.inflate(this, R.layout.dialog_person_edit, null);
+        editDialogNotv = (TextView) editDialogView.findViewById(R.id.tv_dialog_person_edit_no);
+        editDialogNotv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDialog.dismiss();
+            }
+        });
+        editDialogYesTv = (TextView) editDialogView.findViewById(R.id.tv_dialog_person_edit_yes);
+        editDialogYesTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDialog.dismiss();
+                changeFragment();
+            }
+        });
+        editDialog = new AlertDialog.Builder(this).setView(editDialogView).create();
+        editDialog.setCanceledOnTouchOutside(false);
     }
 
     private void initData() {
@@ -76,7 +136,7 @@ public class PersonManageActivity extends AppCompatActivity implements View.OnCl
         recordRl.setOnClickListener(this);
     }
 
-    private void changeFragment(int tarPosition) {
+    private void changeFragment() {
         if (tarPosition != curPosition) {
             switch (tarPosition) {
                 case 0:
@@ -109,13 +169,18 @@ public class PersonManageActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
             case R.id.rl_person_manage_preview:
-                changeFragment(0);
+                tarPosition = 0;
+                changeFragment();
                 break;
             case R.id.rl_person_manage_edit:
-                changeFragment(1);
+                tarPosition = 1;
+                if (curPosition != tarPosition) {
+                    editDialog.show();
+                }
                 break;
             case R.id.rl_person_manage_record:
-                changeFragment(2);
+                tarPosition = 2;
+                changeFragment();
                 break;
         }
     }

@@ -271,7 +271,7 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.rl_worker_screen:
-                startActivityForResult(new Intent(this, ScreenWorkerActivity.class), CodeConfig.screenRequestCode);
+                startActivityForResult(new Intent(this, WorkerScnActivity.class), CodeConfig.screenRequestCode);
                 break;
             case R.id.tv_empty_no_net_refresh:
                 startAnim();

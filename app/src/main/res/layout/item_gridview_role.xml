@@ -18,6 +18,14 @@
             android:gravity="center"
             android:padding="@dimen/y5" />
 
+        <ImageView
+            android:id="@+id/iv_item_gridview_role_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/tv_item_gridview_role_content"
+            android:layout_alignTop="@+id/tv_item_gridview_role_content"
+            android:src="@mipmap/close" />
+
     </RelativeLayout>
 
 </LinearLayout>

@@ -10,4 +10,6 @@ public interface NetConfig {
 
     //测试用（城市列表）
     public static final String testUrl = "http://www.gangjianwang.com/shop/index.php?act=index&op=getWapAreaCities";
+    //服务条款
+    public static final String sevClsUrl = "http://www.gangjianwang.com/wap/";
 }

@@ -22,4 +22,12 @@
     <color name="dialog_cprogress_background">#3C3F41</color>
     <!--自定义ListView头布局文字颜色-->
     <color name="tv_head_clistview">#2681FC</color>
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="black">#000000</color>
+
+    <color name="gray">#aaaaaa</color>
+
+    <color name="light_blue">#6593cb</color>
 </resources>

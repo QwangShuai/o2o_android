@@ -33,15 +33,15 @@
         </activity>
         <activity android:name="activity.KindActivity" />
         <activity android:name="activity.WorkerActivity" />
-        <activity android:name="activity.MessageActivity" />
+        <activity android:name="activity.MsgActivity" />
         <activity android:name="activity.CityActivity" />
         <activity android:name="activity.TalkActivity" />
         <activity android:name="activity.WorkerManageActivity" />
         <activity android:name="activity.EmployerManageActivity" />
         <activity android:name="activity.PersonManageActivity" />
         <activity android:name="activity.JobActivity" />
-        <activity android:name="activity.SettingActivity" />
-        <activity android:name="activity.ServiceClauseActivity" />
+        <activity android:name="activity.SetActivity" />
+        <activity android:name="activity.SevClsActivity" />
         <activity
             android:name="activity.LoginActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -49,16 +49,16 @@
             android:name="activity.RechargeActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name="activity.SendJobActivity" />
-        <activity android:name="activity.CollectActivity" />
-        <activity android:name="activity.EvaluateActivity" />
         <activity android:name="activity.WalletActivity" />
         <activity android:name="activity.DetailActivity" />
         <activity android:name="activity.InviteActivity" />
         <activity android:name="activity.WithDrawActivity" />
         <activity
-            android:name="activity.ScreenWorkerActivity"
+            android:name="activity.WorkerScnActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name="activity.ScreenJobActivity"></activity>
+        <activity
+            android:name="activity.JobScnActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>

@@ -64,7 +64,7 @@ public class ScreenWorkerActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_screen, null);
+        rootView = View.inflate(this, R.layout.activity_screen_worker, null);
         setContentView(rootView);
         initView();
         initData();

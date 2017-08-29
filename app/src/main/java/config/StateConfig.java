@@ -20,4 +20,10 @@ public interface StateConfig {
     public static final String loadRefreshFailure = "刷新失败，请检查网络设置";
     public static final String loadLoadSuccess = "加载成功";
     public static final String loadLoadFailure = "加载失败，请检查网络设置";
+
+    //客服电话
+    public static final String cusSevNumber = "4000788889";
+
+    //获取动态密码间隔时间（秒）
+    public static final int getMovePwdSec = 3;
 }
