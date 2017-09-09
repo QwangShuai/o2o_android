@@ -12,7 +12,7 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import bean.Screen;
+import bean.ScreenBean;
 import listener.ListItemClickHelp;
 
 /**
@@ -24,11 +24,11 @@ import listener.ListItemClickHelp;
 public class ScreenHistoryAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Screen> list;
+    private List<ScreenBean> list;
     private ListItemClickHelp clickHelp;
     private ViewHolder holder;
 
-    public ScreenHistoryAdapter(Context context, List<Screen> list, ListItemClickHelp clickHelp) {
+    public ScreenHistoryAdapter(Context context, List<ScreenBean> list, ListItemClickHelp clickHelp) {
         this.context = context;
         this.list = list;
         this.clickHelp = clickHelp;
@@ -58,19 +58,19 @@ public class ScreenHistoryAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Screen screen = list.get(position);
-        if (screen != null) {
-            if (!TextUtils.isEmpty(screen.getKind())) {
-                holder.kindTv.setText(screen.getKind());
+        ScreenBean screenBean = list.get(position);
+        if (screenBean != null) {
+            if (!TextUtils.isEmpty(screenBean.getKind())) {
+                holder.kindTv.setText(screenBean.getKind());
             } else {
                 holder.kindTv.setText("");
             }
-            if (!TextUtils.isEmpty(screen.getDis())) {
-                holder.disTv.setText(screen.getDis());
+            if (!TextUtils.isEmpty(screenBean.getDis())) {
+                holder.disTv.setText(screenBean.getDis());
             } else {
                 holder.disTv.setText("");
             }
-            switch (screen.getState()) {
+            switch (screenBean.getState()) {
                 case 0:
                     holder.stateTv.setText("空闲");
                     break;

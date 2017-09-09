@@ -2,11 +2,8 @@ package activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,14 +19,14 @@ import java.util.List;
 
 import adapter.ScnDiaAdapter;
 import adapter.ScreenHistoryAdapter;
-import bean.Screen;
-import bean.ScreenHistory;
+import bean.ScreenBean;
+import bean.ScreenHistoryBean;
 import cache.LruJsonCache;
 import config.CodeConfig;
 import listener.ListItemClickHelp;
 import utils.Utils;
 
-public class WorkerScnActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, ListItemClickHelp {
+public class WorkerScnActivity extends CommonActivity implements View.OnClickListener, AdapterView.OnItemClickListener, ListItemClickHelp {
 
     private View rootView, headView, dialogView;
     private RelativeLayout closeRl, searchRl;
@@ -45,35 +42,30 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
     private List<String> dialogList;
     private ScnDiaAdapter scnDiaAdapter;
 
-    private List<Screen> screenList;
+    private List<ScreenBean> screenBeanList;
     private ScreenHistoryAdapter screenHistoryAdapter;
 
     private AlertDialog dialog;
+    private TextView dialogTitleTv;
+    private ImageView dialogCloseIv;
 
     private int workerState = 0;
     private int dialogState = 0;
 
     private boolean disClick, kindClick;
 
-    private Screen screen;
+    private ScreenBean screenBean;
 
     private LruJsonCache lruJsonCache;
-    private ScreenHistory screenHistory;
+    private ScreenHistoryBean screenHistoryBean;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_screen_worker, null);
-        setContentView(rootView);
-        initView();
-        initData();
-        setData();
-        setListener();
-        loadData();
+    protected View getRootView() {
+        return rootView = LayoutInflater.from(this).inflate(R.layout.activity_screen_worker, null);
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         initRootView();
         initHeadView();
         initDialogView();
@@ -99,29 +91,41 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initDialogView() {
-        dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_screen, null);
+        dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_scn, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         dialog = builder.create();
-        dialogLv = (ListView) dialogView.findViewById(R.id.lv_dialog_screen);
+        dialog.setCanceledOnTouchOutside(false);
+        dialogLv = (ListView) dialogView.findViewById(R.id.lv_dialog_scn);
+        dialogTitleTv = (TextView) dialogView.findViewById(R.id.tv_dialog_scn_title);
+        dialogCloseIv = (ImageView) dialogView.findViewById(R.id.iv_dialog_scn_close);
+        dialogCloseIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
         kindList = new ArrayList<>();
         disList = new ArrayList<>();
         dialogList = new ArrayList<>();
         scnDiaAdapter = new ScnDiaAdapter(this, dialogList);
         lruJsonCache = LruJsonCache.get(this);
-        screenList = new ArrayList<>();
-        screenHistoryAdapter = new ScreenHistoryAdapter(this, screenList, this);
+        screenBeanList = new ArrayList<>();
+        screenHistoryAdapter = new ScreenHistoryAdapter(this, screenBeanList, this);
     }
 
-    private void setData() {
+    @Override
+    protected void setData() {
         dialogLv.setAdapter(scnDiaAdapter);
         historyLv.setAdapter(screenHistoryAdapter);
     }
 
-    private void setListener() {
+    @Override
+    protected void setListener() {
         closeRl.setOnClickListener(this);
         searchRl.setOnClickListener(this);
         leisureIv.setOnClickListener(this);
@@ -133,7 +137,8 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
         historyLv.setOnItemClickListener(this);
     }
 
-    private void loadData() {
+    @Override
+    protected void loadData() {
         loadKindData();
         loadDisData();
         loadHistoryData();
@@ -141,16 +146,21 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
 
     private void loadHistoryData() {
         if (checkHistoryData()) {
-            screenList.addAll(screenHistory.getScreenList());
+            screenBeanList.addAll(screenHistoryBean.getScreenBeanList());
             screenHistoryAdapter.notifyDataSetChanged();
+            if (screenBeanList.size() == 0) {
+                historyLv.setVisibility(View.GONE);
+            } else {
+                historyLv.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     private boolean checkHistoryData() {
         boolean b;
-        screenHistory = (ScreenHistory) lruJsonCache.getAsObject("screenHistory");
-        if (screenHistory == null) {
-            screenHistory = new ScreenHistory();
+        screenHistoryBean = (ScreenHistoryBean) lruJsonCache.getAsObject("screenHistoryBean");
+        if (screenHistoryBean == null) {
+            screenHistoryBean = new ScreenHistoryBean();
             b = false;
         } else {
             b = true;
@@ -228,33 +238,33 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
         if (!disClick) {
             Utils.toast(this, "请选择搜索范围");
         } else if (!kindClick) {
-            Utils.toast(this, "青选择工种");
+            Utils.toast(this, "请选择工种");
         } else {
             saveToLocalData();
-            result(screen);
+            result(screenBean);
         }
     }
 
     private void saveToLocalData() {
-        screen = new Screen();
-        screen.setState(workerState);
-        screen.setName(nameEt.getText().toString());
-        screen.setDis(disTv.getText().toString());
-        screen.setKind(kindTv.getText().toString());
-        if (isDif(screen)) {
-            screenList.add(screen);
+        screenBean = new ScreenBean();
+        screenBean.setState(workerState);
+        screenBean.setName(nameEt.getText().toString());
+        screenBean.setDis(disTv.getText().toString());
+        screenBean.setKind(kindTv.getText().toString());
+        if (isDif(screenBean)) {
+            screenBeanList.add(screenBean);
         }
-        screenHistory.setScreenList(screenList);
-        lruJsonCache.put("screenHistory", screenHistory);
+        screenHistoryBean.setScreenBeanList(screenBeanList);
+        lruJsonCache.put("screenHistoryBean", screenHistoryBean);
     }
 
-    private boolean isDif(Screen screen) {
+    private boolean isDif(ScreenBean screenBean) {
         boolean b = true;
-        for (int i = 0; i < screenList.size(); i++) {
-            Screen o = screenList.get(i);
-            if (o.getState() == screen.getState()) {
-                if (o.getDis().equals(screen.getDis())) {
-                    if (o.getKind().equals(screen.getKind())) {
+        for (int i = 0; i < screenBeanList.size(); i++) {
+            ScreenBean o = screenBeanList.get(i);
+            if (o.getState() == screenBean.getState()) {
+                if (o.getDis().equals(screenBean.getDis())) {
+                    if (o.getKind().equals(screenBean.getKind())) {
                         b = false;
                     }
                 }
@@ -263,9 +273,9 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
         return b;
     }
 
-    private void result(Screen screen) {
+    private void result(ScreenBean screenBean) {
         Intent intent = new Intent();
-        intent.putExtra("screen", screen);
+        intent.putExtra("screenBean", screenBean);
         setResult(CodeConfig.screenResultCode, intent);
         finish();
     }
@@ -274,9 +284,11 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
         dialogList.clear();
         switch (tarState) {
             case 0:
+                dialogTitleTv.setText("搜索范围");
                 dialogList.addAll(disList);
                 break;
             case 1:
+                dialogTitleTv.setText("选择工种");
                 dialogList.addAll(kindList);
                 break;
         }
@@ -288,7 +300,7 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         switch (parent.getId()) {
-            case R.id.lv_dialog_screen:
+            case R.id.lv_dialog_scn:
                 dialog.dismiss();
                 switch (dialogState) {
                     case 0:
@@ -302,7 +314,7 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
                 }
                 break;
             case R.id.lv_screen_history:
-                result(screenList.get(position - 1));
+                result(screenBeanList.get(position - 1));
                 break;
         }
     }
@@ -317,10 +329,15 @@ public class WorkerScnActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void delHis(int p) {
-        lruJsonCache.remove("screenHistory");
-        screenList.remove(p);
+        lruJsonCache.remove("screenHistoryBean");
+        screenBeanList.remove(p);
         screenHistoryAdapter.notifyDataSetChanged();
-        screenHistory.setScreenList(screenList);
-        lruJsonCache.put("screenHistory", screenHistory);
+        if (screenBeanList.size() == 0) {
+            historyLv.setVisibility(View.GONE);
+        } else {
+            historyLv.setVisibility(View.VISIBLE);
+        }
+        screenHistoryBean.setScreenBeanList(screenBeanList);
+        lruJsonCache.put("screenHistoryBean", screenHistoryBean);
     }
 }

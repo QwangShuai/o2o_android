@@ -4,7 +4,7 @@
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.LoginActivity">
 
@@ -35,38 +35,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/y5"
+            android:layout_marginTop="@dimen/y10"
             android:text="手机号快捷登录"
-            android:textSize="@dimen/y10" />
+            android:textColor="@color/gray_a0a0a0"
+            android:textSize="@dimen/y9" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x34"
-            android:layout_marginRight="@dimen/x34"
-            android:layout_marginTop="@dimen/y5"
+            android:layout_marginLeft="@dimen/y30"
+            android:layout_marginRight="@dimen/y30"
+            android:layout_marginTop="@dimen/y15"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/y20"
+                android:layout_height="@dimen/y25"
                 android:layout_weight="1"
-                android:background="@drawable/shape_login_pwd"
+                android:background="@drawable/sl_login_phone"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/y15"
                     android:layout_height="@dimen/y15"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/x5"
-                    android:layout_marginRight="@dimen/x5"
+                    android:layout_marginLeft="@dimen/y5"
+                    android:layout_marginRight="@dimen/y5"
                     android:scaleType="fitXY"
                     android:src="@mipmap/mine_face_gray" />
 
                 <View
-                    android:layout_width="@dimen/x1"
+                    android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/side" />
+                    android:background="@color/gray_a0a0a0" />
 
                 <EditText
                     android:id="@+id/et_login_phone_number"
@@ -78,51 +79,53 @@
                     android:hint="请输入手机号"
                     android:inputType="number"
                     android:singleLine="true"
+                    android:textColorHint="@color/gray_a0a0a0"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/x12" />
+                    android:textSize="@dimen/y9" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_login_get_move_pwd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/x5"
-                android:layout_marginRight="@dimen/x5"
-                android:background="@drawable/shape_login_getcode"
-                android:paddingBottom="@dimen/y5"
-                android:paddingLeft="@dimen/y5"
-                android:paddingRight="@dimen/y5"
-                android:paddingTop="@dimen/y5"
-                android:text="获取动态密码"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/x12" />
+            <RelativeLayout
+                android:id="@+id/rl_login_get_move_pwd"
+                android:layout_width="@dimen/y60"
+                android:layout_height="@dimen/y25"
+                android:layout_marginLeft="@dimen/y6"
+                android:background="@drawable/sp_login_get">
+
+                <TextView
+                    android:id="@+id/tv_login_get_move_pwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="获取动态密码"
+                    android:textColor="@color/white_ffffff"
+                    android:textSize="@dimen/y8" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y20"
-            android:layout_marginLeft="@dimen/x34"
-            android:layout_marginRight="@dimen/x34"
-            android:layout_marginTop="@dimen/y5"
-            android:background="@drawable/shape_login_pwd"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y30"
+            android:layout_marginRight="@dimen/y30"
+            android:layout_marginTop="@dimen/y10"
+            android:background="@drawable/sl_login_phone"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="@dimen/y15"
                 android:layout_height="@dimen/y15"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/x5"
-                android:layout_marginRight="@dimen/x5"
+                android:layout_margin="@dimen/y5"
                 android:scaleType="fitXY"
                 android:src="@mipmap/pwd_gray" />
 
             <View
-                android:layout_width="@dimen/x1"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/side" />
+                android:background="@color/gray_a0a0a0" />
 
             <EditText
                 android:id="@+id/et_login_move_pwd"
@@ -134,8 +137,9 @@
                 android:hint="请输入收到的动态密码"
                 android:inputType="number"
                 android:singleLine="true"
+                android:textColorHint="@color/gray_a0a0a0"
                 android:textCursorDrawable="@null"
-                android:textSize="@dimen/x12" />
+                android:textSize="@dimen/y9" />
 
         </LinearLayout>
 
@@ -144,11 +148,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="@dimen/y5"
-            android:background="@drawable/selector_dialog_cache"
-            android:padding="@dimen/y5"
+            android:layout_marginBottom="@dimen/y18"
+            android:layout_marginTop="@dimen/y25"
+            android:background="@drawable/sp_login_log"
+            android:paddingBottom="@dimen/y6"
+            android:paddingLeft="@dimen/y16"
+            android:paddingRight="@dimen/y16"
+            android:paddingTop="@dimen/y6"
             android:text="登录"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_a0a0a0"
             android:textSize="@dimen/y10" />
 
     </LinearLayout>
@@ -162,10 +170,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/y40"
-            android:singleLine="true"
+            android:layout_marginBottom="@dimen/y25"
             android:text="说明：登录/注册代表您已经同意《钢建众工用户协议》"
-            android:textSize="@dimen/x10" />
+            android:textSize="@dimen/y8" />
 
     </RelativeLayout>
 

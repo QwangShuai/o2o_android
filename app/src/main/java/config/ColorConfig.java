@@ -1,18 +1,18 @@
 package config;
 
+import android.graphics.Color;
+
 /**
- * 创建日期：2017/8/1 on 9:43
+ * 创建日期：2017/9/1 on 10:43
  * 作者:孙明明
  * 描述:颜色配置
  */
 
 public interface ColorConfig {
 
-    //首页底部按钮文字颜色
-    public static final String TV_MAIN_DEFAULT = "#2681FC";
-    public static final String TV_MAIN_CHOOSED = "#FF3E50";
-    //灰
-    public static final String TV_GRAY = "#A0A0A0";
-    //红
-    public static final String TV_RED = "#FF3E50";
+    int blue_2681fc = Color.parseColor("#2681fc");
+    int red_ff3e50 = Color.parseColor("#ff3e50");
+    int gray_a0a0a0 = Color.parseColor("#a0a0a0");
+    int yellow_ffc822 = Color.parseColor("#ffc822");
+    int white_ffffff = Color.parseColor("#ffffff");
 }

@@ -3,7 +3,6 @@ package adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +10,8 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import bean.Person;
+import bean.PersonBean;
+import config.StateConfig;
 
 /**
  * 创建日期：2017/8/2 on 10:39
@@ -19,29 +19,10 @@ import bean.Person;
  * 描述:工人/雇主适配器
  */
 
-public class PersonAdapter extends BaseAdapter {
+public class PersonAdapter extends CommonAdapter<PersonBean> {
 
-    private Context context;
-    private List<Person> list;
-
-    public PersonAdapter(Context context, List<Person> list) {
-        this.context = context;
-        this.list = list;
-    }
-
-    @Override
-    public int getCount() {
-        return list == null ? 0 : list.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public PersonAdapter(Context context, List<PersonBean> list) {
+        super(context, list);
     }
 
     @Override
@@ -54,19 +35,37 @@ public class PersonAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Person person = list.get(position);
-        if (person != null) {
+        PersonBean personBean = list.get(position);
+        if (personBean != null) {
             holder.imageIv.setImageResource(R.mipmap.person_face_default);
-            holder.stateIv.setImageResource(R.mipmap.worker_leisure);
-            if (person.isCollect()) {
+            switch (personBean.getState()) {
+                case StateConfig.LEISURE:
+                    holder.stateIv.setImageResource(R.mipmap.worker_leisure);
+                    break;
+                case StateConfig.WAIT:
+                    holder.stateIv.setImageResource(R.mipmap.worker_wait);
+                    break;
+                case StateConfig.TALKING:
+                    holder.stateIv.setImageResource(R.mipmap.worker_talk);
+                    break;
+                case StateConfig.WORKING:
+                    holder.stateIv.setImageResource(R.mipmap.worker_mid);
+                    break;
+                case StateConfig.OVER:
+                    holder.stateIv.setImageResource(R.mipmap.worker_over);
+                    break;
+                default:
+                    break;
+            }
+            if (personBean.isCollect()) {
                 holder.collectIv.setImageResource(R.mipmap.collect_yellow);
             } else {
                 holder.collectIv.setImageResource(R.mipmap.collect_gray);
             }
-            holder.nameTv.setText(person.getName());
-            holder.playTv.setText(person.getPlay());
-            holder.showTv.setText(person.getShow());
-            holder.distanceTv.setText(person.getDistance());
+            holder.nameTv.setText(personBean.getName());
+            holder.playTv.setText(personBean.getPlay());
+            holder.showTv.setText(personBean.getShow());
+            holder.distanceTv.setText(personBean.getDistance());
         }
         return convertView;
     }
@@ -77,13 +76,13 @@ public class PersonAdapter extends BaseAdapter {
         private TextView nameTv, playTv, showTv, distanceTv;
 
         public ViewHolder(View itemView) {
-            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_image);
-            stateIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_state);
-            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_collect);
-            nameTv = (TextView) itemView.findViewById(R.id.tv_item_worker_name);
-            playTv = (TextView) itemView.findViewById(R.id.tv_item_worker_play);
-            showTv = (TextView) itemView.findViewById(R.id.tv_item_worker_show);
-            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_distance);
+            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_image);
+            stateIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_state);
+            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_collect);
+            nameTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_name);
+            playTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_play);
+            showTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_show);
+            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_distance);
         }
     }
 }

@@ -14,7 +14,7 @@
             android:id="@+id/iv_head_clistview"
             android:layout_width="@dimen/x20"
             android:layout_height="@dimen/x20"
-            android:src="@mipmap/pull" />
+            />
 
         <TextView
             android:id="@+id/tv_head_clistview"
@@ -23,7 +23,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="@dimen/x10"
             android:layout_toRightOf="@+id/iv_head_clistview"
-            android:textColor="@color/tv_head_clistview"
+            android:textColor="@color/blue_2681fc"
             android:textSize="@dimen/x12" />
 
     </RelativeLayout>

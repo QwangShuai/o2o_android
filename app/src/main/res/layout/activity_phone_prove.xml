@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_phone_prove"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="activity.PhoneProveActivity">
+
+    <RelativeLayout style="@style/rl_top_bar">
+
+        <RelativeLayout
+            android:id="@+id/rl_phone_prove_return"
+            style="@style/rl_return">
+
+            <ImageView style="@style/iv_return" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/tv_top_title"
+            android:text="手机验证" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/et_phone_prove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="number"
+            android:maxLength="4"
+            android:singleLine="true"
+            android:textColor="@color/white_ffffff"
+            android:textCursorDrawable="@color/white_ffffff" />
+
+        <LinearLayout
+            android:id="@+id/ll_phone_prove_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_phone_prove"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="已给手机发出验证码" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="150****3456" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_phone_prove_pwd"
+            style="@style/ll_pwd"
+            android:layout_below="@+id/ll_phone_prove_tip">
+
+            <RelativeLayout style="@style/rl_pwd">
+
+                <TextView
+                    android:id="@+id/tv_phone_prove_0"
+                    style="@style/tv_pwd" />
+
+            </RelativeLayout>
+
+            <View style="@style/v_pwd" />
+
+            <RelativeLayout style="@style/rl_pwd">
+
+                <TextView
+                    android:id="@+id/tv_phone_prove_1"
+                    style="@style/tv_pwd" />
+
+            </RelativeLayout>
+
+            <View style="@style/v_pwd" />
+
+            <RelativeLayout style="@style/rl_pwd">
+
+                <TextView
+                    android:id="@+id/tv_phone_prove_2"
+                    style="@style/tv_pwd" />
+
+            </RelativeLayout>
+
+            <View style="@style/v_pwd" />
+
+            <RelativeLayout style="@style/rl_pwd">
+
+                <TextView
+                    android:id="@+id/tv_phone_prove_3"
+                    style="@style/tv_pwd" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

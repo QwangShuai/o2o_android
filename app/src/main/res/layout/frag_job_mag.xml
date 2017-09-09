@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout style="@style/rl_top_bar">
+
+        <TextView
+            style="@style/tv_top_title"
+            android:text="工作管理" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/x1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_job_mag_prepaid"
+                    style="@style/rl_main">
+
+                    <LinearLayout style="@style/ll_main">
+
+                        <ImageView
+                            style="@style/iv_job_mag_pay"
+                            android:src="@mipmap/prepaid" />
+
+                        <TextView
+                            style="@style/tv_job_mag_pay"
+                            android:text="充值" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_job_mag_send_job"
+                    style="@style/rl_main">
+
+                    <LinearLayout style="@style/ll_main">
+
+                        <ImageView
+                            style="@style/iv_job_mag_pay"
+                            android:src="@mipmap/send_job2" />
+
+                        <TextView
+                            style="@style/tv_job_mag_pay"
+                            android:text="发布工作" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y10"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_job_mag_worker"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y57"
+                    android:clickable="true">
+
+                    <TextView
+                        style="@style/tv_job_mag_mag"
+                        android:text="工人工作管理" />
+
+                    <ImageView style="@style/iv_job_mag_mag" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_job_mag_emp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y57"
+                    android:clickable="true">
+
+                    <TextView
+                        style="@style/tv_job_mag_mag"
+                        android:text="雇主发布管理" />
+
+                    <ImageView style="@style/iv_job_mag_mag" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_job_mag_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y57"
+                    android:clickable="true">
+
+                    <TextView
+                        style="@style/tv_job_mag_mag"
+                        android:text="个人信息管理" />
+
+                    <ImageView style="@style/iv_job_mag_mag" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

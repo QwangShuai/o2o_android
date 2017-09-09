@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/red">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/y10"
             android:text="是否要修改您的个人信息？"
-            android:textColor="@android:color/white"
             android:textSize="@dimen/x20" />
 
         <LinearLayout
@@ -30,11 +28,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/selector_dialog_person_edit"
+                android:background="@drawable/sl_black_stroke"
                 android:gravity="center"
                 android:padding="@dimen/y5"
                 android:text="取消"
-                android:textColor="@android:color/white"
                 android:textSize="@dimen/x15" />
 
             <TextView
@@ -43,11 +40,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/y10"
                 android:layout_weight="1"
-                android:background="@drawable/selector_dialog_person_edit"
+                android:background="@drawable/sl_black_stroke"
                 android:gravity="center"
                 android:padding="@dimen/y5"
                 android:text="确认修改"
-                android:textColor="@android:color/white"
                 android:textSize="@dimen/x15" />
 
         </LinearLayout>

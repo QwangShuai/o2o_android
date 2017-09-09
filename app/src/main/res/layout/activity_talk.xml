@@ -4,7 +4,7 @@
     android:id="@+id/activity_talk"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.TalkActivity">
 
@@ -26,7 +26,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y225">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <com.baidu.mapapi.map.MapView
             android:id="@+id/mv_worker"
@@ -46,20 +47,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y85"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y50"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <view.CImageView
-                android:layout_width="@dimen/x50"
-                android:layout_height="@dimen/x50"
+                android:layout_width="@dimen/y35"
+                android:layout_height="@dimen/y35"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/y7"
                 android:layout_marginLeft="@dimen/y10"
+                android:layout_marginRight="@dimen/y10"
+                android:layout_marginTop="@dimen/y7"
                 android:scaleType="fitXY"
                 android:src="@mipmap/person_face_default" />
 
@@ -67,8 +71,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/y10"
-                android:layout_marginRight="@dimen/y10"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -81,21 +83,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="网二牛" />
+                        android:text="王二妮"
+                        android:textColor="@color/black_000000"
+                        android:textSize="@dimen/y10" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/y10"
+                        android:layout_height="@dimen/y10"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/y5"
                         android:scaleType="fitXY"
                         android:src="@mipmap/female" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/y30"
+                        android:layout_height="@dimen/y15"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/y25"
+                        android:layout_marginLeft="@dimen/y23"
                         android:scaleType="fitXY"
                         android:src="@mipmap/worker_leisure" />
 
@@ -105,15 +109,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/y10"
-                    android:text="保洁" />
+                    android:text="保洁"
+                    android:textColor="@color/gray_a0a0a0"
+                    android:textSize="@dimen/y9" />
 
             </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/iv_talk_phone"
+                android:layout_width="@dimen/y25"
+                android:layout_height="@dimen/y25"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/y10"
+                android:layout_marginRight="@dimen/y19"
                 android:scaleType="fitXY"
                 android:src="@mipmap/custom_service" />
 
@@ -124,12 +131,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/y2"
+            android:layout_marginTop="@dimen/y10"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/y10"
+                android:layout_height="@dimen/y10"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/y15"
                 android:scaleType="fitXY"
@@ -140,20 +147,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/y10"
-                android:text="dfsfsfsfd"
-                android:textColor="@android:color/black" />
+                android:singleLine="true"
+                android:text="完成过个人家装"
+                android:textColor="@color/gray_a0a0a0"
+                android:textSize="@dimen/y10" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/y5"
+            android:layout_marginTop="@dimen/y10"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/y10"
+                android:layout_height="@dimen/y10"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/y15"
                 android:scaleType="fitXY"
@@ -164,35 +173,56 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/y10"
-                android:text="dfsfsfsfd"
-                android:textColor="@android:color/black" />
+                android:text="哈尔滨市第四中学"
+                android:textColor="@color/gray_a0a0a0"
+                android:textSize="@dimen/y10" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/y10"
-                android:text="dfsfsfsfd" />
+                android:layout_marginLeft="@dimen/y12"
+                android:text="开原街"
+                android:textColor="@color/gray_a0a0a0"
+                android:textSize="@dimen/y8" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/y7"
+                android:text="现距我0.9km"
+                android:textColor="@color/gray_a0a0a0"
+                android:textSize="@dimen/y8" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_talk_sit"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_talk_wyzg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/y10"
                 android:layout_marginLeft="@dimen/y10"
-                android:text="dfsfsfsfd" />
+                android:layout_marginRight="@dimen/y10"
+                android:layout_marginTop="@dimen/y10"
+                android:background="@drawable/sl_login_get"
+                android:gravity="center"
+                android:paddingBottom="@dimen/y6"
+                android:paddingTop="@dimen/y6"
+                android:text="我要招工"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/y10" />
 
         </LinearLayout>
 
     </LinearLayout>
-
-    <View style="@style/v_split" />
-
-    <LinearLayout
-        android:id="@+id/ll_talk_sit"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        android:orientation="vertical" />
 
 </LinearLayout>

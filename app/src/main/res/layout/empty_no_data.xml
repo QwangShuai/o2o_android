@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="暂时没有相关数据"
-            android:textColor="@color/tv_main_default"
+            android:textColor="@color/blue_2681fc"
             android:textStyle="bold" />
 
     </LinearLayout>

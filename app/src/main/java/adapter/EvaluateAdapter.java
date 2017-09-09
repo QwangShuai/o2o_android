@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import bean.Evaluate;
+import bean.EvaluateBean;
 
 /**
  * 创建日期：2017/8/25 on 16:29
@@ -22,29 +21,10 @@ import bean.Evaluate;
  * 描述:评价适配器
  */
 
-public class EvaluateAdapter extends BaseAdapter {
+public class EvaluateAdapter extends CommonAdapter<EvaluateBean> {
 
-    private Context context;
-    private List<Evaluate> list;
-
-    public EvaluateAdapter(Context context, List<Evaluate> list) {
-        this.context = context;
-        this.list = list;
-    }
-
-    @Override
-    public int getCount() {
-        return list == null ? 0 : list.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public EvaluateAdapter(Context context, List<EvaluateBean> list) {
+        super(context, list);
     }
 
     @Override
@@ -57,7 +37,7 @@ public class EvaluateAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Evaluate e = list.get(position);
+        EvaluateBean e = list.get(position);
         if (e != null) {
             if (position == 0) {
                 holder.numCountLl.setVisibility(View.VISIBLE);

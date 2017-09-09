@@ -13,28 +13,19 @@ import com.gjzg.R;
 import cache.LruJsonCache;
 import utils.Utils;
 
-//设置页面
 public class SetActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //根视图
     private View rootView;
-    //返回视图
     private RelativeLayout returnRl;
-    //手机绑定视图
     private RelativeLayout phoneBindRl;
-    //清除缓存视图
     private RelativeLayout clearCacheRl;
-    //消息提示视图
     private RelativeLayout msgTipRl;
-    //退出登录视图
     private RelativeLayout quitRl;
-    //清除缓存对话框视图
     private AlertDialog cacheDialog;
     private View cacheDialogView;
     private TextView cacheDialogTipTv;
     private TextView cacheDialogNoTv;
     private TextView cacheDialogYesTv;
-    //缓存工具类
     private LruJsonCache lruJsonCache;
 
     @Override

@@ -1,16 +1,13 @@
 package activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,51 +21,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.PersonAdapter;
-import bean.Kind;
-import bean.Person;
-import bean.Screen;
-import cache.LruJsonCache;
+import bean.PersonBean;
+import bean.ScreenBean;
 import config.CodeConfig;
 import config.NetConfig;
 import config.StateConfig;
-import listener.OnRefreshListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import refreshload.PullToRefreshLayout;
+import refreshload.PullableListView;
 import utils.Utils;
-import view.CListView;
 import view.CProgressDialog;
 
-public class WorkerActivity extends AppCompatActivity implements View.OnClickListener, OnRefreshListener, AdapterView.OnItemClickListener {
+public class WorkerActivity extends CommonActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
-    private View rootView, noDataEmptyView, noNetEmptyView;
-    private RelativeLayout returnRl, screenRl;
-    private CListView listView;
-    private CProgressDialog progressDialog;
-    private TextView noNetRefreshTv;
-
-    private List<Person> personList;
+    private View rootView;
+    private RelativeLayout returnRl;
+    private RelativeLayout screenRl;
+    private PullToRefreshLayout pTrl;
+    private PullableListView pLv;
+    private CProgressDialog cPd;
+    private List<PersonBean> personBeanList;
     private PersonAdapter personAdapter;
-
     private OkHttpClient okHttpClient;
-    private LruJsonCache lruJsonCache;
-    private String cacheData;
-
-    private int LOAD_STATE;
-
-    private Kind kind;
+    private int state;
+    private FrameLayout emptyFl;
+    private View emptyDataView;
+    private View emptyNetView;
+    private TextView noNetRefreshTv;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg != null) {
-                stopAnim();
                 switch (msg.what) {
                     case StateConfig.LOAD_NO_NET:
-                        noNet();
+                        notifyNoNet();
                         break;
                     case StateConfig.LOAD_DONE:
                         notifyData();
@@ -86,96 +78,73 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_worker, null);
-        setContentView(rootView);
-        initView();
-        initData();
-        setData();
-        setListener();
-        loadData();
+    protected View getRootView() {
+        return rootView = LayoutInflater.from(this).inflate(R.layout.activity_worker, null);
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         initRootView();
-        initEmptyView();
         initDialogView();
+        initEmptyView();
     }
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_worker_return);
         screenRl = (RelativeLayout) rootView.findViewById(R.id.rl_worker_screen);
-        listView = (CListView) rootView.findViewById(R.id.clv_worker);
-    }
-
-    private void initEmptyView() {
-        noDataEmptyView = LayoutInflater.from(this).inflate(R.layout.empty_no_data, null);
-        noDataEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        ((ViewGroup) listView.getParent()).addView(noDataEmptyView);
-        noDataEmptyView.setVisibility(View.GONE);
-        noNetEmptyView = LayoutInflater.from(this).inflate(R.layout.empty_no_net, null);
-        noNetEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        ((ViewGroup) listView.getParent()).addView(noNetEmptyView);
-        noNetEmptyView.setVisibility(View.GONE);
-        noNetRefreshTv = (TextView) noNetEmptyView.findViewById(R.id.tv_empty_no_net_refresh);
+        pTrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        pLv = (PullableListView) rootView.findViewById(R.id.plv);
     }
 
     private void initDialogView() {
-        progressDialog = new CProgressDialog(this, R.style.dialog_cprogress);
+        cPd = new CProgressDialog(this, R.style.dialog_cprogress);
     }
 
-    private void startAnim() {
-        progressDialog.show();
+    private void initEmptyView() {
+        emptyFl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyDataView = LayoutInflater.from(this).inflate(R.layout.empty_data, null);
+        emptyDataView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        emptyFl.addView(emptyDataView);
+        emptyDataView.setVisibility(View.GONE);
+        emptyNetView = LayoutInflater.from(this).inflate(R.layout.empty_net, null);
+        noNetRefreshTv = (TextView) emptyNetView.findViewById(R.id.tv_no_net_refresh);
+        emptyNetView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        emptyFl.addView(emptyNetView);
+        emptyNetView.setVisibility(View.GONE);
     }
 
-    private void stopAnim() {
-        progressDialog.dismiss();
-    }
-
-    private void initData() {
-        Intent intent = getIntent();
-        kind = (Kind) intent.getSerializableExtra("kind");
-        personList = new ArrayList<>();
-        personAdapter = new PersonAdapter(this, personList);
+    @Override
+    protected void initData() {
+        personBeanList = new ArrayList<>();
+        personAdapter = new PersonAdapter(this, personBeanList);
         okHttpClient = new OkHttpClient();
-        lruJsonCache = LruJsonCache.get(this);
+        state = StateConfig.LOAD_DONE;
     }
 
-    private void setData() {
-        listView.setAdapter(personAdapter);
+    @Override
+    protected void setData() {
+        pLv.setAdapter(personAdapter);
     }
 
-    private void setListener() {
+    @Override
+    protected void setListener() {
         returnRl.setOnClickListener(this);
         screenRl.setOnClickListener(this);
-        listView.setOnRefreshListener(this);
-        listView.setOnItemClickListener(this);
-        noNetRefreshTv.setOnClickListener(this);
+        pTrl.setOnRefreshListener(this);
+        pLv.setOnItemClickListener(this);
+        noNetRefreshTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyNetView.setVisibility(View.GONE);
+                loadNetData();
+            }
+        });
     }
 
-    private void loadData() {
-        startAnim();
-        if (checkLocalData()) {
-            loadLocalData();
-        } else {
-            loadNetData();
-        }
-    }
-
-    private boolean checkLocalData() {
-        cacheData = lruJsonCache.getAsString("worker");
-        if (!TextUtils.isEmpty(cacheData)) {
-            return false;
-        }
-        return false;
-    }
-
-    private void loadLocalData() {
-        if (parseJson(cacheData)) {
-            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
-        }
+    @Override
+    protected void loadData() {
+        cPd.show();
+        loadNetData();
     }
 
     private void loadNetData() {
@@ -189,79 +158,88 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String json = response.body().string();
-                    if (!TextUtils.isEmpty(json)) {
-                        lruJsonCache.put("worker", json, 10);
-                        switch (LOAD_STATE) {
-                            case StateConfig.LOAD_REFRESH:
-                                personList.clear();
-                                break;
-                        }
-                        if (parseJson(json)) {
-                            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
-                        }
+                    String result = response.body().string();
+                    if (state == StateConfig.LOAD_REFRESH) {
+                        personBeanList.clear();
                     }
+                    parseJson(result);
                 }
             }
         });
     }
 
+    private void notifyNoNet() {
+        switch (state) {
+            case StateConfig.LOAD_DONE:
+                cPd.dismiss();
+                if (personBeanList.size() == 0) {
+                    pTrl.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.VISIBLE);
+                }
+                break;
+            case StateConfig.LOAD_REFRESH:
+                Utils.toast(this, StateConfig.loadNonet);
+                break;
+            case StateConfig.LOAD_LOAD:
+                Utils.toast(this, StateConfig.loadNonet);
+                break;
+        }
+    }
+
     private void notifyData() {
+        switch (state) {
+            case StateConfig.LOAD_DONE:
+                cPd.dismiss();
+                if (personBeanList.size() == 0) {
+                    pTrl.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.VISIBLE);
+                }
+                break;
+            case StateConfig.LOAD_REFRESH:
+                pTrl.hideHeadView();
+                break;
+            case StateConfig.LOAD_LOAD:
+                pTrl.hideFootView();
+                break;
+        }
         personAdapter.notifyDataSetChanged();
-        listView.setEmptyView(noDataEmptyView);
-        switch (LOAD_STATE) {
-            case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                Utils.toast(this, StateConfig.loadRefreshSuccess);
-                break;
-            case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                Utils.toast(this, StateConfig.loadLoadSuccess);
-                break;
-        }
     }
 
-    private void noNet() {
-        switch (LOAD_STATE) {
-            case StateConfig.LOAD_NO_NET:
-                personList.clear();
-                listView.setEmptyView(noNetEmptyView);
-                break;
-            case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                Utils.toast(this, StateConfig.loadRefreshFailure);
-                break;
-            case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                Utils.toast(this, StateConfig.loadLoadFailure);
-                break;
-        }
-    }
-
-    private boolean parseJson(String json) {
-        boolean result = false;
+    private void parseJson(String json) {
         try {
             JSONObject objBean = new JSONObject(json);
             if (objBean.optInt("code") == 200) {
-                for (int i = 0; i < 5; i++) {
-                    Person person = new Person();
-                    person.setImage("");
-                    person.setName(kind.getName() + "-" + i);
-                    person.setPlay("精通刮大白");
-                    person.setShow("十年刮大白经验");
-                    person.setState(1);
-                    person.setCollect(false);
-                    person.setDistance("距离3公里");
-                    personList.add(person);
-                }
-                result = true;
-            } else {
-                result = false;
+                PersonBean p0 = new PersonBean();
+                p0.setName("专业水泥工");
+                p0.setPlay("精通XX，XX，XX");
+                p0.setShow("完成过xx项目，个人家装");
+                p0.setState(StateConfig.LEISURE);
+                p0.setCollect(false);
+                p0.setDistance("距离3公里");
+                PersonBean p1 = new PersonBean();
+                p1.setName("专业水泥工");
+                p1.setPlay("精通XX，XX，XX");
+                p1.setShow("完成过xx项目，个人家装");
+                p1.setState(StateConfig.WORKING);
+                p1.setCollect(false);
+                p1.setDistance("距离3公里");
+                PersonBean p2 = new PersonBean();
+                p2.setName("专业水泥工");
+                p2.setPlay("精通XX，XX，XX");
+                p2.setShow("完成过xx项目，个人家装");
+                p2.setState(StateConfig.TALKING);
+                p2.setCollect(true);
+                p2.setDistance("距离3公里");
+                personBeanList.add(p0);
+                personBeanList.add(p1);
+                personBeanList.add(p2);
+                handler.sendEmptyMessage(StateConfig.LOAD_DONE);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return result;
     }
 
     @Override
@@ -273,30 +251,15 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.rl_worker_screen:
                 startActivityForResult(new Intent(this, WorkerScnActivity.class), CodeConfig.screenRequestCode);
                 break;
-            case R.id.tv_empty_no_net_refresh:
-                startAnim();
-                LOAD_STATE = StateConfig.LOAD_REFRESH;
-                loadNetData();
+            default:
                 break;
         }
     }
 
     @Override
-    public void onDownPullRefresh() {
-        LOAD_STATE = StateConfig.LOAD_REFRESH;
-        loadNetData();
-    }
-
-    @Override
-    public void onLoadingMore() {
-        LOAD_STATE = StateConfig.LOAD_LOAD;
-        loadNetData();
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, TalkActivity.class);
-        intent.putExtra("worker", personList.get(position - 1));
+        intent.putExtra("worker", personBeanList.get(position));
         startActivity(intent);
     }
 
@@ -304,11 +267,23 @@ public class WorkerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CodeConfig.screenRequestCode && resultCode == CodeConfig.screenResultCode && data != null) {
-            Screen screen = (Screen) data.getSerializableExtra("screen");
-            if (screen != null) {
-                int a = screen.getState();
+            ScreenBean screenBean = (ScreenBean) data.getSerializableExtra("screenBean");
+            if (screenBean != null) {
+                int a = screenBean.getState();
                 Utils.toast(this, a + "");
             }
         }
+    }
+
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        state = StateConfig.LOAD_REFRESH;
+        loadNetData();
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        state = StateConfig.LOAD_LOAD;
+        loadNetData();
     }
 }

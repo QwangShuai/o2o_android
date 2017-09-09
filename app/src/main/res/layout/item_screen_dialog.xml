@@ -4,20 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+
+    <TextView
+        android:id="@+id/tv_item_screen_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_press_or_not">
+        android:layout_marginBottom="@dimen/y5"
+        android:background="@drawable/sl_item_dialog_scn"
+        android:gravity="center"
+        android:paddingBottom="@dimen/y5"
+        android:paddingTop="@dimen/y5"
+        android:singleLine="true"
+        android:textColor="@color/black_000000"
+        android:textSize="@dimen/y11" />
 
-        <TextView
-            android:id="@+id/tv_item_screen_dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/y5"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/x15" />
-
-    </RelativeLayout>
 
 </LinearLayout>

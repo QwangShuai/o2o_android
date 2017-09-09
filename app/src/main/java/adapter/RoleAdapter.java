@@ -11,7 +11,7 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import bean.Role;
+import bean.RoleBean;
 
 /**
  * 创建日期：2017/8/11 on 9:43
@@ -23,9 +23,9 @@ public class RoleAdapter extends BaseAdapter {
 
     private Context context;
     private int state;
-    private List<Role> list;
+    private List<RoleBean> list;
 
-    public RoleAdapter(Context context, int state, List<Role> list) {
+    public RoleAdapter(Context context, int state, List<RoleBean> list) {
         this.context = context;
         this.state = state;
         this.list = list;
@@ -56,9 +56,9 @@ public class RoleAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Role role = list.get(position);
-        if (role != null) {
-            holder.contentTv.setText(role.getContent());
+        RoleBean roleBean = list.get(position);
+        if (roleBean != null) {
+            holder.contentTv.setText(roleBean.getContent());
         }
         if (state == 0) {
             holder.delIv.setVisibility(View.GONE);

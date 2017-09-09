@@ -1,126 +1,127 @@
 package activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.gjzg.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import adapter.PayWayAdapter;
-import bean.PayWay;
-import listener.ListItemClickHelp;
 import utils.Utils;
 
-public class RechargeActivity extends AppCompatActivity implements View.OnClickListener, ListItemClickHelp {
+public class RechargeActivity extends CommonActivity implements View.OnClickListener {
 
     private View rootView;
-    private RelativeLayout returnRl, toPayRl;
+    private RelativeLayout returnRl;
     private EditText moneyEt;
-    private ListView listView;
-
-    private PayWayAdapter payWayAdapter;
-    private List<PayWay> payWayList;
+    private LinearLayout wxLl;
+    private LinearLayout zfbLl;
+    private LinearLayout ylLl;
+    private ImageView wxIv, zfbIv, ylIv;
+    private TextView toPayTv;
+    private int curState;
+    private int tarState;
+    private final int WX_PAY = 0;
+    private final int ZFB_PAY = 1;
+    private final int YL_PAY = 2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_recharge, null);
-        setContentView(rootView);
-        initView();
-        initData();
-        setData();
-        setListener();
-        loadData();
+    protected View getRootView() {
+        return rootView = LayoutInflater.from(this).inflate(R.layout.activity_recharge, null);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        payWayAdapter = null;
-        payWayList = null;
-    }
-
-    private void initView() {
+    protected void initView() {
         initRootView();
     }
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_recharge_return);
         moneyEt = (EditText) rootView.findViewById(R.id.et_recharge_money);
-        listView = (ListView) rootView.findViewById(R.id.lv_pay_way);
-        toPayRl = (RelativeLayout) rootView.findViewById(R.id.rl_recharge_to_pay);
+        wxLl = (LinearLayout) rootView.findViewById(R.id.ll_recharge_wx);
+        zfbLl = (LinearLayout) rootView.findViewById(R.id.ll_recharge_zfb);
+        ylLl = (LinearLayout) rootView.findViewById(R.id.ll_recharge_yl);
+        wxIv = (ImageView) rootView.findViewById(R.id.iv_recharge_wx_point);
+        zfbIv = (ImageView) rootView.findViewById(R.id.iv_recharge_zfb_point);
+        ylIv = (ImageView) rootView.findViewById(R.id.iv_recharge_yl_point);
+        toPayTv = (TextView) rootView.findViewById(R.id.tv_recharge_pay);
     }
 
-    private void initData() {
-        payWayList = new ArrayList<>();
-        payWayAdapter = new PayWayAdapter(this, payWayList, this);
+    @Override
+    protected void initData() {
+        curState = WX_PAY;
+        tarState = -1;
     }
 
-    private void setData() {
-        listView.setAdapter(payWayAdapter);
+    @Override
+    protected void setData() {
     }
 
-    private void setListener() {
+    @Override
+    protected void setListener() {
         returnRl.setOnClickListener(this);
-        toPayRl.setOnClickListener(this);
+        wxLl.setOnClickListener(this);
+        zfbLl.setOnClickListener(this);
+        ylLl.setOnClickListener(this);
+        toPayTv.setOnClickListener(this);
     }
 
-    private void loadData() {
-        PayWay payWay1 = new PayWay();
-        payWay1.setImageResource(R.mipmap.wx_pay);
-        payWay1.setContent("微信支付");
-        payWay1.setYesOrno(true);
-        PayWay payWay2 = new PayWay();
-        payWay2.setImageResource(R.mipmap.ali_pay);
-        payWay2.setContent("支付宝支付");
-        payWay2.setYesOrno(false);
-        PayWay payWay3 = new PayWay();
-        payWay3.setImageResource(R.mipmap.yl_pay);
-        payWay3.setContent("银行卡支付");
-        payWay3.setYesOrno(false);
-        payWayList.add(payWay1);
-        payWayList.add(payWay2);
-        payWayList.add(payWay3);
-        payWayAdapter.notifyDataSetChanged();
+    @Override
+    protected void loadData() {
     }
 
-    private void payJudge() {
-        if (!TextUtils.isEmpty(moneyEt.getText().toString())) {
-            int payNoCount = -3;
-            int payWhich = 0;
-            for (int i = 0; i < payWayList.size(); i++) {
-                if (!payWayList.get(i).isYesOrno()) {
-                    payNoCount++;
-                } else {
-                    payWhich = i;
-                }
+    private void changePay() {
+        if (curState != tarState) {
+            switch (curState) {
+                case WX_PAY:
+                    wxIv.setImageResource(R.mipmap.point_gray);
+                    break;
+                case ZFB_PAY:
+                    zfbIv.setImageResource(R.mipmap.point_gray);
+                    break;
+                case YL_PAY:
+                    ylIv.setImageResource(R.mipmap.point_gray);
+                    break;
+                default:
+                    break;
             }
-            if (payNoCount == 0) {
-                Utils.toast(this, "请选择支付方式");
-            } else {
-                switch (payWhich) {
-                    case 0:
-                        Utils.toast(this, "微信支付:" + moneyEt.getText().toString());
-                        break;
-                    case 1:
-                        Utils.toast(this, "支付宝支付:" + moneyEt.getText().toString());
-                        break;
-                    case 2:
-                        Utils.toast(this, "银行卡支付:" + moneyEt.getText().toString());
-                        break;
-                }
+            switch (tarState) {
+                case WX_PAY:
+                    wxIv.setImageResource(R.mipmap.pay_choosed);
+                    break;
+                case ZFB_PAY:
+                    zfbIv.setImageResource(R.mipmap.pay_choosed);
+                    break;
+                case YL_PAY:
+                    ylIv.setImageResource(R.mipmap.pay_choosed);
+                    break;
+                default:
+                    break;
             }
+            curState = tarState;
+        }
+    }
+
+    private void toPay() {
+        String money = moneyEt.getText().toString();
+        if (TextUtils.isEmpty(money)) {
+            Utils.toast(this, "请输入金额");
         } else {
-            Utils.toast(this, "请输入充值金额");
+            switch (curState) {
+                case WX_PAY:
+                    Utils.toast(this, "微信支付：" + money);
+                    break;
+                case ZFB_PAY:
+                    Utils.toast(this, "支付宝支付：" + money);
+                    break;
+                case YL_PAY:
+                    Utils.toast(this, "银联支付：" + money);
+                    break;
+            }
         }
     }
 
@@ -130,26 +131,22 @@ public class RechargeActivity extends AppCompatActivity implements View.OnClickL
             case R.id.rl_recharge_return:
                 finish();
                 break;
-            case R.id.rl_recharge_to_pay:
-                payJudge();
+            case R.id.ll_recharge_wx:
+                tarState = WX_PAY;
+                changePay();
+                break;
+            case R.id.ll_recharge_zfb:
+                tarState = ZFB_PAY;
+                changePay();
+                break;
+            case R.id.ll_recharge_yl:
+                tarState = YL_PAY;
+                changePay();
+                break;
+            case R.id.tv_recharge_pay:
+                toPay();
                 break;
         }
     }
 
-    @Override
-    public void onClick(View item, View widget, int position, int which, boolean isChecked) {
-        switch (which) {
-            case R.id.cb_item_pay_way_yes_or_no:
-                payWayList.get(position).setYesOrno(isChecked);
-                if (isChecked) {
-                    for (int i = 0; i < payWayList.size(); i++) {
-                        if (i != position) {
-                            payWayList.get(i).setYesOrno(false);
-                        }
-                    }
-                }
-                payWayAdapter.notifyDataSetChanged();
-                break;
-        }
-    }
 }

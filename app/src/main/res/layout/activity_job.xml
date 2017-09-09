@@ -4,7 +4,7 @@
     android:id="@+id/activity_job"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.JobActivity">
 
@@ -35,23 +35,28 @@
 
     </RelativeLayout>
 
-    <refreshload.PullToRefreshLayout
-        android:id="@+id/ptrl_job"
+    <FrameLayout
+        android:id="@+id/fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y5">
+        android:layout_height="match_parent">
 
-        <include layout="@layout/refresh_head" />
-
-        <refreshload.PullableListView
-            android:id="@+id/lv_job"
+        <refreshload.PullToRefreshLayout
+            android:id="@+id/ptrl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/background"
-            android:dividerHeight="@dimen/y5" />
+            android:layout_height="match_parent">
 
-        <include layout="@layout/load_more" />
+            <include layout="@layout/head" />
 
-    </refreshload.PullToRefreshLayout>
+            <refreshload.PullableListView
+                android:id="@+id/plv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+
+            <include layout="@layout/foot" />
+
+        </refreshload.PullToRefreshLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

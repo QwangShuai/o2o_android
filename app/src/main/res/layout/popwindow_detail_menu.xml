@@ -2,90 +2,95 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/rl_popwindow_detail_menu_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_press_or_not"
-            android:clickable="true">
+            android:background="@android:color/white">
 
-            <TextView
+            <RelativeLayout
+                android:id="@+id/rl_popwindow_detail_menu_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginLeft="@dimen/y10"
-                android:layout_marginRight="@dimen/y10"
-                android:layout_marginTop="@dimen/y5"
-                android:text="全部"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/x15" />
+                android:clickable="true"
+                android:paddingBottom="@dimen/y5"
+                android:paddingLeft="@dimen/y10"
+                android:paddingRight="@dimen/y10"
+                android:paddingTop="@dimen/y5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全部"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/y10" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x1"
-        android:background="@android:color/white">
+        <View style="@style/v_split" />
 
         <RelativeLayout
-            android:id="@+id/rl_popwindow_detail_menu_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_press_or_not"
-            android:clickable="true">
+            android:background="@android:color/white">
 
-            <TextView
+            <RelativeLayout
+                android:id="@+id/rl_popwindow_detail_menu_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginLeft="@dimen/y10"
-                android:layout_marginRight="@dimen/y10"
-                android:layout_marginTop="@dimen/y5"
-                android:text="支出"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/x15" />
+                android:clickable="true"
+                android:paddingBottom="@dimen/y5"
+                android:paddingLeft="@dimen/y10"
+                android:paddingRight="@dimen/y10"
+                android:paddingTop="@dimen/y5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="支出"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/y10" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x1"
-        android:background="@android:color/white">
+        <View style="@style/v_split" />
 
         <RelativeLayout
-            android:id="@+id/rl_popwindow_detail_menu_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_press_or_not"
-            android:clickable="true">
+            android:background="@android:color/white">
 
-            <TextView
+            <RelativeLayout
+                android:id="@+id/rl_popwindow_detail_menu_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginLeft="@dimen/y10"
-                android:layout_marginRight="@dimen/y10"
-                android:layout_marginTop="@dimen/y5"
-                android:text="收入"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/x15" />
+                android:clickable="true"
+                android:paddingBottom="@dimen/y5"
+                android:paddingLeft="@dimen/y10"
+                android:paddingRight="@dimen/y10"
+                android:paddingTop="@dimen/y5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="收入"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/y10" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

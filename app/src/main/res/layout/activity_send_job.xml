@@ -4,7 +4,7 @@
     android:id="@+id/activity_send_job"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.SendJobActivity">
 
@@ -22,17 +22,200 @@
             style="@style/tv_top_title"
             android:text="发布工作" />
 
+        <RelativeLayout
+            android:id="@+id/rl_send_job_add"
+            style="@style/rl_return"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                style="@style/tv_top_title"
+                android:layout_margin="@dimen/y5"
+                android:text="增加工种"
+                android:textSize="@dimen/x15" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/y5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@drawable/sl_ll_send_job"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/y10"
+            android:paddingLeft="@dimen/y20"
+            android:paddingRight="@dimen/y20"
+            android:paddingTop="@dimen/y10">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="标题"
+                    android:textColor="@color/black_000000"
+                    android:textSize="@dimen/x15"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_send_job_project_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/y5"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="工程名称"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/x15" />
+
+            </LinearLayout>
+
+            <View style="@style/v_split" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:text="描述"
+                android:textColor="@color/black_000000"
+                android:textSize="@dimen/x15"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y50"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@drawable/sl_black_stroke"
+                android:padding="@dimen/y5">
+
+                <EditText
+                    android:id="@+id/et_send_job_project_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:hint="描述一下工作内容和工作渠道"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/x15" />
+
+            </RelativeLayout>
+
+            <View style="@style/v_split" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="工程类型"
+                    android:textColor="@color/black_000000"
+                    android:textSize="@dimen/x15"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_send_job_project_kind"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="选择项目类型"
+                    android:textSize="@dimen/x15" />
+
+            </LinearLayout>
+
+            <View style="@style/v_split" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="所在区域"
+                    android:textColor="@color/black_000000"
+                    android:textSize="@dimen/x15"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_send_job_project_area"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="选择工作所在区域"
+                    android:textSize="@dimen/x15" />
+
+            </LinearLayout>
+
+            <View style="@style/v_split" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:text="详细地址"
+                android:textColor="@color/black_000000"
+                android:textSize="@dimen/x15"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y50"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@drawable/sl_black_stroke"
+                android:padding="@dimen/y5">
+
+                <EditText
+                    android:id="@+id/et_send_job_project_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:hint="请填写详细地址，不少于5个字"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/x15" />
+
+            </RelativeLayout>
+
+            <View style="@style/v_split" />
+
+            <ListView
+                android:id="@+id/lv_send_job"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/y5" />
+
+            <TextView
+                android:id="@+id/tv_send_job_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@drawable/sl_black_stroke_corner"
+                android:clickable="true"
+                android:gravity="center"
+                android:paddingBottom="@dimen/y5"
+                android:paddingTop="@dimen/y5"
+                android:text="确认提交"
+                android:textColor="@color/black_000000"
+                android:textSize="@dimen/x15" />
 
         </LinearLayout>
 

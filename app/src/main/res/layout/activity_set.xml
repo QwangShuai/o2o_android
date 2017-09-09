@@ -4,7 +4,7 @@
     android:id="@+id/activity_setting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.SetActivity">
 
@@ -43,32 +43,25 @@
                     android:id="@+id/rl_set_phone_bind"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not"
-                    android:clickable="true"
-                    android:padding="@dimen/y5">
+                    android:clickable="true">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="手机绑定"
-                        android:textSize="@dimen/x15" />
+                        style="@style/tv_set"
+                        android:text="手机绑定" />
 
                     <ImageView
                         android:id="@+id/iv_set_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/arrow_r" />
+                        style="@style/iv_set" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/y10"
                         android:layout_toLeftOf="@+id/iv_set_phone"
-                        android:text="152****4239" />
+                        android:text="152****4239"
+                        android:textColor="@color/gray_a0a0a0"
+                        android:textSize="@dimen/y12" />
 
                 </RelativeLayout>
 
@@ -77,31 +70,20 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
+                android:layout_marginTop="@dimen/y10"
                 android:background="@android:color/white">
 
                 <RelativeLayout
                     android:id="@+id/rl_set_cache_clear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not"
-                    android:clickable="true"
-                    android:padding="@dimen/y5">
+                    android:clickable="true">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="清除缓存"
-                        android:textSize="@dimen/x15" />
+                        style="@style/tv_set"
+                        android:text="清除缓存" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/arrow_r" />
+                    <ImageView style="@style/iv_set" />
 
                 </RelativeLayout>
 
@@ -110,60 +92,45 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
+                android:layout_marginTop="@dimen/y10"
                 android:background="@android:color/white">
 
                 <RelativeLayout
                     android:id="@+id/rl_set_msg_tip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not"
-                    android:clickable="true"
-                    android:padding="@dimen/y5">
+                    android:clickable="true">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="消息提示"
-                        android:textSize="@dimen/x15" />
+                        style="@style/tv_set"
+                        android:text="消息提示" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/arrow_r" />
+                    <ImageView style="@style/iv_set" />
 
                 </RelativeLayout>
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:id="@+id/rl_set_quit"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y100"
-                android:background="@android:color/white">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y193"
+                android:background="@drawable/sp_login_get"
+                android:clickable="true"
+                android:paddingBottom="@dimen/y7"
+                android:paddingLeft="@dimen/y27"
+                android:paddingRight="@dimen/y27"
+                android:paddingTop="@dimen/y7">
 
-                <RelativeLayout
-                    android:id="@+id/rl_set_quit"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_press_or_not"
-                    android:clickable="true"
-                    android:padding="@dimen/y5">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_centerVertical="true"
-                        android:text="退出登录"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/x15" />
-
-                </RelativeLayout>
+                    android:layout_centerInParent="true"
+                    android:text="退出登录"
+                    android:textColor="@color/white_ffffff"
+                    android:textSize="@dimen/y12" />
 
             </RelativeLayout>
 

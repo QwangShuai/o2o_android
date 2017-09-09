@@ -4,7 +4,7 @@
     android:id="@+id/activity_wallet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.WalletActivity">
 
@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/selector_press_or_not"
             android:clickable="true">
 
             <TextView
@@ -37,7 +36,8 @@
                 android:layout_marginLeft="@dimen/x10"
                 android:layout_marginRight="@dimen/x10"
                 android:text="明细"
-                android:textSize="@dimen/x15" />
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y10" />
 
         </RelativeLayout>
 
@@ -54,20 +54,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/y10"
-            android:layout_marginTop="@dimen/y10"
+            android:layout_marginTop="@dimen/y18"
             android:text="当前余额（元）"
-            android:textColor="@color/red"
-            android:textSize="@dimen/x15" />
+            android:textColor="@color/red_ff3e50"
+            android:textSize="@dimen/y9" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/y10"
-            android:layout_marginLeft="@dimen/y10"
-            android:layout_marginTop="@dimen/y10"
+            android:layout_marginBottom="@dimen/y25"
+            android:layout_marginLeft="@dimen/y20"
+            android:layout_marginTop="@dimen/y20"
             android:text="0.00"
-            android:textColor="@color/red"
-            android:textSize="@dimen/x20" />
+            android:textColor="@color/red_ff3e50"
+            android:textSize="@dimen/y20" />
 
     </LinearLayout>
 
@@ -82,21 +82,24 @@
             android:id="@+id/rl_wallet_recharge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_press_or_not"
-            android:clickable="true"
-            android:padding="@dimen/y10">
+            android:clickable="true">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/y11"
                 android:text="立即充值"
-                android:textColor="@color/blue_d"
-                android:textSize="@dimen/x15" />
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y10" />
 
             <ImageView
-                android:layout_width="@dimen/x20"
-                android:layout_height="@dimen/x20"
+                android:layout_width="@dimen/y15"
+                android:layout_height="@dimen/y15"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/y7"
+                android:layout_marginRight="@dimen/y21"
+                android:layout_marginTop="@dimen/y7"
                 android:scaleType="fitXY"
                 android:src="@mipmap/right" />
 
@@ -115,21 +118,24 @@
             android:id="@+id/rl_wallet_withdraw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_press_or_not"
-            android:clickable="true"
-            android:padding="@dimen/y10">
+            android:clickable="true">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/y11"
                 android:text="我要提现"
-                android:textColor="@color/blue_d"
-                android:textSize="@dimen/x15" />
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y10" />
 
             <ImageView
-                android:layout_width="@dimen/x20"
-                android:layout_height="@dimen/x20"
+                android:layout_width="@dimen/y15"
+                android:layout_height="@dimen/y15"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/y7"
+                android:layout_marginRight="@dimen/y21"
+                android:layout_marginTop="@dimen/y7"
                 android:scaleType="fitXY"
                 android:src="@mipmap/right" />
 

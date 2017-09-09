@@ -3,14 +3,13 @@ package adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.gjzg.R;
 
 import java.util.List;
 
-import bean.Detail;
+import bean.DetailBean;
 
 /**
  * 创建日期：2017/8/9 on 10:55
@@ -18,34 +17,15 @@ import bean.Detail;
  * 描述:明细适配器
  */
 
-public class DetailAdapter extends BaseAdapter {
+public class DetailAdapter extends CommonAdapter<DetailBean> {
 
-    private Context context;
-    private List<Detail> list;
-    private ViewHoler holer;
-
-    public DetailAdapter(Context context, List<Detail> list) {
-        this.context = context;
-        this.list = list;
-    }
-
-    @Override
-    public int getCount() {
-        return list.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public DetailAdapter(Context context, List<DetailBean> list) {
+        super(context, list);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHoler holer;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_detail, null);
             holer = new ViewHoler(convertView);
@@ -53,12 +33,12 @@ public class DetailAdapter extends BaseAdapter {
         } else {
             holer = (ViewHoler) convertView.getTag();
         }
-        Detail detail = list.get(position);
-        if (detail != null) {
-            holer.titleTv.setText(detail.getTitle());
-            holer.balanceTv.setText(detail.getBalance());
-            holer.timeTv.setText(detail.getTime());
-            holer.desTv.setText(detail.getDes());
+        DetailBean detailBean = list.get(position);
+        if (detailBean != null) {
+            holer.titleTv.setText(detailBean.getTitle());
+            holer.balanceTv.setText(detailBean.getBalance());
+            holer.timeTv.setText(detailBean.getTime());
+            holer.desTv.setText(detailBean.getDes());
         }
         return convertView;
     }

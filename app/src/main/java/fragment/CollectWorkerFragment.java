@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.gjzg.R;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.PersonAdapter;
-import bean.Person;
+import bean.PersonBean;
 import config.NetConfig;
 import config.StateConfig;
 import okhttp3.Call;
@@ -31,6 +31,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.Utils;
 import view.CProgressDialog;
 
 /**
@@ -39,17 +40,18 @@ import view.CProgressDialog;
  * 描述:收藏的工人碎片
  */
 
-public class CollectWorkerFragment extends Fragment implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
+public class CollectWorkerFragment extends Fragment implements PullToRefreshLayout.OnRefreshListener {
 
     private View rootView;
-    private PullToRefreshLayout collectWorkerPtrl;
-    private PullableListView collectWorkerLv;
-    private LinearLayout noNetLl, noDataLl;
-    private TextView noNetTv;
-    private CProgressDialog progressDialog;
+    private FrameLayout fl;
+    private View emptyDataView, emptyNetView;
+    private TextView emptyNetTv;
+    private PullToRefreshLayout ptrl;
+    private PullableListView plv;
+    private CProgressDialog cpd;
 
-    private List<Person> collectWorkerList;
-    private PersonAdapter collectWorkerAdapter;
+    private List<PersonBean> list;
+    private PersonAdapter adapter;
 
     private OkHttpClient okHttpClient;
 
@@ -62,7 +64,7 @@ public class CollectWorkerFragment extends Fragment implements View.OnClickListe
             if (msg != null) {
                 switch (msg.what) {
                     case StateConfig.LOAD_NO_NET:
-                        notifyNoNet();
+                        notifyNet();
                         break;
                     case StateConfig.LOAD_DONE:
                         notifyData();
@@ -82,7 +84,7 @@ public class CollectWorkerFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_msg, null);
+        rootView = inflater.inflate(R.layout.common_listview, null);
         initView();
         initData();
         setData();
@@ -94,37 +96,54 @@ public class CollectWorkerFragment extends Fragment implements View.OnClickListe
     private void initView() {
         initRootView();
         initDialogView();
+        initEmptyView();
     }
 
     private void initRootView() {
-        collectWorkerPtrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl_msg);
-        collectWorkerLv = (PullableListView) rootView.findViewById(R.id.lv_msg);
-        noNetLl = (LinearLayout) rootView.findViewById(R.id.ll_no_net);
-        noDataLl = (LinearLayout) rootView.findViewById(R.id.ll_no_data);
-        noNetTv = (TextView) rootView.findViewById(R.id.tv_empty_no_net_refresh);
+        ptrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        plv = (PullableListView) rootView.findViewById(R.id.plv);
     }
 
     private void initDialogView() {
-        progressDialog = new CProgressDialog(getActivity(), R.style.dialog_cprogress);
+        cpd = new CProgressDialog(getActivity(), R.style.dialog_cprogress);
+    }
+
+    private void initEmptyView() {
+        fl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyDataView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_data, null);
+        emptyDataView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyDataView);
+        emptyDataView.setVisibility(View.GONE);
+        emptyNetView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_net, null);
+        emptyNetTv = (TextView) emptyNetView.findViewById(R.id.tv_no_net_refresh);
+        emptyNetView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyNetView);
+        emptyNetView.setVisibility(View.GONE);
+        emptyNetTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyNetView.setVisibility(View.GONE);
+                loadNetData();
+            }
+        });
     }
 
     private void initData() {
-        collectWorkerList = new ArrayList<>();
-        collectWorkerAdapter = new PersonAdapter(getActivity(), collectWorkerList);
+        list = new ArrayList<>();
+        adapter = new PersonAdapter(getActivity(), list);
         okHttpClient = new OkHttpClient();
     }
 
     private void setData() {
-        collectWorkerLv.setAdapter(collectWorkerAdapter);
+        plv.setAdapter(adapter);
     }
 
     private void setListener() {
-        noNetTv.setOnClickListener(this);
-        collectWorkerPtrl.setOnRefreshListener(this);
+        ptrl.setOnRefreshListener(this);
     }
 
     private void loadData() {
-        progressDialog.show();
+        cpd.show();
         loadNetData();
     }
 
@@ -140,7 +159,7 @@ public class CollectWorkerFragment extends Fragment implements View.OnClickListe
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (state == StateConfig.LOAD_REFRESH) {
-                        collectWorkerList.clear();
+                        list.clear();
                     }
                     String result = response.body().string();
                     parseJson(result);
@@ -154,14 +173,14 @@ public class CollectWorkerFragment extends Fragment implements View.OnClickListe
             JSONObject objBean = new JSONObject(json);
             if (objBean.optInt("code") == 200) {
                 for (int i = 0; i < 10; i++) {
-                    Person p = new Person();
+                    PersonBean p = new PersonBean();
                     p.setName("dfdf");
-                    p.setShow("weedt");
                     p.setPlay("hadifdf");
+                    p.setShow("weedt");
                     p.setDistance("vcvcv");
                     p.setState(2);
                     p.setCollect(true);
-                    collectWorkerList.add(p);
+                    list.add(p);
                 }
                 handler.sendEmptyMessage(StateConfig.LOAD_DONE);
             }
@@ -170,51 +189,47 @@ public class CollectWorkerFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    private void notifyNoNet() {
+    private void notifyNet() {
         switch (state) {
             case StateConfig.LOAD_DONE:
-                progressDialog.dismiss();
-                if (collectWorkerList.size() == 0) {
-                    noNetLl.setVisibility(View.VISIBLE);
-                    noDataLl.setVisibility(View.GONE);
-                }
+                cpd.dismiss();
+                ptrl.setVisibility(View.GONE);
+                emptyDataView.setVisibility(View.GONE);
+                emptyNetView.setVisibility(View.VISIBLE);
                 break;
             case StateConfig.LOAD_REFRESH:
-                collectWorkerPtrl.refreshFinish(PullToRefreshLayout.FAIL);
+                ptrl.hideHeadView();
+                Utils.toast(getActivity(), StateConfig.loadNonet);
                 break;
             case StateConfig.LOAD_LOAD:
-                collectWorkerPtrl.loadmoreFinish(PullToRefreshLayout.FAIL);
+                ptrl.hideFootView();
+                Utils.toast(getActivity(), StateConfig.loadNonet);
                 break;
         }
     }
 
     private void notifyData() {
-        collectWorkerAdapter.notifyDataSetChanged();
         switch (state) {
             case StateConfig.LOAD_DONE:
-                progressDialog.dismiss();
-                if (collectWorkerList.size() == 0) {
-                    noDataLl.setVisibility(View.VISIBLE);
-                    noNetLl.setVisibility(View.GONE);
+                cpd.dismiss();
+                if (list.size() == 0) {
+                    ptrl.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.VISIBLE);
+                } else {
+                    ptrl.setVisibility(View.VISIBLE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.GONE);
                 }
                 break;
             case StateConfig.LOAD_REFRESH:
-                collectWorkerPtrl.refreshFinish(PullToRefreshLayout.SUCCEED);
+                ptrl.hideHeadView();
                 break;
             case StateConfig.LOAD_LOAD:
-                collectWorkerPtrl.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                ptrl.hideFootView();
                 break;
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_empty_no_net_refresh:
-                noNetLl.setVisibility(View.GONE);
-                loadNetData();
-                break;
-        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override

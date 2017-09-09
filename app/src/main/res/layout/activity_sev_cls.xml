@@ -4,7 +4,7 @@
     android:id="@+id/activity_service_clause"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.SevClsActivity">
 
@@ -28,8 +28,8 @@
         android:id="@+id/pb_sev_cls"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x2"
-        android:progressDrawable="@drawable/pb" />
+        android:layout_height="1dp"
+        android:progressDrawable="@drawable/ll_pb" />
 
     <WebView
         android:id="@+id/wv_sev_cls"

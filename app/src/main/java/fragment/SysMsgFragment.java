@@ -102,7 +102,7 @@ public class SysMsgFragment extends Fragment implements View.OnClickListener , P
         noDataLl = (LinearLayout) rootView.findViewById(R.id.ll_no_data);
         noNetTv = (TextView) rootView.findViewById(R.id.tv_empty_no_net_refresh);
         sysMsgPtrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl_msg);
-        sysMsgLv = (PullableListView) rootView.findViewById(R.id.lv_msg);
+        sysMsgLv = (PullableListView) rootView.findViewById(R.id.plv_msg);
     }
 
     private void initDialogView() {

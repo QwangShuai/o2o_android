@@ -4,7 +4,7 @@
     android:id="@+id/activity_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.WorkerScnActivity">
 
@@ -15,7 +15,12 @@
             style="@style/rl_return">
 
             <ImageView
-                style="@style/iv_return"
+                android:layout_width="@dimen/y18"
+                android:layout_height="@dimen/y18"
+                android:layout_marginBottom="@dimen/y3"
+                android:layout_marginLeft="@dimen/y10"
+                android:layout_marginTop="@dimen/y3"
+                android:scaleType="fitXY"
                 android:src="@mipmap/close" />
 
         </RelativeLayout>
@@ -26,7 +31,12 @@
             android:layout_alignParentRight="true">
 
             <ImageView
-                style="@style/iv_return"
+                android:layout_width="@dimen/y18"
+                android:layout_height="@dimen/y18"
+                android:layout_marginBottom="@dimen/y3"
+                android:layout_marginRight="@dimen/y10"
+                android:layout_marginTop="@dimen/y3"
+                android:scaleType="fitXY"
                 android:src="@mipmap/search" />
 
         </RelativeLayout>
@@ -36,7 +46,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x1"
+        android:layout_marginTop="1dp"
         android:background="@android:color/white"
         android:orientation="vertical">
 
@@ -44,31 +54,36 @@
             android:id="@+id/et_screen_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/x10"
-            android:background="@drawable/shape_et_screen"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y12"
+            android:background="@drawable/sl_me_login"
             android:hint="请输入工人姓名"
-            android:padding="@dimen/x5"
+            android:padding="@dimen/y7"
+            android:textColorHint="@color/gray_a0a0a0"
             android:textCursorDrawable="@null"
-            android:textSize="@dimen/x15" />
+            android:textSize="@dimen/y10" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/x10">
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="工人状态"
-                android:textSize="@dimen/x15" />
+                android:text="工人状态："
+                android:textSize="@dimen/y10" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/x10">
+                android:layout_marginLeft="@dimen/y10">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -77,23 +92,23 @@
 
                     <ImageView
                         android:id="@+id/iv_screen_leisure"
-                        android:layout_width="@dimen/x50"
-                        android:layout_height="@dimen/y20"
+                        android:layout_width="@dimen/y35"
+                        android:layout_height="@dimen/y18"
                         android:scaleType="fitXY"
                         android:src="@mipmap/worker_leisure" />
 
                     <ImageView
                         android:id="@+id/iv_screen_talk"
-                        android:layout_width="@dimen/x50"
-                        android:layout_height="@dimen/y20"
+                        android:layout_width="@dimen/y35"
+                        android:layout_height="@dimen/y18"
                         android:layout_marginLeft="@dimen/x10"
                         android:scaleType="fitXY"
                         android:src="@mipmap/worker_talk_g" />
 
                     <ImageView
                         android:id="@+id/iv_screen_mid"
-                        android:layout_width="@dimen/x50"
-                        android:layout_height="@dimen/y20"
+                        android:layout_width="@dimen/y35"
+                        android:layout_height="@dimen/y18"
                         android:layout_marginLeft="@dimen/x10"
                         android:scaleType="fitXY"
                         android:src="@mipmap/worker_mid_g" />
@@ -108,21 +123,23 @@
             android:id="@+id/ll_screen_dis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
             android:clickable="true"
-            android:orientation="horizontal"
-            android:padding="@dimen/x10">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="搜索范围"
-                android:textSize="@dimen/x15" />
+                android:text="搜索范围："
+                android:textSize="@dimen/y10" />
 
             <TextView
                 android:id="@+id/tv_screen_dis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginLeft="@dimen/y10"
                 android:singleLine="true"
                 android:text="请选择搜索范围"
                 android:textColor="@android:color/black"
@@ -134,21 +151,24 @@
             android:id="@+id/ll_screen_kind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/y10"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
             android:clickable="true"
-            android:orientation="horizontal"
-            android:padding="@dimen/x10">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="选择工种"
-                android:textSize="@dimen/x15" />
+                android:text="选择工种："
+                android:textSize="@dimen/y10" />
 
             <TextView
                 android:id="@+id/tv_screen_kind"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x10"
+                android:layout_marginLeft="@dimen/y10"
                 android:singleLine="true"
                 android:text="请选择工种"
                 android:textColor="@android:color/black"
@@ -160,10 +180,9 @@
 
     <ListView
         android:id="@+id/lv_screen_history"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/y211"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/y5"
-        android:divider="@color/background"
-        android:dividerHeight="@dimen/y5" />
+        android:layout_gravity="center_horizontal"
+        android:divider="@null" />
 
 </LinearLayout>

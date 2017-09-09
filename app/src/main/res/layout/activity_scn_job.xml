@@ -4,7 +4,7 @@
     android:id="@+id/activity_screen_job"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.JobScnActivity">
 
@@ -15,7 +15,10 @@
             style="@style/rl_return">
 
             <ImageView
-                style="@style/iv_return"
+                android:layout_width="@dimen/y18"
+                android:layout_height="@dimen/y18"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/y10"
                 android:src="@mipmap/close" />
 
         </RelativeLayout>
@@ -26,17 +29,201 @@
             android:layout_alignParentRight="true">
 
             <ImageView
-                style="@style/iv_return"
+                android:layout_width="@dimen/y18"
+                android:layout_height="@dimen/y18"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/y10"
                 android:src="@mipmap/search" />
 
         </RelativeLayout>
 
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/lv_scn_job_cdt"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white_ffffff"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/et_screen_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y12"
+            android:background="@drawable/sl_me_login"
+            android:hint="请输入工人姓名"
+            android:padding="@dimen/y7"
+            android:textColorHint="@color/gray_a0a0a0"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/y10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搜索范围："
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_job_scn_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y10"
+                android:singleLine="true"
+                android:text="请选择搜索范围"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择工期："
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_job_scn_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y10"
+                android:singleLine="true"
+                android:text="请选择工期"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工资金额："
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_job_scn_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y10"
+                android:singleLine="true"
+                android:text="请选择工资金额"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="项目时间："
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_job_scn_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y10"
+                android:singleLine="true"
+                android:text="请选择项目时间"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="项目类型："
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_job_scn_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y10"
+                android:singleLine="true"
+                android:text="请选择项目类型"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/y10"
+            android:layout_marginLeft="@dimen/y10"
+            android:layout_marginRight="@dimen/y10"
+            android:layout_marginTop="@dimen/y10"
+            android:clickable="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择工种："
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_job_scn_kind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/y10"
+                android:singleLine="true"
+                android:text="请选择工种"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/x15" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,11 +1,9 @@
 package activity;
 
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,7 +15,7 @@ import com.gjzg.R;
 
 import config.NetConfig;
 
-public class SevClsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SevClsActivity extends CommonActivity implements View.OnClickListener {
 
     private View rootView;
     private RelativeLayout returnRl;
@@ -25,17 +23,12 @@ public class SevClsActivity extends AppCompatActivity implements View.OnClickLis
     private ProgressBar progressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_sev_cls, null);
-        setContentView(rootView);
-        initView();
-        setListener();
-        loadData();
+    protected View getRootView() {
+        return rootView = LayoutInflater.from(this).inflate(R.layout.activity_sev_cls,null);
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         initRootView();
     }
 
@@ -80,11 +73,23 @@ public class SevClsActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void setListener() {
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void setData() {
+
+    }
+
+    @Override
+    protected void setListener() {
         returnRl.setOnClickListener(this);
     }
 
-    private void loadData() {
+    @Override
+    protected void loadData() {
         sevClsWv.loadUrl(NetConfig.sevClsUrl);
     }
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import bean.ScnJob;
+import bean.ScnJobBean;
 import listener.ListItemClickHelp;
 
 /**
@@ -22,12 +22,12 @@ import listener.ListItemClickHelp;
 public class ScnJobCdtAdapter extends BaseAdapter {
 
     private Context context;
-    private ScnJob scnJob;
+    private ScnJobBean scnJobBean;
     private ListItemClickHelp clickHelp;
 
-    public ScnJobCdtAdapter(Context context, ScnJob scnJob, ListItemClickHelp clickHelp) {
+    public ScnJobCdtAdapter(Context context, ScnJobBean scnJobBean, ListItemClickHelp clickHelp) {
         this.context = context;
-        this.scnJob = scnJob;
+        this.scnJobBean = scnJobBean;
         this.clickHelp = clickHelp;
     }
 
@@ -52,7 +52,7 @@ public class ScnJobCdtAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return scnJob;
+        return scnJobBean;
     }
 
     @Override
@@ -74,9 +74,9 @@ public class ScnJobCdtAdapter extends BaseAdapter {
                 } else {
                     etVh = (EtVh) convertView.getTag();
                 }
-                if (scnJob != null) {
-                    etVh.nameEt.setText(scnJob.getName());
-                    etVh.nameEt.setHint(scnJob.getNameHint());
+                if (scnJobBean != null) {
+                    etVh.nameEt.setText(scnJobBean.getName());
+                    etVh.nameEt.setHint(scnJobBean.getNameHint());
                 }
                 break;
             case 1:
@@ -96,31 +96,31 @@ public class ScnJobCdtAdapter extends BaseAdapter {
                         clickHelp.onClick(view, parent, p, id, false);
                     }
                 });
-                if (scnJob != null) {
+                if (scnJobBean != null) {
                     switch (position) {
                         case 1:
-                            tvVh.titleTv.setText(scnJob.getDisTitle());
-                            tvVh.contentTv.setText(scnJob.getDisContent());
+                            tvVh.titleTv.setText(scnJobBean.getDisTitle());
+                            tvVh.contentTv.setText(scnJobBean.getDisContent());
                             break;
                         case 2:
-                            tvVh.titleTv.setText(scnJob.getDurationTitle());
-                            tvVh.contentTv.setText(scnJob.getDurationContent());
+                            tvVh.titleTv.setText(scnJobBean.getDurationTitle());
+                            tvVh.contentTv.setText(scnJobBean.getDurationContent());
                             break;
                         case 3:
-                            tvVh.titleTv.setText(scnJob.getMoneyTitle());
-                            tvVh.contentTv.setText(scnJob.getMoneyContent());
+                            tvVh.titleTv.setText(scnJobBean.getMoneyTitle());
+                            tvVh.contentTv.setText(scnJobBean.getMoneyContent());
                             break;
                         case 4:
-                            tvVh.titleTv.setText(scnJob.getStartTimeTitle());
-                            tvVh.contentTv.setText(scnJob.getStartTimeContent());
+                            tvVh.titleTv.setText(scnJobBean.getStartTimeTitle());
+                            tvVh.contentTv.setText(scnJobBean.getStartTimeContent());
                             break;
                         case 5:
-                            tvVh.titleTv.setText(scnJob.getKindTitle());
-                            tvVh.contentTv.setText(scnJob.getKindContent());
+                            tvVh.titleTv.setText(scnJobBean.getKindTitle());
+                            tvVh.contentTv.setText(scnJobBean.getKindContent());
                             break;
                         case 6:
-                            tvVh.titleTv.setText(scnJob.getTypeTitle());
-                            tvVh.contentTv.setText(scnJob.getTypeContent());
+                            tvVh.titleTv.setText(scnJobBean.getTypeTitle());
+                            tvVh.contentTv.setText(scnJobBean.getTypeContent());
                             break;
                     }
                 }

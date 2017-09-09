@@ -1,16 +1,13 @@
 package activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,45 +21,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.KindAdapter;
-import bean.Kind;
-import cache.LruJsonCache;
+import bean.KindBean;
 import config.NetConfig;
 import config.StateConfig;
-import listener.OnRefreshListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import refreshload.PullToRefreshLayout;
+import refreshload.PullableListView;
 import utils.Utils;
-import view.CListView;
 import view.CProgressDialog;
 
-public class KindActivity extends AppCompatActivity implements View.OnClickListener, OnRefreshListener, AdapterView.OnItemClickListener {
+public class KindActivity extends CommonActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
-    private View rootView, noDataEmptyView, noNetEmptyView;
+    private View rootView;
     private RelativeLayout returnRl;
-    private CListView listView;
-    private CProgressDialog progressDialog;
-    private TextView noNetRefreshTv;
-
-    private List<Kind> kindList;
+    private PullToRefreshLayout pTrl;
+    private PullableListView pLv;
+    private CProgressDialog cPd;
+    private List<KindBean> kindBeanList, tempList;
     private KindAdapter kindAdapter;
-
     private OkHttpClient okHttpClient;
-    private LruJsonCache lruJsonCache;
-    private String cacheData;
-    private int LOAD_STATE;
+    private int state;
+
+    private FrameLayout emptyFl;
+    private View emptyDataView;
+    private View emptyNetView;
+    private TextView noNetRefreshTv;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg != null) {
-                stopAnim();
                 switch (msg.what) {
                     case StateConfig.LOAD_NO_NET:
-                        noNet();
+                        notifyNoNet();
                         break;
                     case StateConfig.LOAD_DONE:
                         notifyData();
@@ -80,84 +76,72 @@ public class KindActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_type, null);
-        setContentView(rootView);
-        initView();
-        initData();
-        setData();
-        setListener();
-        loadData();
+    protected View getRootView() {
+        return rootView = LayoutInflater.from(this).inflate(R.layout.activity_kind, null);
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         initRootView();
-        initEmptyView();
         initDialogView();
+        initEmptyView();
     }
 
     private void initRootView() {
-        returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_type_return);
-        listView = (CListView) rootView.findViewById(R.id.clv_type);
-    }
-
-    private void initEmptyView() {
-        noDataEmptyView = LayoutInflater.from(this).inflate(R.layout.empty_no_data, null);
-        noDataEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        ((ViewGroup) listView.getParent()).addView(noDataEmptyView);
-        noDataEmptyView.setVisibility(View.GONE);
-        noNetEmptyView = LayoutInflater.from(this).inflate(R.layout.empty_no_net, null);
-        noNetEmptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        ((ViewGroup) listView.getParent()).addView(noNetEmptyView);
-        noNetEmptyView.setVisibility(View.GONE);
-        noNetRefreshTv = (TextView) noNetEmptyView.findViewById(R.id.tv_empty_no_net_refresh);
+        returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_kind_return);
+        pTrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        pLv = (PullableListView) rootView.findViewById(R.id.plv);
     }
 
     private void initDialogView() {
-        progressDialog = new CProgressDialog(this, R.style.dialog_cprogress);
+        cPd = new CProgressDialog(this, R.style.dialog_cprogress);
     }
 
-    private void initData() {
-        kindList = new ArrayList<>();
-        kindAdapter = new KindAdapter(this, kindList);
+    private void initEmptyView() {
+        emptyFl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyDataView = LayoutInflater.from(this).inflate(R.layout.empty_data, null);
+        emptyDataView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        emptyFl.addView(emptyDataView);
+        emptyDataView.setVisibility(View.GONE);
+        emptyNetView = LayoutInflater.from(this).inflate(R.layout.empty_net, null);
+        noNetRefreshTv = (TextView) emptyNetView.findViewById(R.id.tv_no_net_refresh);
+        emptyNetView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        emptyFl.addView(emptyNetView);
+        emptyNetView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void initData() {
+        kindBeanList = new ArrayList<>();
+        tempList = new ArrayList<>();
+        kindAdapter = new KindAdapter(this, kindBeanList);
         okHttpClient = new OkHttpClient();
-        lruJsonCache = LruJsonCache.get(this);
+        state = StateConfig.LOAD_DONE;
     }
 
-    private void setData() {
-        listView.setAdapter(kindAdapter);
+    @Override
+    protected void setData() {
+        pLv.setAdapter(kindAdapter);
     }
 
-    private void setListener() {
+    @Override
+    protected void setListener() {
         returnRl.setOnClickListener(this);
-        listView.setOnRefreshListener(this);
-        listView.setOnItemClickListener(this);
-        noNetRefreshTv.setOnClickListener(this);
+        pTrl.setOnRefreshListener(this);
+        pLv.setOnItemClickListener(this);
+        noNetRefreshTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyNetView.setVisibility(View.GONE);
+                loadNetData();
+            }
+        });
     }
 
-    private void loadData() {
-        startAnim();
-        if (checkLocalData()) {
-            loadLocalData();
-        } else {
-            loadNetData();
-        }
-    }
-
-    private boolean checkLocalData() {
-        cacheData = lruJsonCache.getAsString("kind");
-        if (!TextUtils.isEmpty(cacheData)) {
-            return false;
-        }
-        return false;
-    }
-
-    private void loadLocalData() {
-        if (parseJson(cacheData)) {
-            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
-        }
+    @Override
+    protected void loadData() {
+        cPd.show();
+        loadNetData();
     }
 
     private void loadNetData() {
@@ -171,123 +155,104 @@ public class KindActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String json = response.body().string();
-                    if (!TextUtils.isEmpty(json)) {
-                        lruJsonCache.put("kind", json, 10);
-                        switch (LOAD_STATE) {
-                            case StateConfig.LOAD_REFRESH:
-                                kindList.clear();
-                                break;
-                        }
-                        if (parseJson(json)) {
-                            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
-                        }
+                    String result = response.body().string();
+                    if (state == StateConfig.LOAD_REFRESH) {
+                        kindBeanList.clear();
                     }
+                    parseJson(result);
                 }
             }
         });
     }
 
-    private boolean parseJson(String json) {
-        boolean result = false;
+    private void parseJson(String json) {
         try {
             JSONObject objBean = new JSONObject(json);
             if (objBean.optInt("code") == 200) {
-                Kind k0 = new Kind();
-                k0.setName("水泥工");
-                Kind k1 = new Kind();
+                KindBean k0 = new KindBean();
+                k0.setName("水泥工（瓦匠）");
+                KindBean k1 = new KindBean();
                 k1.setName("搬运工");
-                Kind k2 = new Kind();
+                KindBean k2 = new KindBean();
                 k2.setName("焊接工");
-                Kind k3 = new Kind();
-                k3.setName("水暖工");
-                Kind k4 = new Kind();
-                k4.setName("瓦工");
-                kindList.add(k0);
-                kindList.add(k1);
-                kindList.add(k2);
-                kindList.add(k3);
-                kindList.add(k4);
-                result = true;
-            } else {
-                result = false;
+                tempList.add(k0);
+                tempList.add(k1);
+                tempList.add(k2);
+                handler.sendEmptyMessage(StateConfig.LOAD_DONE);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return result;
     }
 
-    private void startAnim() {
-        progressDialog.show();
-    }
-
-    private void stopAnim() {
-        progressDialog.dismiss();
-    }
-
-    private void noNet() {
-        switch (LOAD_STATE) {
-            case StateConfig.LOAD_NO_NET:
-                kindList.clear();
-                listView.setEmptyView(noNetEmptyView);
+    private void notifyNoNet() {
+        switch (state) {
+            case StateConfig.LOAD_DONE:
+                cPd.dismiss();
+                if (kindBeanList.size() == 0) {
+                    emptyNetView.setVisibility(View.VISIBLE);
+                    pTrl.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.GONE);
+                }
                 break;
             case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                Utils.toast(this, StateConfig.loadRefreshFailure);
+                pTrl.hideHeadView();
+                Utils.toast(this, StateConfig.loadNonet);
                 break;
             case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                Utils.toast(this, StateConfig.loadLoadFailure);
+                pTrl.hideFootView();
+                Utils.toast(this, StateConfig.loadNonet);
                 break;
         }
     }
 
     private void notifyData() {
-        kindAdapter.notifyDataSetChanged();
-        listView.setEmptyView(noDataEmptyView);
-        switch (LOAD_STATE) {
+        kindBeanList.addAll(tempList);
+        tempList.clear();
+        switch (state) {
+            case StateConfig.LOAD_DONE:
+                cPd.dismiss();
+                if (kindBeanList.size() == 0) {
+                    pTrl.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.VISIBLE);
+                    emptyNetView.setVisibility(View.GONE);
+                } else {
+                    pTrl.setVisibility(View.VISIBLE);
+                }
+                break;
             case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                Utils.toast(this, StateConfig.loadRefreshSuccess);
+                pTrl.hideHeadView();
                 break;
             case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                Utils.toast(this, StateConfig.loadLoadSuccess);
+                pTrl.hideFootView();
                 break;
         }
+        kindAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_type_return:
+            case R.id.rl_kind_return:
                 finish();
-                break;
-            case R.id.tv_empty_no_net_refresh:
-                startAnim();
-                LOAD_STATE = StateConfig.LOAD_REFRESH;
-                loadNetData();
                 break;
         }
     }
 
     @Override
-    public void onDownPullRefresh() {
-        LOAD_STATE = StateConfig.LOAD_REFRESH;
-        loadNetData();
-    }
-
-    @Override
-    public void onLoadingMore() {
-        LOAD_STATE = StateConfig.LOAD_LOAD;
-        loadNetData();
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, WorkerActivity.class);
-        intent.putExtra("kind", kindList.get(position - 1));
-        startActivity(intent);
+        startActivity(new Intent(this, WorkerActivity.class));
+    }
+
+    @Override
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        state = StateConfig.LOAD_REFRESH;
+        loadNetData();
+    }
+
+    @Override
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        state = StateConfig.LOAD_LOAD;
+        loadNetData();
     }
 }

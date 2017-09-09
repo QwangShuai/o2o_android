@@ -14,6 +14,13 @@ public interface StateConfig {
     public static final int LOAD_REFRESH = 2;
     public static final int LOAD_LOAD = 3;
 
+    //工人状态
+    public static final int LEISURE = 0;
+    public static final int WAIT = 1;
+    public static final int TALKING = 2;
+    public static final int WORKING = 3;
+    public static final int OVER = 4;
+
     //加载结果
     public static final String loadNonet = "网络异常";
     public static final String loadRefreshSuccess = "刷新成功";

@@ -4,7 +4,7 @@
     android:id="@+id/activity_city"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.CityActivity">
 

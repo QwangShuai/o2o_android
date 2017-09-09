@@ -1,15 +1,12 @@
 package activity;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -25,47 +22,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.DetailAdapter;
-import bean.Detail;
+import bean.DetailBean;
 import config.NetConfig;
 import config.StateConfig;
-import listener.OnRefreshListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import refreshload.PullToRefreshLayout;
+import refreshload.PullableListView;
 import utils.Utils;
-import view.CListView;
 import view.CProgressDialog;
 
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener, OnRefreshListener {
+public class DetailActivity extends CommonActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
 
-    private View rootView, menuPopView;
+    private View rootView;
     private RelativeLayout returnRl;
     private LinearLayout menuLl;
-    private CListView listView;
-    private CProgressDialog progressDialog;
+    private View menuPopView;
     private PopupWindow menuPopWindow;
     private RelativeLayout menuAllRl, menuOutRl, menuInRl;
     private TextView menuContentTv;
-
-    private List<Detail> detailList;
-    private DetailAdapter detailAdapter;
-
+    private CProgressDialog cpd;
+    private FrameLayout fl;
+    private View emptyNetView, emptyDataView;
+    private TextView emptyNetTv;
+    private PullToRefreshLayout ptrl;
+    private PullableListView plv;
+    private List<DetailBean> list;
+    private DetailAdapter adapter;
     private OkHttpClient okHttpClient;
-
-    private int LOAD_STATE;
-    private String tip;
-
+    private int state = StateConfig.LOAD_DONE;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg != null) {
-                stopAnim();
                 switch (msg.what) {
                     case StateConfig.LOAD_NO_NET:
-                        notifyNoNet();
+                        notifyNet();
                         break;
                     case StateConfig.LOAD_DONE:
                         notifyData();
@@ -75,20 +71,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
     };
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        rootView = View.inflate(this, R.layout.activity_detail, null);
-        setContentView(rootView);
-        initView();
-        initData();
-        setData();
-        setListener();
-        loadData();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -96,21 +78,29 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         handler.removeMessages(StateConfig.LOAD_DONE);
     }
 
-    private void initView() {
+    @Override
+    protected View getRootView() {
+        return rootView = LayoutInflater.from(this).inflate(R.layout.activity_detail, null);
+    }
+
+    @Override
+    protected void initView() {
         initRootView();
         initDialogView();
         initPopWindowView();
+        initEmptyView();
     }
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_detail_return);
-        listView = (CListView) rootView.findViewById(R.id.lv_detail);
         menuLl = (LinearLayout) rootView.findViewById(R.id.ll_detail_menu);
         menuContentTv = (TextView) rootView.findViewById(R.id.tv_detail_menu_content);
+        ptrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        plv = (PullableListView) rootView.findViewById(R.id.plv);
     }
 
     private void initDialogView() {
-        progressDialog = new CProgressDialog(this, R.style.dialog_cprogress);
+        cpd = new CProgressDialog(this, R.style.dialog_cprogress);
     }
 
     private void initPopWindowView() {
@@ -131,40 +121,52 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void initData() {
-        detailList = new ArrayList<>();
-        detailAdapter = new DetailAdapter(this, detailList);
+    private void initEmptyView() {
+        fl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyDataView = LayoutInflater.from(this).inflate(R.layout.empty_data, null);
+        emptyDataView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyDataView);
+        emptyDataView.setVisibility(View.GONE);
+        emptyNetView = LayoutInflater.from(this).inflate(R.layout.empty_net, null);
+        emptyNetTv = (TextView) emptyNetView.findViewById(R.id.tv_no_net_refresh);
+        emptyNetView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyNetView);
+        emptyNetView.setVisibility(View.GONE);
+        emptyNetTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyNetView.setVisibility(View.GONE);
+                loadNetData();
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        list = new ArrayList<>();
+        adapter = new DetailAdapter(this, list);
         okHttpClient = new OkHttpClient();
     }
 
-    private void setData() {
-        listView.setAdapter(detailAdapter);
+    @Override
+    protected void setData() {
+        plv.setAdapter(adapter);
     }
 
-    private void setListener() {
+    @Override
+    protected void setListener() {
+        ptrl.setOnRefreshListener(this);
         returnRl.setOnClickListener(this);
         menuLl.setOnClickListener(this);
         menuAllRl.setOnClickListener(this);
         menuOutRl.setOnClickListener(this);
         menuInRl.setOnClickListener(this);
-        listView.setOnRefreshListener(this);
     }
 
-    private void loadData() {
-        startAnim();
-        if (checkLocalData()) {
-            loadLocalData();
-        } else {
-            loadNetData();
-        }
-    }
-
-    private boolean checkLocalData() {
-        return false;
-    }
-
-    private void loadLocalData() {
-
+    @Override
+    protected void loadData() {
+        cpd.show();
+        loadNetData();
     }
 
     private void loadNetData() {
@@ -178,87 +180,94 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String json = response.body().string();
-                    if (!TextUtils.isEmpty(json)) {
-                        switch (LOAD_STATE) {
-                            case StateConfig.LOAD_REFRESH:
-                                detailList.clear();
-                                break;
-                        }
-                        saveToLocalData(json);
-                        if (parseJson(json))
-                            handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+                    String result = response.body().string();
+                    if (state == StateConfig.LOAD_REFRESH) {
+                        list.clear();
                     }
+                    parseJson(result);
                 }
             }
         });
     }
 
-    private void startAnim() {
-        progressDialog.show();
-    }
-
-    private void stopAnim() {
-        progressDialog.dismiss();
-    }
-
-    private boolean parseJson(String json) {
-        boolean b = false;
+    private void parseJson(String json) {
         try {
             JSONObject objBean = new JSONObject(json);
             if (objBean.optInt("code") == 200) {
-                Detail d0 = new Detail();
-                d0.setTitle("支出");
-                d0.setDes("dfdfd");
-                d0.setTime("derer");
-                d0.setBalance("gtfbrt");
-                detailList.add(d0);
-                b = true;
+                DetailBean d0 = new DetailBean();
+                d0.setTitle("提现");
+                d0.setDes("-300.00");
+                d0.setTime("2017-08-06");
+                d0.setBalance("余额：100.00");
+                DetailBean d1 = new DetailBean();
+                d1.setTitle("支付");
+                d1.setDes("-300.00");
+                d1.setTime("2017-08-01");
+                d1.setBalance("余额：100.00");
+                DetailBean d2 = new DetailBean();
+                d2.setTitle("充值");
+                d2.setDes("+100.00");
+                d2.setTime("2017-07-06");
+                d2.setBalance("余额：200.00");
+                DetailBean d3 = new DetailBean();
+                d3.setTitle("收入");
+                d3.setDes("+100.00");
+                d3.setTime("2016-08-06");
+                d3.setBalance("余额：300.00");
+                list.add(d0);
+                list.add(d1);
+                list.add(d2);
+                list.add(d3);
+                handler.sendEmptyMessage(StateConfig.LOAD_DONE);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return b;
     }
 
-    private void saveToLocalData(String json) {
-
-    }
-
-    private void notifyNoNet() {
-        switch (LOAD_STATE) {
+    private void notifyNet() {
+        switch (state) {
+            case StateConfig.LOAD_DONE:
+                cpd.dismiss();
+                ptrl.setVisibility(View.GONE);
+                emptyDataView.setVisibility(View.GONE);
+                emptyNetView.setVisibility(View.VISIBLE);
+                break;
             case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                tip = StateConfig.loadRefreshFailure;
+                ptrl.hideHeadView();
+                Utils.toast(this, StateConfig.loadNonet);
                 break;
             case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                tip = StateConfig.loadLoadFailure;
+                ptrl.hideFootView();
+                Utils.toast(this, StateConfig.loadNonet);
                 break;
         }
-        showTip(tip);
     }
 
     private void notifyData() {
-        switch (LOAD_STATE) {
+        switch (state) {
+            case StateConfig.LOAD_DONE:
+                cpd.dismiss();
+                if (list.size() == 0) {
+                    ptrl.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.VISIBLE);
+                } else {
+                    ptrl.setVisibility(View.VISIBLE);
+                    emptyDataView.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.GONE);
+                }
+                break;
             case StateConfig.LOAD_REFRESH:
-                listView.hideHeadView();
-                tip = StateConfig.loadRefreshSuccess;
+                ptrl.hideHeadView();
                 break;
             case StateConfig.LOAD_LOAD:
-                listView.hideFootView();
-                tip = StateConfig.loadLoadSuccess;
+                ptrl.hideFootView();
                 break;
         }
-        detailAdapter.notifyDataSetChanged();
-        showTip(tip);
+        adapter.notifyDataSetChanged();
     }
 
-    private void showTip(String tip) {
-        if (!TextUtils.isEmpty(tip))
-            Utils.toast(this, tip);
-
-    }
 
     private void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -274,7 +283,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.ll_detail_menu:
                 if (!menuPopWindow.isShowing()) {
-                    menuPopWindow.showAsDropDown(menuLl, -10, 10);
+                    menuPopWindow.showAsDropDown(menuLl, -20, -10);
                     backgroundAlpha(0.8f);
                 }
                 break;
@@ -300,14 +309,14 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onDownPullRefresh() {
-        LOAD_STATE = StateConfig.LOAD_REFRESH;
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        state = StateConfig.LOAD_REFRESH;
         loadNetData();
     }
 
     @Override
-    public void onLoadingMore() {
-        LOAD_STATE = StateConfig.LOAD_LOAD;
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        state = StateConfig.LOAD_LOAD;
         loadNetData();
     }
 }

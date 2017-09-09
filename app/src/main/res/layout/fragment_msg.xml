@@ -4,23 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <refreshload.PullToRefreshLayout
-        android:id="@+id/ptrl_msg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/refresh_head" />
-
-        <refreshload.PullableListView
-            android:id="@+id/lv_msg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null" />
-
-        <include layout="@layout/load_more" />
-
-    </refreshload.PullToRefreshLayout>
-
     <LinearLayout
         android:id="@+id/ll_no_data"
         android:layout_width="wrap_content"
@@ -82,5 +65,22 @@
             android:textSize="@dimen/x15" />
 
     </LinearLayout>
+
+    <refreshload.PullToRefreshLayout
+        android:id="@+id/ptrl_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/refresh_head" />
+
+        <refreshload.PullableListView
+            android:id="@+id/plv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null" />
+
+        <include layout="@layout/load_more" />
+
+    </refreshload.PullToRefreshLayout>
 
 </RelativeLayout>

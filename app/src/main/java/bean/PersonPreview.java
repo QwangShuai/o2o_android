@@ -14,17 +14,19 @@ public class PersonPreview implements Serializable {
     private String nameTitle;
     private String nameContent;
     private String sexTitle;
-    private String sexContent;
+    private boolean sex;
     private String idNumberTitle;
     private String idNumberContent;
     private String addressTitle;
     private String addressContent;
+    private String houseHoldTitle;
+    private String houseHoldContent;
     private String briefTitle;
     private String briefContent;
     private String phoneNumberTitle;
     private String phoneNumberContent;
     private String roleTitle;
-    private String roleContent;
+    private boolean role;
     private List<Role> roleList;
 
     public String getNameTitle() {
@@ -51,12 +53,12 @@ public class PersonPreview implements Serializable {
         this.sexTitle = sexTitle;
     }
 
-    public String getSexContent() {
-        return sexContent;
+    public boolean isSex() {
+        return sex;
     }
 
-    public void setSexContent(String sexContent) {
-        this.sexContent = sexContent;
+    public void setSex(boolean sex) {
+        this.sex = sex;
     }
 
     public String getIdNumberTitle() {
@@ -89,6 +91,22 @@ public class PersonPreview implements Serializable {
 
     public void setAddressContent(String addressContent) {
         this.addressContent = addressContent;
+    }
+
+    public String getHouseHoldTitle() {
+        return houseHoldTitle;
+    }
+
+    public void setHouseHoldTitle(String houseHoldTitle) {
+        this.houseHoldTitle = houseHoldTitle;
+    }
+
+    public String getHouseHoldContent() {
+        return houseHoldContent;
+    }
+
+    public void setHouseHoldContent(String houseHoldContent) {
+        this.houseHoldContent = houseHoldContent;
     }
 
     public String getBriefTitle() {
@@ -131,12 +149,12 @@ public class PersonPreview implements Serializable {
         this.roleTitle = roleTitle;
     }
 
-    public String getRoleContent() {
-        return roleContent;
+    public boolean isRole() {
+        return role;
     }
 
-    public void setRoleContent(String roleContent) {
-        this.roleContent = roleContent;
+    public void setRole(boolean role) {
+        this.role = role;
     }
 
     public List<Role> getRoleList() {
@@ -153,7 +171,7 @@ public class PersonPreview implements Serializable {
                 "nameTitle='" + nameTitle + '\'' +
                 ", nameContent='" + nameContent + '\'' +
                 ", sexTitle='" + sexTitle + '\'' +
-                ", sexContent='" + sexContent + '\'' +
+                ", sex=" + sex +
                 ", idNumberTitle='" + idNumberTitle + '\'' +
                 ", idNumberContent='" + idNumberContent + '\'' +
                 ", addressTitle='" + addressTitle + '\'' +
@@ -163,7 +181,7 @@ public class PersonPreview implements Serializable {
                 ", phoneNumberTitle='" + phoneNumberTitle + '\'' +
                 ", phoneNumberContent='" + phoneNumberContent + '\'' +
                 ", roleTitle='" + roleTitle + '\'' +
-                ", roleContent='" + roleContent + '\'' +
+                ", role=" + role +
                 ", roleList=" + roleList +
                 '}';
     }

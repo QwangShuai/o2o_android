@@ -4,7 +4,7 @@
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="activity.DetailActivity">
 
@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/selector_press_or_not"
             android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/y5"
@@ -53,11 +52,30 @@
 
     </RelativeLayout>
 
-    <view.CListView
-        android:id="@+id/lv_detail"
+    <View style="@style/v_split" />
+
+    <FrameLayout
+        android:id="@+id/fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/background"
-        android:dividerHeight="@dimen/y1" />
+        android:layout_height="match_parent">
+
+        <refreshload.PullToRefreshLayout
+            android:id="@+id/ptrl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/head" />
+
+            <refreshload.PullableListView
+                android:id="@+id/plv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+
+            <include layout="@layout/foot" />
+
+        </refreshload.PullToRefreshLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/gray_c4ced3">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:layout_marginBottom="@dimen/y5"
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
-        android:background="@drawable/selector_item_job"
+        android:background="@drawable/sl_black_stroke"
         android:orientation="vertical">
 
         <LinearLayout
@@ -47,7 +47,7 @@
                     android:layout_marginBottom="@dimen/y5"
                     android:layout_marginTop="@dimen/y5"
                     android:singleLine="true"
-                    android:textColor="@color/side" />
+                    android:textColor="@color/gray_a0a0a0" />
 
                 <TextView
                     android:id="@+id/tv_item_manage_employer_price"
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/y5"
                     android:singleLine="true"
-                    android:textColor="@color/red" />
+                    android:textColor="@color/red_ff3e50" />
 
             </LinearLayout>
 
