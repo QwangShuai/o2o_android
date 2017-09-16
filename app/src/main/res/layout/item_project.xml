@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="急招木工"
-                    android:textColor="@color/black_000000"
+                    android:textColor="@color/black_252323"
                     android:textSize="@dimen/y10" />
 
                 <TextView

@@ -1,8 +1,12 @@
 package activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -10,16 +14,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gjzg.R;
+
+import config.VarConfig;
+import service.CodeTimerService;
 
 public class PhoneProveActivity extends CommonActivity implements View.OnClickListener {
 
     private View rootView;
     private RelativeLayout returnRl;
     private EditText editText;
-    private TextView tv0, tv1, tv2, tv3;
+    private TextView tv0, tv1, tv2, tv3, resendTv;
     private LinearLayout pwdLl;
 
     @Override
@@ -40,6 +46,7 @@ public class PhoneProveActivity extends CommonActivity implements View.OnClickLi
         tv2 = (TextView) rootView.findViewById(R.id.tv_phone_prove_2);
         tv3 = (TextView) rootView.findViewById(R.id.tv_phone_prove_3);
         pwdLl = (LinearLayout) rootView.findViewById(R.id.ll_phone_prove_pwd);
+        resendTv = (TextView) rootView.findViewById(R.id.tv_phone_prove_resend);
     }
 
     @Override
@@ -57,6 +64,7 @@ public class PhoneProveActivity extends CommonActivity implements View.OnClickLi
         returnRl.setOnClickListener(this);
         editText.addTextChangedListener(textWatcher);
         pwdLl.setOnClickListener(this);
+        resendTv.setOnClickListener(this);
     }
 
     @Override
@@ -79,7 +87,7 @@ public class PhoneProveActivity extends CommonActivity implements View.OnClickLi
         public void afterTextChanged(Editable s) {
             refreshTv(s.toString());
             if (s.length() == 4) {
-                Toast.makeText(PhoneProveActivity.this, "judge", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(PhoneProveActivity.this, IdActivity.class));
             }
         }
     };
@@ -131,6 +139,53 @@ public class PhoneProveActivity extends CommonActivity implements View.OnClickLi
                 InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.tv_phone_prove_resend:
+                startService(new Intent(this, CodeTimerService.class));
+                break;
+            default:
+                break;
         }
+    }
+
+    private static IntentFilter updateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(CodeTimerService.IN_RUNNING);
+        intentFilter.addAction(CodeTimerService.END_RUNNING);
+        return intentFilter;
+    }
+
+    private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            switch (action) {
+                case CodeTimerService.IN_RUNNING:
+                    if (resendTv.isEnabled())
+                        resendTv.setEnabled(false);
+                    // 正在倒计时
+                    resendTv.setText(intent.getStringExtra("time"));
+                    Log.e("TAG", intent.getStringExtra("time"));
+                    break;
+                case CodeTimerService.END_RUNNING:
+                    // 完成倒计时
+                    resendTv.setEnabled(true);
+                    resendTv.setText(VarConfig.pwdResendTip);
+                    break;
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 注册广播
+        registerReceiver(mUpdateReceiver, updateIntentFilter());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 移除注册
+        unregisterReceiver(mUpdateReceiver);
     }
 }

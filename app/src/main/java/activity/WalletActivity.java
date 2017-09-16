@@ -59,7 +59,7 @@ public class WalletActivity extends CommonActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.rl_wallet_detail:
-                startActivity(new Intent(this, DetailActivity.class));
+                startActivity(new Intent(this, AccountDetailActivity.class));
                 break;
             case R.id.rl_wallet_recharge:
                 startActivity(new Intent(this, RechargeActivity.class));

@@ -1,7 +1,10 @@
 package activity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,41 +22,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.PersonPreviewBean;
-import fragment.PersonMagPreviewFrag;
-import fragment.PersonMagEditFrag;
-import fragment.PersonMagRecordFrag;
+import config.PermissionConfig;
+import fragment.EditInfoFragment;
+import fragment.PicaViewFragment;
+import fragment.DeliveryRecordFragment;
 
 public class PersonMagActivity extends CommonActivity implements View.OnClickListener {
 
-    //根视图
-    private View rootView;
-    //返回视图
-    private RelativeLayout returnRl;
-    //信息预览视图
-    private RelativeLayout previewRl;
-    private TextView previewTv;
-    //编辑信息视图
-    private RelativeLayout editRl;
-    private TextView editTv;
-    //投递记录视图
-    private RelativeLayout recordRl;
-    private TextView recordTv;
-    //编辑信息对话框视图
+    private View rootView, editDialogView;
+    private RelativeLayout returnRl, previewRl, editRl, recordRl;
+    private TextView previewTv, editTv, recordTv, editDialogYesTv, editDialogNotv;
     private AlertDialog editDialog;
-    private View editDialogView;
-    private TextView editDialogYesTv;
-    private TextView editDialogNotv;
-    //碎片管理者
+    private ImageView iconIv;
     private FragmentManager fragmentManager;
-    //碎片集合
     private List<Fragment> fragmentList;
-    //当前碎片索引
-    private int curPosition;
-    //目标碎片索引
-    private int tarPosition;
-    //信息预览数据类对象
+    private int curPosition = 0, tarPosition = -1;
     public PersonPreviewBean personPreviewBean;
-    //handler
     public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -71,7 +56,6 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
 
     @Override
     protected View getRootView() {
-        //初始化根视图
         return rootView = LayoutInflater.from(this).inflate(R.layout.activity_person_mag, null);
     }
 
@@ -82,21 +66,17 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
     }
 
     private void initRootView() {
-        //初始化返回视图
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_person_manage_return);
-        //初始化信息预览视图
         previewRl = (RelativeLayout) rootView.findViewById(R.id.rl_person_manage_preview);
         previewTv = (TextView) rootView.findViewById(R.id.tv_person_manage_preview);
-        //初始化编辑信息视图
         editRl = (RelativeLayout) rootView.findViewById(R.id.rl_person_manage_edit);
         editTv = (TextView) rootView.findViewById(R.id.tv_person_manage_edit);
-        //初始化投递记录视图
         recordRl = (RelativeLayout) rootView.findViewById(R.id.rl_person_manage_record);
         recordTv = (TextView) rootView.findViewById(R.id.tv_person_manage_record);
+        iconIv = (ImageView) rootView.findViewById(R.id.iv_person_mag_icon);
     }
 
     private void initDialogView() {
-        //初始化编辑信息对话框视图
         editDialogView = View.inflate(this, R.layout.dialog_person_edit, null);
         editDialogNotv = (TextView) editDialogView.findViewById(R.id.tv_dialog_person_edit_no);
         editDialogNotv.setOnClickListener(new View.OnClickListener() {
@@ -119,20 +99,14 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
 
     @Override
     protected void initData() {
-        //初始化碎片集合
+        Fragment picaViewFragment = new PicaViewFragment();
+        Fragment editInfoFragment = new EditInfoFragment();
+        Fragment deliveryRecordFragment = new DeliveryRecordFragment();
         fragmentList = new ArrayList<>();
-        PersonMagPreviewFrag previewFrag = new PersonMagPreviewFrag();
-        PersonMagEditFrag editFrag = new PersonMagEditFrag();
-        PersonMagRecordFrag recordFrag = new PersonMagRecordFrag();
-        fragmentList.add(previewFrag);
-        fragmentList.add(editFrag);
-        fragmentList.add(recordFrag);
-        //初始化碎片管理者
+        fragmentList.add(picaViewFragment);
+        fragmentList.add(editInfoFragment);
+        fragmentList.add(deliveryRecordFragment);
         fragmentManager = getSupportFragmentManager();
-        //初始化当前碎片索引
-        curPosition = 0;
-        //初始化目标碎片索引
-        tarPosition = -1;
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.ll_person_manage_sit, fragmentList.get(curPosition));
         transaction.commit();
@@ -145,14 +119,11 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
 
     @Override
     protected void setListener() {
-        //返回视图监听
         returnRl.setOnClickListener(this);
-        //信息预览监听
         previewRl.setOnClickListener(this);
-        //编辑信息监听
         editRl.setOnClickListener(this);
-        //投递记录监听
         recordRl.setOnClickListener(this);
+        iconIv.setOnClickListener(this);
     }
 
     @Override
@@ -206,6 +177,22 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
                 tarPosition = 2;
                 changeFragment();
                 break;
+            case R.id.iv_person_mag_icon:
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, PermissionConfig.GALLERY);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PermissionConfig.GALLERY && resultCode == RESULT_OK && data != null) {
+            Bundle bundle = data.getExtras();
+            Bitmap bitmap = (Bitmap) bundle.get("data");
+            iconIv.setImageBitmap(bitmap);
         }
     }
 }

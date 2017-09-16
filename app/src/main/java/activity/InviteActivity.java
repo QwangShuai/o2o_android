@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import config.VarConfig;
 import utils.Utils;
 
 public class InviteActivity extends CommonActivity implements View.OnClickListener {
@@ -58,7 +59,7 @@ public class InviteActivity extends CommonActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.tv_invite:
-                Utils.toast(this, "邀请好友功能暂未开通");
+                Utils.toast(this, VarConfig.notyetTip);
                 break;
         }
     }

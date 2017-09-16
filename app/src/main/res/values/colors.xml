@@ -3,18 +3,15 @@
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#ff4081</color>
-    <!--蓝-->
+    <!--颜色面板-->
+    <color name="yellow_ffc822">#ffc822</color>
     <color name="blue_2681fc">#2681fc</color>
-    <!--红-->
-    <color name="red_ff3e50">#ff3e50</color>
-    <!--灰-->
+    <color name="purple_8071f9">#8071f9</color>
+    <color name="blue_3dc4ff">#3dc4ff</color>
     <color name="gray_c4ced3">#c4ced3</color>
     <color name="gray_a0a0a0">#a0a0a0</color>
-    <color name="gray_3c3f41">#3c3f41</color>
-    <!--黄-->
-    <color name="yellow_ffc822">#ffc822</color>
-    <!--白-->
+    <color name="red_ff3e50">#ff3e50</color>
+    <color name="green_06d413">#06d413</color>
+    <color name="black_252323">#252323</color>
     <color name="white_ffffff">#ffffff</color>
-    <!--黑-->
-    <color name="black_000000">#000000</color>
 </resources>

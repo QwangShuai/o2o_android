@@ -8,5 +8,7 @@ package config;
 
 public interface PermissionConfig {
 
-    public static final int LOCATION = 1;
+    int LOCATION = 1;
+    int CAMERA = 2;
+    int GALLERY = 3;
 }

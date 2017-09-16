@@ -18,7 +18,7 @@
             android:paddingBottom="@dimen/y5"
             android:paddingTop="@dimen/y5"
             android:text="拍照"
-            android:textColor="@color/black_000000"
+            android:textColor="@color/black_252323"
             android:textSize="@dimen/y10" />
 
         <View style="@style/v_split" />
@@ -31,7 +31,7 @@
             android:paddingBottom="@dimen/y5"
             android:paddingTop="@dimen/y5"
             android:text="图库"
-            android:textColor="@color/black_000000"
+            android:textColor="@color/black_252323"
             android:textSize="@dimen/y10" />
 
         <View style="@style/v_split" />
@@ -44,7 +44,7 @@
             android:paddingBottom="@dimen/y5"
             android:paddingTop="@dimen/y5"
             android:text="取消"
-            android:textColor="@color/black_000000"
+            android:textColor="@color/black_252323"
             android:textSize="@dimen/y10" />
 
     </LinearLayout>

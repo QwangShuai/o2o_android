@@ -4,7 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.gjzg.R;
@@ -16,10 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.PersonAdapter;
+import adapter.WorkerMagAdapter;
 import bean.PersonBean;
 import config.NetConfig;
 import config.StateConfig;
+import listener.ListItemClickHelp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -27,6 +29,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.Utils;
 import view.CProgressDialog;
 
 /**
@@ -35,30 +38,18 @@ import view.CProgressDialog;
  * 描述:雇主工作管理-全部
  */
 
-public class EmpMagAllFrag extends CommonFragment implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
+public class EmpMagAllFrag extends CommonFragment implements PullToRefreshLayout.OnRefreshListener, ListItemClickHelp {
 
-    //根视图
-    private View rootView;
-    //无网络视图
-    private LinearLayout noNetLl;
-    private TextView noNetTv;
-    //无数据视图
-    private LinearLayout noDataLl;
-    //刷新布局视图
-    private PullToRefreshLayout pTrl;
-    //刷新ListView视图
-    private PullableListView pLv;
-    //加载对话框视图
-    private CProgressDialog cPd;
-    //全部数据类集合
-    private List<PersonBean> allList;
-    //全部数据适配器
-    private PersonAdapter allAdapter;
-    //okHttpClient
+    private View rootView, emptyDataView, emptyNetView;
+    private FrameLayout fl;
+    private TextView emptyNetTv;
+    private PullToRefreshLayout ptrl;
+    private PullableListView plv;
+    private CProgressDialog cpd;
+    private List<PersonBean> list;
+    private WorkerMagAdapter adapter;
     private OkHttpClient okHttpClient;
-    //加载状态
     private int state;
-    //handler
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,10 +57,10 @@ public class EmpMagAllFrag extends CommonFragment implements View.OnClickListene
             if (msg != null) {
                 switch (msg.what) {
                     case StateConfig.LOAD_NO_NET:
-                        notifyNoNet();
+                        notifyNet();
                         break;
                     case StateConfig.LOAD_DONE:
-                        notifyNoData();
+                        notifyData();
                         break;
                 }
             }
@@ -92,54 +83,60 @@ public class EmpMagAllFrag extends CommonFragment implements View.OnClickListene
     protected void initView() {
         initRootView();
         initDialogView();
+        initEmptyView();
     }
 
     private void initRootView() {
-        //初始化无网络视图
-        noNetLl = (LinearLayout) rootView.findViewById(R.id.ll_no_net);
-        noNetTv = (TextView) rootView.findViewById(R.id.tv_no_net_refresh);
-        //初始化无数据视图
-        noDataLl = (LinearLayout) rootView.findViewById(R.id.ll_no_data);
-        //初始化刷新布局视图
-        pTrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
-        //初始化刷新ListView视图
-        pLv = (PullableListView) rootView.findViewById(R.id.plv);
+        fl = (FrameLayout) rootView.findViewById(R.id.fl);
+        ptrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        plv = (PullableListView) rootView.findViewById(R.id.plv);
     }
 
     private void initDialogView() {
-        //初始化加载对话框视图
-        cPd = new CProgressDialog(getActivity(), R.style.dialog_cprogress);
+        cpd = new CProgressDialog(getActivity(), R.style.dialog_cprogress);
+    }
+
+    private void initEmptyView() {
+        fl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyDataView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_data, null);
+        emptyDataView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyDataView);
+        emptyDataView.setVisibility(View.GONE);
+        emptyNetView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_net, null);
+        emptyNetTv = (TextView) emptyNetView.findViewById(R.id.tv_no_net_refresh);
+        emptyNetView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyNetView);
+        emptyNetView.setVisibility(View.GONE);
+        emptyNetTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyNetView.setVisibility(View.GONE);
+                loadNetData();
+            }
+        });
     }
 
     @Override
     protected void initData() {
-        //初始化全部数据类集合
-        allList = new ArrayList<>();
-        //初始化全部数据适配器
-        allAdapter = new PersonAdapter(getActivity(), allList);
-        //初始化okHttpClient
+        list = new ArrayList<>();
+        adapter = new WorkerMagAdapter(getActivity(), list, this);
         okHttpClient = new OkHttpClient();
-        //初始化加载状态
         state = StateConfig.LOAD_DONE;
     }
 
     @Override
     protected void setData() {
-        //绑定全部数据适配器
-        pLv.setAdapter(allAdapter);
+        plv.setAdapter(adapter);
     }
 
     @Override
     protected void setListener() {
-        //无网络视图监听
-        noNetTv.setOnClickListener(this);
-        //刷新布局视图监听
-        pTrl.setOnRefreshListener(this);
+        ptrl.setOnRefreshListener(this);
     }
 
     @Override
     protected void loadData() {
-        cPd.show();
+        cpd.show();
         loadNetData();
     }
 
@@ -155,7 +152,7 @@ public class EmpMagAllFrag extends CommonFragment implements View.OnClickListene
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (state == StateConfig.LOAD_REFRESH) {
-                        allList.clear();
+                        list.clear();
                     }
                     String result = response.body().string();
                     parseJson(result);
@@ -168,19 +165,42 @@ public class EmpMagAllFrag extends CommonFragment implements View.OnClickListene
         try {
             JSONObject objBean = new JSONObject(json);
             if (objBean.optInt("code") == 200) {
-                for (int i = 0; i < 10; i++) {
-                    PersonBean p = new PersonBean();
-                    p.setImage("");
-                    p.setLongitude(1);
-                    p.setState(0);
-                    p.setName("dfdfweedsf");
-                    p.setLatitude(2);
-                    p.setCollect(false);
-                    p.setShow("dfeiefdfjdlf");
-                    p.setDistance("dfseodfjdkf");
-                    p.setPlay("dfefdlfj");
-                    allList.add(p);
-                }
+                PersonBean p0 = new PersonBean();
+                p0.setImage("");
+                p0.setState(StateConfig.WORKING);
+                p0.setName("急招水泥工");
+                p0.setCollect(false);
+                p0.setShow("工资：200/人/天");
+                p0.setDistance("南马路12号");
+                p0.setPlay("X月X日开工，工期2天");
+                PersonBean p1 = new PersonBean();
+                p1.setImage("");
+                p1.setName("急招水泥工");
+                p1.setPlay("10月2日开工，工期5天");
+                p1.setShow("工资：100/人/天");
+                p1.setState(StateConfig.TALKING);
+                p1.setCollect(false);
+                p1.setDistance("南马路12号");
+                PersonBean p2 = new PersonBean();
+                p2.setImage("");
+                p2.setName("急招水泥工");
+                p2.setPlay("11月1日开工，工期一天");
+                p2.setShow("工资：500/人/天");
+                p2.setState(StateConfig.OVER);
+                p2.setCollect(true);
+                p2.setDistance("南马路12号");
+                PersonBean p3 = new PersonBean();
+                p3.setImage("");
+                p3.setName("急招水泥工");
+                p3.setPlay("11月1日开工，工期一天");
+                p3.setShow("工资：500/人/天");
+                p3.setState(StateConfig.WAIT);
+                p3.setCollect(true);
+                p3.setDistance("南马路12号");
+                list.add(p0);
+                list.add(p1);
+                list.add(p2);
+                list.add(p3);
                 handler.sendEmptyMessage(StateConfig.LOAD_DONE);
             }
         } catch (JSONException e) {
@@ -188,54 +208,51 @@ public class EmpMagAllFrag extends CommonFragment implements View.OnClickListene
         }
     }
 
-    //无网络通知
-    private void notifyNoNet() {
+    private void notifyNet() {
         switch (state) {
             case StateConfig.LOAD_DONE:
-                cPd.dismiss();
-                if (allList.size() == 0) {
-                    noNetLl.setVisibility(View.VISIBLE);
-                    noDataLl.setVisibility(View.GONE);
-                }
+                cpd.dismiss();
+                ptrl.setVisibility(View.GONE);
+                emptyDataView.setVisibility(View.GONE);
+                emptyNetView.setVisibility(View.VISIBLE);
                 break;
             case StateConfig.LOAD_REFRESH:
+                ptrl.hideHeadView();
+                Utils.toast(getActivity(), StateConfig.loadNonet);
                 break;
             case StateConfig.LOAD_LOAD:
+                ptrl.hideFootView();
+                Utils.toast(getActivity(), StateConfig.loadNonet);
                 break;
             default:
                 break;
         }
     }
 
-    //无数据通知
-    private void notifyNoData() {
+    private void notifyData() {
         switch (state) {
             case StateConfig.LOAD_DONE:
-                cPd.dismiss();
-                if (allList.size() == 0) {
-                    noDataLl.setVisibility(View.VISIBLE);
-                    noNetLl.setVisibility(View.GONE);
+                cpd.dismiss();
+                if (list.size() == 0) {
+                    ptrl.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.GONE);
+                    ptrl.setVisibility(View.VISIBLE);
                 }
                 break;
             case StateConfig.LOAD_REFRESH:
+                ptrl.hideHeadView();
                 break;
             case StateConfig.LOAD_LOAD:
+                ptrl.hideFootView();
                 break;
             default:
                 break;
         }
-        allAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            //无网络视图点击事件
-            case R.id.tv_no_net_refresh:
-                noNetLl.setVisibility(View.GONE);
-                loadNetData();
-                break;
-        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -248,5 +265,14 @@ public class EmpMagAllFrag extends CommonFragment implements View.OnClickListene
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
         state = StateConfig.LOAD_LOAD;
         loadNetData();
+    }
+
+    @Override
+    public void onClick(View item, View widget, int position, int which, boolean isChecked) {
+        switch (which) {
+
+            default:
+                break;
+        }
     }
 }

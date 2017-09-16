@@ -106,6 +106,14 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_phone_prove_resend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_phone_prove_pwd"
+            android:layout_centerHorizontal="true"
+            android:text="重新发送" />
+
     </RelativeLayout>
 
 </LinearLayout>

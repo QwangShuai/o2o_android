@@ -7,8 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/y10">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,7 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/sl_black_stroke"
+                android:background="@drawable/sl_me_login"
                 android:gravity="center"
                 android:padding="@dimen/y5"
                 android:text="取消"
@@ -40,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/y10"
                 android:layout_weight="1"
-                android:background="@drawable/sl_black_stroke"
+                android:background="@drawable/sl_me_login"
                 android:gravity="center"
                 android:padding="@dimen/y5"
                 android:text="确认修改"

@@ -28,13 +28,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_centerInParent">true</item>
-        <item name="android:layout_marginTop">@dimen/y5</item>
-        <item name="android:layout_marginBottom">@dimen/y5</item>
     </style>
     <!--主页底部按钮ImageView样式-->
     <style name="iv_main">
-        <item name="android:layout_width">@dimen/x23</item>
-        <item name="android:layout_height">@dimen/x23</item>
+        <item name="android:layout_width">@dimen/y17</item>
+        <item name="android:layout_height">@dimen/y17</item>
         <item name="android:scaleType">fitXY</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
@@ -42,7 +40,7 @@
     <style name="tv_main">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/y9</item>
+        <item name="android:textSize">@dimen/y8</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
     <!--首页三图样式-->
@@ -133,7 +131,7 @@
     <style name="tv_top_title">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/x17</item>
+        <item name="android:textSize">@dimen/y14</item>
         <item name="android:textColor">@color/blue_2681fc</item>
         <item name="android:layout_centerInParent">true</item>
         <item name="android:textStyle">bold</item>
@@ -181,7 +179,7 @@
     <RelativeLayout-->
     <style name="rl_top_bar">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/y25</item>
+        <item name="android:layout_height">@dimen/y30</item>
         <item name="android:background">@android:color/white</item>
     </style>
     <!--返回RelativeLayout样式-->
@@ -250,7 +248,7 @@
     <style name="v_pwd">
         <item name="android:layout_width">@dimen/x1</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/black_000000</item>
+        <item name="android:background">@color/black_252323</item>
     </style>
 
     <style name="tv_pwd">

@@ -64,20 +64,30 @@ public class WorkerMagAdapter extends BaseAdapter {
             Picasso.with(context).load(personBean.getImage()).placeholder(holder.iconIv.getDrawable()).into(holder.iconIv);
         }
         switch (personBean.getState()) {
+            case StateConfig.WAIT:
+                holder.stateIv.setImageResource(R.mipmap.worker_wait);
+                holder.waitLl.setVisibility(View.VISIBLE);
+                holder.talkingLl.setVisibility(View.GONE);
+                holder.workingLl.setVisibility(View.GONE);
+                holder.overLl.setVisibility(View.GONE);
+                break;
             case StateConfig.TALKING:
                 holder.stateIv.setImageResource(R.mipmap.worker_talk);
+                holder.waitLl.setVisibility(View.GONE);
                 holder.talkingLl.setVisibility(View.VISIBLE);
                 holder.workingLl.setVisibility(View.GONE);
                 holder.overLl.setVisibility(View.GONE);
                 break;
             case StateConfig.WORKING:
                 holder.stateIv.setImageResource(R.mipmap.worker_mid);
+                holder.waitLl.setVisibility(View.GONE);
                 holder.talkingLl.setVisibility(View.GONE);
                 holder.workingLl.setVisibility(View.VISIBLE);
                 holder.overLl.setVisibility(View.GONE);
                 break;
             case StateConfig.OVER:
                 holder.stateIv.setImageResource(R.mipmap.worker_over);
+                holder.waitLl.setVisibility(View.GONE);
                 holder.talkingLl.setVisibility(View.GONE);
                 holder.workingLl.setVisibility(View.GONE);
                 holder.overLl.setVisibility(View.VISIBLE);
@@ -96,11 +106,25 @@ public class WorkerMagAdapter extends BaseAdapter {
         holder.distanceTv.setText(personBean.getDistance());
         final View view = convertView;
         final int p = position;
+        final int cancelId = holder.cancelTv.getId();
+        final int changeId = holder.changeTv.getId();
         final int quitId = holder.quitTv.getId();
         final int refuseId = holder.refuseTv.getId();
         final int complainId = holder.complainTv.getId();
         final int deleteId = holder.deleteTv.getId();
         final int evaluateId = holder.evaluateTv.getId();
+        holder.cancelTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickHelp.onClick(view, parent, p, cancelId, false);
+            }
+        });
+        holder.changeTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickHelp.onClick(view, parent, p, changeId, false);
+            }
+        });
         holder.quitTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,8 +162,8 @@ public class WorkerMagAdapter extends BaseAdapter {
 
         private ImageView iconIv, stateIv, collectIv;
         private TextView titleTv, contentTv, priceTv, distanceTv;
-        private LinearLayout talkingLl, workingLl, overLl;
-        private TextView quitTv, refuseTv, complainTv, deleteTv, evaluateTv;
+        private LinearLayout waitLl, talkingLl, workingLl, overLl;
+        private TextView cancelTv, changeTv, quitTv, refuseTv, complainTv, deleteTv, evaluateTv;
 
         public ViewHolder(View itemView) {
             iconIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_image);
@@ -149,9 +173,12 @@ public class WorkerMagAdapter extends BaseAdapter {
             contentTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_play);
             priceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_show);
             distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_distance);
+            waitLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_wait);
             talkingLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_talking);
             workingLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_working);
             overLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_over);
+            cancelTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_cancel);
+            changeTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_change);
             quitTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_quit);
             refuseTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_refuse);
             complainTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_complain);

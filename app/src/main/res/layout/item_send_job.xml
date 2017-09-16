@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/y5"
             android:text="选择招聘工种"
-            android:textColor="@color/black_000000"
+            android:textColor="@color/black_252323"
             android:textSize="@dimen/x15" />
 
         <View style="@style/v_split" />
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="人"
-                android:textColor="@color/black_000000"
+                android:textColor="@color/black_252323"
                 android:textSize="@dimen/x15" />
 
             <EditText
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="元/人/天"
-                android:textColor="@color/black_000000"
+                android:textColor="@color/black_252323"
                 android:textSize="@dimen/x15" />
 
         </LinearLayout>
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="工期"
-                android:textColor="@color/black_000000"
+                android:textColor="@color/black_252323"
                 android:textSize="@dimen/x15" />
 
             <TextView
@@ -121,7 +121,7 @@
             android:paddingBottom="@dimen/y5"
             android:paddingTop="@dimen/y5"
             android:text="删除该工种"
-            android:textColor="@color/black_000000"
+            android:textColor="@color/black_252323"
             android:textSize="@dimen/x15" />
 
     </LinearLayout>

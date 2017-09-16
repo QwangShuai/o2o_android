@@ -1,5 +1,6 @@
 package activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,38 +20,25 @@ import fragment.EmpMagContactingFrag;
 import fragment.EmpMagFinishedFrag;
 import fragment.EmpMagUnderWayFrag;
 import fragment.EmpMagWaitContactFrag;
-import utils.Utils;
 
 public class EmpMagActivity extends CommonActivity implements View.OnClickListener {
 
-    //根视图
     private View rootView;
-    //返回视图
     private RelativeLayout returnRl;
-    //草稿箱视图
     private RelativeLayout draftRl;
-    //全部视图
     private RelativeLayout allRl;
     private TextView allTv;
-    //待联系视图
     private RelativeLayout waitContactRl;
     private TextView waitContactTv;
-    //洽谈中视图
     private RelativeLayout contactingRl;
     private TextView contactingTv;
-    //进行中视图
     private RelativeLayout underWayRl;
     private TextView underWayTv;
-    //已结束视图
     private RelativeLayout finishedRl;
     private TextView finishedTv;
-    //当前碎片索引
     private int curPosition;
-    //目标碎片索引
     private int tarPosition;
-    //碎片集合
     private List<Fragment> fragmentList;
-    //碎片管理者
     private FragmentManager fragmentManager;
 
     @Override
@@ -64,38 +52,26 @@ public class EmpMagActivity extends CommonActivity implements View.OnClickListen
     }
 
     private void initRootView() {
-        //初始化返回视图
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_return);
-        //初始化草稿箱视图
         draftRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_draft);
-        //初始化全部视图
         allRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_all);
         allTv = (TextView) rootView.findViewById(R.id.tv_employer_manage_all);
-        //初始化待联系视图
         waitContactRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_wait_contact);
         waitContactTv = (TextView) rootView.findViewById(R.id.tv_employer_manage_wait_contact);
-        //初始化洽谈中视图
         contactingRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_contacting);
         contactingTv = (TextView) rootView.findViewById(R.id.tv_employer_manage_contacting);
-        //初始化进行中视图
         underWayRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_under_way);
         underWayTv = (TextView) rootView.findViewById(R.id.tv_employer_manage_under_way);
-        //初始化已结束视图
         finishedRl = (RelativeLayout) rootView.findViewById(R.id.rl_employer_manage_finished);
         finishedTv = (TextView) rootView.findViewById(R.id.tv_employer_manage_finished);
     }
 
     @Override
     protected void initData() {
-        //初始化当前碎片索引
         curPosition = 0;
-        //初始化目标碎片索引
         tarPosition = 0;
-        //初始化碎片集合
         fragmentList = new ArrayList<>();
-        //初始化碎片管理者
         fragmentManager = getSupportFragmentManager();
-        //初始化加载碎片
         EmpMagAllFrag allFrag = new EmpMagAllFrag();
         EmpMagWaitContactFrag waitContactFrag = new EmpMagWaitContactFrag();
         EmpMagContactingFrag contactingFrag = new EmpMagContactingFrag();
@@ -118,19 +94,12 @@ public class EmpMagActivity extends CommonActivity implements View.OnClickListen
 
     @Override
     protected void setListener() {
-        //返回视图监听
         returnRl.setOnClickListener(this);
-        //草稿箱视图监听
         draftRl.setOnClickListener(this);
-        //全部视图监听
         allRl.setOnClickListener(this);
-        //待联系视图监听
         waitContactRl.setOnClickListener(this);
-        //洽谈中视图监听
         contactingRl.setOnClickListener(this);
-        //进行中视图监听
         underWayRl.setOnClickListener(this);
-        //已结束视图监听
         finishedRl.setOnClickListener(this);
     }
 
@@ -199,7 +168,7 @@ public class EmpMagActivity extends CommonActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.rl_employer_manage_draft:
-                Utils.toast(this, "草稿箱");
+                startActivity(new Intent(this, DraftActivity.class));
                 break;
             case R.id.rl_employer_manage_all:
                 tarPosition = 0;

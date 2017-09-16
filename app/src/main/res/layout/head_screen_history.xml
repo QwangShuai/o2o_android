@@ -10,7 +10,7 @@
         android:layout_marginBottom="@dimen/y5"
         android:layout_marginTop="@dimen/y5"
         android:text="搜索历史"
-        android:textColor="@color/black_000000"
+        android:textColor="@color/black_252323"
         android:textSize="@dimen/y10" />
 
 </LinearLayout>

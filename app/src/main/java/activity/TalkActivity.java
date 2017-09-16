@@ -39,10 +39,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout returnRl;
     private TextView topTitleTv, noLocationTipTv;
     private TextView wyzgTv;
-    private ImageView phoneIv;
+    private ImageView iconIv, phoneIv;
     private MapView mapView;
 
-    //取消工人弹窗
     private View cancelWorkerPopView;
     private PopupWindow cancelWorkerPopWindow;
     private TextView cancelWorkerNoTv, cancelWorkerYesTv;
@@ -96,6 +95,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         topTitleTv = (TextView) rootView.findViewById(R.id.tv_talk_top_title);
         mapView = (MapView) rootView.findViewById(R.id.mv_worker);
         noLocationTipTv = (TextView) rootView.findViewById(R.id.tv_talk_no_location_tip);
+        iconIv = (ImageView) rootView.findViewById(R.id.iv_talk_icon);
         phoneIv = (ImageView) rootView.findViewById(R.id.iv_talk_phone);
         phoneIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +140,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setListener() {
         returnRl.setOnClickListener(this);
+        iconIv.setOnClickListener(this);
     }
 
     private void checkLocPermisson() {
@@ -171,6 +172,11 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.rl_talk_return:
                 finish();
+                break;
+            case R.id.iv_talk_icon:
+                startActivity(new Intent(this, PersonDetailActivity.class));
+                break;
+            default:
                 break;
         }
     }

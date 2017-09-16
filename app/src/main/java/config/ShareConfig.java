@@ -9,4 +9,5 @@ package config;
 public interface ShareConfig {
     String shareName = "gjzg";
     String payPwd = "payPwd";
+    String getCode = "getcode";
 }

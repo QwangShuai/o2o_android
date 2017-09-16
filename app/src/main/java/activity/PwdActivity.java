@@ -14,11 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gjzg.R;
 
 import config.ShareConfig;
+import config.VarConfig;
+import utils.Utils;
 
 public class PwdActivity extends CommonActivity implements View.OnClickListener {
 
@@ -34,10 +35,7 @@ public class PwdActivity extends CommonActivity implements View.OnClickListener 
     private String secondPwd;
     private String beforePwd;
 
-    private final int FIRST_PWD = 0;
-    private final int SECOND_PWD = 1;
-    private final int BEFORE_PWD = 2;
-    private int pwdState;
+    private int state = VarConfig.PWD_FIRST;
 
     private SharedPreferences sharedPreferences;
 
@@ -70,10 +68,10 @@ public class PwdActivity extends CommonActivity implements View.OnClickListener 
         sharedPreferences = getSharedPreferences(ShareConfig.shareName, Context.MODE_PRIVATE);
         String payPwd = sharedPreferences.getString(ShareConfig.payPwd, null);
         if (TextUtils.isEmpty(payPwd)) {
-            pwdState = FIRST_PWD;
+            state = VarConfig.PWD_FIRST;
         } else {
             beforePwd = payPwd;
-            pwdState = BEFORE_PWD;
+            state = VarConfig.PWD_ORIGIN;
             fgtTv.setVisibility(View.VISIBLE);
         }
         refreshView();
@@ -103,23 +101,28 @@ public class PwdActivity extends CommonActivity implements View.OnClickListener 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(ShareConfig.payPwd, firstPwd);
             editor.commit();
-            Toast.makeText(this, "设置密码成功", Toast.LENGTH_SHORT).show();
+            Utils.toast(this, VarConfig.pwdSuccessTip);
             finish();
         } else {
-            Toast.makeText(this, "两次密码不一致", Toast.LENGTH_SHORT).show();
+            Utils.toast(this, VarConfig.pwdDifferTip);
         }
     }
 
     private void refreshView() {
-        switch (pwdState) {
-            case FIRST_PWD:
-                textView.setText("请输入新密码");
+        switch (state) {
+            case VarConfig.PWD_FIRST:
+                textView.setText(VarConfig.pwdFirstTip);
                 break;
-            case SECOND_PWD:
-                textView.setText("再次输入密码");
+            case VarConfig.PWD_AGAIN:
+                textView.setText(VarConfig.pwdAgainTip);
                 break;
-            case BEFORE_PWD:
-                textView.setText("请输入原密码");
+            case VarConfig.PWD_ORIGIN:
+                textView.setText(VarConfig.pwdOriginTip);
+                break;
+            case VarConfig.PWD_NEW:
+                textView.setText(VarConfig.pwdNewTip);
+                break;
+            default:
                 break;
         }
     }
@@ -200,27 +203,36 @@ public class PwdActivity extends CommonActivity implements View.OnClickListener 
         public void afterTextChanged(Editable s) {
             refreshPoint(s.length());
             if (s.length() == 6) {
-                switch (pwdState) {
-                    case FIRST_PWD:
+                switch (state) {
+                    case VarConfig.PWD_FIRST:
                         firstPwd = s.toString();
                         editText.setText("");
-                        pwdState = SECOND_PWD;
+                        state = VarConfig.PWD_AGAIN;
                         refreshView();
                         refreshPoint(0);
                         break;
-                    case SECOND_PWD:
+                    case VarConfig.PWD_AGAIN:
                         secondPwd = s.toString();
                         judge();
                         break;
-                    case BEFORE_PWD:
+                    case VarConfig.PWD_ORIGIN:
                         if (beforePwd.equals(s.toString())) {
                             editText.setText("");
-                            pwdState = FIRST_PWD;
+                            state = VarConfig.PWD_NEW;
                             refreshView();
                             refreshPoint(0);
                         } else {
-                            Toast.makeText(PwdActivity.this, "密码不正确", Toast.LENGTH_SHORT).show();
+                            Utils.toast(PwdActivity.this, VarConfig.pwdErrorTip);
                         }
+                        break;
+                    case VarConfig.PWD_NEW:
+                        firstPwd = s.toString();
+                        editText.setText("");
+                        state = VarConfig.PWD_AGAIN;
+                        refreshView();
+                        refreshPoint(0);
+                        break;
+                    default:
                         break;
                 }
             }

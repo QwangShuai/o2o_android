@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import activity.ComplainActivity;
+import activity.EvaluateActivity;
+import activity.RefuseOrderActivity;
 import activity.ResignActivity;
 import adapter.WorkerMagAdapter;
 import bean.PersonBean;
@@ -268,16 +270,17 @@ public class WorkerMagAllFrag extends CommonFragment implements PullToRefreshLay
                 startActivity(new Intent(getActivity(), ResignActivity.class));
                 break;
             case R.id.tv_item_worker_mag_refuse:
-                Utils.toast(getActivity(), "不接此单");
+                startActivity(new Intent(getActivity(), RefuseOrderActivity.class));
                 break;
             case R.id.tv_item_worker_mag_complain:
                 startActivity(new Intent(getActivity(), ComplainActivity.class));
                 break;
             case R.id.tv_item_worker_mag_delete:
-                Utils.toast(getActivity(), "删除信息");
+                list.remove(position);
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.tv_item_worker_mag_evaluate:
-                Utils.toast(getActivity(), "追加评价");
+                startActivity(new Intent(getActivity(), EvaluateActivity.class));
                 break;
             default:
                 break;

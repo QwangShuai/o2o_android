@@ -1,6 +1,7 @@
 package utils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,5 +69,14 @@ public class Utils {
         Pattern p = Pattern.compile(regularStr);
         Matcher m = p.matcher(str);
         return m.matches();
+    }
+
+    //判断SD卡
+    public static boolean hasSdcard() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

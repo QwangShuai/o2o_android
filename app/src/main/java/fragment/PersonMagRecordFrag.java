@@ -4,7 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.gjzg.R;
@@ -27,6 +28,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.Utils;
 import view.CProgressDialog;
 
 /**
@@ -37,30 +39,19 @@ import view.CProgressDialog;
 
 public class PersonMagRecordFrag extends CommonFragment implements PullToRefreshLayout.OnRefreshListener {
 
-    //根视图
-    private View rootView;
-    //无网络空视图
-    private LinearLayout noNetLl;
-    private TextView noNetTv;
-    //无数据空视图
-    private LinearLayout noDataLl;
-    //刷新布局视图
-    private PullToRefreshLayout pTrl;
-    //刷新ListView视图
-    private PullableListView pLv;
-    //加载对话框视图
-    private CProgressDialog cPd;
+    private View rootView, emptyDataView, emptyNetView;
+    private FrameLayout fl;
+    private TextView emptyNetTv;
+    private PullToRefreshLayout ptrl;
+    private PullableListView plv;
+    private CProgressDialog cpd;
 
-    //投递记录数据集合
-    private List<PersonBean> recordList;
-    //投递记录数据适配器
-    private PersonAdapter recordAdapter;
+    private List<PersonBean> list;
+    private PersonAdapter adapter;
 
-    //okHttpClient
     private OkHttpClient okHttpClient;
 
-    //加载状态
-    private int state;
+    private int state = StateConfig.LOAD_DONE;
 
     private Handler handler = new Handler() {
         @Override
@@ -90,59 +81,66 @@ public class PersonMagRecordFrag extends CommonFragment implements PullToRefresh
 
     @Override
     protected View getRootView() {
-        return rootView = LayoutInflater.from(getActivity()).inflate(R.layout.common_listview,null);
+        return rootView = LayoutInflater.from(getActivity()).inflate(R.layout.common_listview, null);
     }
 
     @Override
     protected void initView() {
         initRootView();
         initDialogView();
+        initEmptyView();
     }
 
     private void initRootView() {
-        //初始化无网络空视图
-        noNetLl = (LinearLayout) rootView.findViewById(R.id.ll_no_net);
-        noNetTv = (TextView) rootView.findViewById(R.id.tv_no_net_refresh);
-        //初始化无数据空视图
-        noDataLl = (LinearLayout) rootView.findViewById(R.id.ll_no_data);
-        //初始化刷新布局视图
-        pTrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
-        //初始化刷新ListView视图
-        pLv = (PullableListView) rootView.findViewById(R.id.plv);
+        ptrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        plv = (PullableListView) rootView.findViewById(R.id.plv);
     }
 
     private void initDialogView() {
-        //初始化加载对话框
-        cPd = new CProgressDialog(getActivity(), R.style.dialog_cprogress);
+        cpd = new CProgressDialog(getActivity(), R.style.dialog_cprogress);
+    }
+
+    private void initEmptyView() {
+        fl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyDataView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_data, null);
+        emptyDataView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyDataView);
+        emptyDataView.setVisibility(View.GONE);
+        emptyNetView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_net, null);
+        emptyNetTv = (TextView) emptyNetView.findViewById(R.id.tv_no_net_refresh);
+        emptyNetView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fl.addView(emptyNetView);
+        emptyNetView.setVisibility(View.GONE);
+        emptyNetTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyNetView.setVisibility(View.GONE);
+                loadNetData();
+            }
+        });
     }
 
     @Override
     protected void initData() {
-        //初始化投递记录数据集合
-        recordList = new ArrayList<>();
-        //初始化投递记录数据适配器
-        recordAdapter = new PersonAdapter(getActivity(), recordList);
-        //初始化okHttpClient
+        list = new ArrayList<>();
+        adapter = new PersonAdapter(getActivity(), list);
         okHttpClient = new OkHttpClient();
-        //初始化加载状态
         state = StateConfig.LOAD_DONE;
     }
 
     @Override
     protected void setData() {
-        //绑定投递记录数据适配器
-        pLv.setAdapter(recordAdapter);
+        plv.setAdapter(adapter);
     }
 
     @Override
     protected void setListener() {
-        //刷新布局监听
-        pTrl.setOnRefreshListener(this);
+        ptrl.setOnRefreshListener(this);
     }
 
     @Override
     protected void loadData() {
-        cPd.show();
+        cpd.show();
         loadNetData();
     }
 
@@ -158,7 +156,7 @@ public class PersonMagRecordFrag extends CommonFragment implements PullToRefresh
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     if (state == StateConfig.LOAD_REFRESH) {
-                        recordList.clear();
+                        list.clear();
                     }
                     String result = response.body().string();
                     parseJson(result);
@@ -171,18 +169,30 @@ public class PersonMagRecordFrag extends CommonFragment implements PullToRefresh
         try {
             JSONObject objBean = new JSONObject(json);
             if (objBean.optInt("code") == 200) {
-                for (int i = 0; i < 10; i++) {
-                    PersonBean p = new PersonBean();
-                    p.setCollect(true);
-                    p.setShow("dfdfdf");
-                    p.setState(1);
-                    p.setName("dfdf");
-                    p.setDistance("dfddf");
-                    p.setImage("");
-                    p.setLatitude(1);
-                    p.setLongitude(1);
-                    recordList.add(p);
-                }
+                PersonBean p0 = new PersonBean();
+                p0.setName("专业水泥工");
+                p0.setCollect(false);
+                p0.setState(StateConfig.LEISURE);
+                p0.setDistance("距离3公里");
+                p0.setPlay("X月X日开工，工期2天");
+                p0.setShow("工资：200/人/天");
+                PersonBean p1 = new PersonBean();
+                p1.setName("专业水泥工");
+                p1.setCollect(false);
+                p1.setState(StateConfig.WORKING);
+                p1.setDistance("距离3公里");
+                p1.setPlay("10月2号开工，工期5天");
+                p1.setShow("工资：100/人/天");
+                PersonBean p2 = new PersonBean();
+                p2.setName("专业水泥工");
+                p2.setPlay("11月1日开工，工期一天");
+                p2.setShow("工资：500/人/天");
+                p2.setState(StateConfig.TALKING);
+                p2.setCollect(true);
+                p2.setDistance("距离3公里");
+                list.add(p0);
+                list.add(p1);
+                list.add(p2);
                 handler.sendEmptyMessage(StateConfig.LOAD_DONE);
             }
         } catch (JSONException e) {
@@ -193,15 +203,16 @@ public class PersonMagRecordFrag extends CommonFragment implements PullToRefresh
     private void notifyNoNet() {
         switch (state) {
             case StateConfig.LOAD_DONE:
-                cPd.dismiss();
-                if (recordList.size() == 0) {
-                    noNetLl.setVisibility(View.VISIBLE);
-                    noDataLl.setVisibility(View.GONE);
-                }
+                cpd.dismiss();
+                ptrl.setVisibility(View.GONE);
+                emptyDataView.setVisibility(View.GONE);
+                emptyNetView.setVisibility(View.VISIBLE);
                 break;
             case StateConfig.LOAD_REFRESH:
+                Utils.toast(getActivity(), StateConfig.loadNonet);
                 break;
             case StateConfig.LOAD_LOAD:
+                Utils.toast(getActivity(), StateConfig.loadNonet);
                 break;
         }
     }
@@ -209,18 +220,25 @@ public class PersonMagRecordFrag extends CommonFragment implements PullToRefresh
     private void notifyData() {
         switch (state) {
             case StateConfig.LOAD_DONE:
-                cPd.dismiss();
-                if (recordList.size() == 0) {
-                    noNetLl.setVisibility(View.GONE);
-                    noDataLl.setVisibility(View.VISIBLE);
+                cpd.dismiss();
+                if (list.size() == 0) {
+                    ptrl.setVisibility(View.GONE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.VISIBLE);
+                } else {
+                    ptrl.setVisibility(View.VISIBLE);
+                    emptyNetView.setVisibility(View.GONE);
+                    emptyDataView.setVisibility(View.GONE);
                 }
                 break;
             case StateConfig.LOAD_REFRESH:
+                ptrl.hideHeadView();
                 break;
             case StateConfig.LOAD_LOAD:
+                ptrl.hideFootView();
                 break;
         }
-        recordAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/y10"
             android:layout_marginTop="@dimen/y6"
-            android:textColor="@color/black_000000"
+            android:textColor="@color/black_252323"
             android:textSize="@dimen/y10" />
 
         <TextView

@@ -18,7 +18,7 @@ import config.ColorConfig;
 import config.IntentConfig;
 import fragment.CollectJobFragment;
 import fragment.CollectWorkerFragment;
-import fragment.EvaluateGetFragment;
+import fragment.ReceiveEvaluateFragment;
 import fragment.EvaluateGiveFragment;
 import fragment.JobOfferFrag;
 import fragment.SysMsgFrag;
@@ -91,9 +91,9 @@ public class LeftRightActivity extends CommonActivity implements View.OnClickLis
                     titleTv.setText("我的评价");
                     lTv.setText("收到的评价");
                     rTv.setText("给别人的评价");
-                    EvaluateGetFragment evaluateGetFragment = new EvaluateGetFragment();
+                    ReceiveEvaluateFragment receiveEvaluateFragment = new ReceiveEvaluateFragment();
                     EvaluateGiveFragment evaluateGiveFragment = new EvaluateGiveFragment();
-                    fragmentList.add(evaluateGetFragment);
+                    fragmentList.add(receiveEvaluateFragment);
                     fragmentList.add(evaluateGiveFragment);
                     break;
                 case IntentConfig.MESSAGE:
