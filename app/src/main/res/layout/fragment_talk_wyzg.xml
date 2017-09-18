@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_talk_wyzg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/y10"
+        android:layout_marginLeft="@dimen/y10"
+        android:layout_marginRight="@dimen/y10"
+        android:layout_marginTop="@dimen/y10"
+        android:background="@drawable/sl_login_get"
+        android:gravity="center"
+        android:paddingBottom="@dimen/y6"
+        android:paddingTop="@dimen/y6"
+        android:textColor="@color/white_ffffff"
+        android:textSize="@dimen/y10" />
+
+</RelativeLayout>

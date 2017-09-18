@@ -9,7 +9,7 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import bean.DetailBean;
+import bean.AccountDetailBean;
 
 /**
  * 创建日期：2017/8/9 on 10:55
@@ -17,9 +17,9 @@ import bean.DetailBean;
  * 描述:明细适配器
  */
 
-public class DetailAdapter extends CommonAdapter<DetailBean> {
+public class DetailAdapter extends CommonAdapter<AccountDetailBean> {
 
-    public DetailAdapter(Context context, List<DetailBean> list) {
+    public DetailAdapter(Context context, List<AccountDetailBean> list) {
         super(context, list);
     }
 
@@ -33,12 +33,12 @@ public class DetailAdapter extends CommonAdapter<DetailBean> {
         } else {
             holer = (ViewHoler) convertView.getTag();
         }
-        DetailBean detailBean = list.get(position);
-        if (detailBean != null) {
-            holer.titleTv.setText(detailBean.getTitle());
-            holer.balanceTv.setText(detailBean.getBalance());
-            holer.timeTv.setText(detailBean.getTime());
-            holer.desTv.setText(detailBean.getDes());
+        AccountDetailBean accountDetailBean = list.get(position);
+        if (accountDetailBean != null) {
+            holer.titleTv.setText(accountDetailBean.getTitle());
+            holer.balanceTv.setText(accountDetailBean.getBalance());
+            holer.timeTv.setText(accountDetailBean.getTime());
+            holer.desTv.setText(accountDetailBean.getDes());
         }
         return convertView;
     }

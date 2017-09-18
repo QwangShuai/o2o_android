@@ -36,7 +36,7 @@ public class KindAdapter extends CommonAdapter<KindBean> {
         }
         KindBean job = list.get(position);
         if (job != null) {
-            holder.imageIv.setImageResource(R.mipmap.ic_launcher);
+            holder.imageIv.setImageResource(R.mipmap.person_face_default);
             holder.nameTv.setText(job.getName());
         }
         return convertView;

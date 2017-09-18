@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -30,15 +33,17 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.gjzg.R;
 
-import bean.PersonBean;
 import config.PermissionConfig;
+import config.VarConfig;
+import fragment.TalkQrkgFragment;
+import fragment.TalkWyzgFragment;
 
+//详谈
 public class TalkActivity extends AppCompatActivity implements View.OnClickListener {
 
     private View rootView;
     private RelativeLayout returnRl;
     private TextView topTitleTv, noLocationTipTv;
-    private TextView wyzgTv;
     private ImageView iconIv, phoneIv;
     private MapView mapView;
 
@@ -53,7 +58,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private MapStatusUpdate mapStatusUpdate;
     private double latitude, longitude;
 
-    private PersonBean personBean;
+    private int state = VarConfig.WYZG;
+    private Fragment wyzgFragment, qrkgFragment;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,13 +110,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                 cancelWorkerPopWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
             }
         });
-        wyzgTv = (TextView) rootView.findViewById(R.id.tv_talk_wyzg);
-        wyzgTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(TalkActivity.this, ProjectActivity.class));
-            }
-        });
     }
 
     private void initPopView() {
@@ -132,10 +132,32 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
-        Intent intent = getIntent();
-        personBean = (PersonBean) intent.getSerializableExtra("personBean");
         latitude = 39.963175;
         longitude = 116.400244;
+        wyzgFragment = new TalkWyzgFragment();
+        qrkgFragment = new TalkQrkgFragment();
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction t = fragmentManager.beginTransaction();
+        switch (state) {
+            case VarConfig.WYZG:
+                t.replace(R.id.ll_talk_sit, wyzgFragment);
+                break;
+            case VarConfig.YYQQ:
+                t.replace(R.id.ll_talk_sit, wyzgFragment);
+                break;
+            case VarConfig.QRKG:
+                t.replace(R.id.ll_talk_sit, qrkgFragment);
+                break;
+            case VarConfig.DDGR:
+                t.replace(R.id.ll_talk_sit, qrkgFragment);
+                break;
+            case VarConfig.GGJS:
+                t.replace(R.id.ll_talk_sit, qrkgFragment);
+                break;
+            default:
+                break;
+        }
+        t.commit();
     }
 
     private void setListener() {
