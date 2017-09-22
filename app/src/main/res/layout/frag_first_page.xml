@@ -22,9 +22,9 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_fp_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="哈尔滨"
                     android:textColor="@color/blue_2681fc"
                     android:textSize="@dimen/y11" />
 

@@ -28,7 +28,7 @@
                 android:background="@android:color/white">
 
                 <view.CImageView
-                    android:id="@+id/iv_mine_head_shot"
+                    android:id="@+id/iv_frag_me_login_icon"
                     android:layout_width="@dimen/y34"
                     android:layout_height="@dimen/y34"
                     android:layout_centerVertical="true"
@@ -39,30 +39,101 @@
                     android:scaleType="fitXY"
                     android:src="@mipmap/person_face_default" />
 
-                <TextView
-                    android:id="@+id/tv_mine_login"
+                <RelativeLayout
+                    android:id="@+id/rl_frag_me_login_right_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/iv_mine_head_shot"
-                    android:background="@drawable/sl_me_login"
-                    android:paddingBottom="@dimen/y2"
-                    android:paddingLeft="@dimen/y9"
-                    android:paddingRight="@dimen/y9"
-                    android:paddingTop="@dimen/y2"
-                    android:text="立即登录"
-                    android:textColor="@color/red_ff3e50"
-                    android:textSize="@dimen/y9" />
+                    android:layout_toRightOf="@+id/iv_frag_me_login_icon">
 
-                <TextView
+                    <TextView
+                        android:id="@+id/tv_mine_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/sl_me_login"
+                        android:paddingBottom="@dimen/y2"
+                        android:paddingLeft="@dimen/y9"
+                        android:paddingRight="@dimen/y9"
+                        android:paddingTop="@dimen/y2"
+                        android:text="立即登录"
+                        android:textColor="@color/red_ff3e50"
+                        android:textSize="@dimen/y9" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/y4"
+                        android:layout_toRightOf="@+id/tv_mine_login"
+                        android:text="开启轻松生活"
+                        android:textColor="@color/gray_c4ced3"
+                        android:textSize="@dimen/y8" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_me_login_done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/y4"
-                    android:layout_toRightOf="@+id/tv_mine_login"
-                    android:text="开启轻松生活"
-                    android:textColor="@color/gray_c4ced3"
-                    android:textSize="@dimen/y8" />
+                    android:layout_marginRight="@dimen/y15"
+                    android:layout_toRightOf="@+id/iv_frag_me_login_icon"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_frag_me_login_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="王二妮"
+                        android:textColor="@color/black_252323"
+                        android:textSize="@dimen/y9" />
+
+                    <ImageView
+                        android:id="@+id/iv_frag_me_login_sex"
+                        android:layout_width="@dimen/y8"
+                        android:layout_height="@dimen/y8"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/y10"
+                        android:layout_toRightOf="@+id/tv_frag_me_login_name"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/female" />
+
+                    <ImageView
+                        android:id="@+id/iv_frag_me_login_line"
+                        android:layout_width="@dimen/y32"
+                        android:layout_height="@dimen/y16"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/user_on_line" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/y5"
+                        android:layout_toLeftOf="@+id/iv_frag_me_login_line">
+
+                        <ImageView
+                            android:layout_width="@dimen/y40"
+                            android:layout_height="@dimen/y25"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/user_line_border" />
+
+                        <TextView
+                            android:id="@+id/tv_frag_me_login_line_tip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/y2"
+                            android:text="公开信息"
+                            android:textColor="@color/gray_a0a0a0"
+                            android:textSize="@dimen/y8" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
             </RelativeLayout>
 

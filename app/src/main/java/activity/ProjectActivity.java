@@ -1,5 +1,6 @@
 package activity;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -107,6 +108,8 @@ public class ProjectActivity extends CommonActivity implements View.OnClickListe
 
     @Override
     public void onClick(View item, View widget, int position, int which, boolean isChecked) {
+        Intent intent = new Intent();
+        setResult(1, intent);
         finish();
     }
 

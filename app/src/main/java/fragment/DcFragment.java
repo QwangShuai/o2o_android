@@ -1,8 +1,10 @@
 package fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.gjzg.R;
 
@@ -14,9 +16,10 @@ import bean.DcBean;
 import config.StateConfig;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.Utils;
 
 //优惠
-public class DcFragment extends CommonFragment implements PullToRefreshLayout.OnRefreshListener {
+public class DcFragment extends CommonFragment implements PullToRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     private View rootView;
     private PullToRefreshLayout ptrl;
@@ -55,19 +58,20 @@ public class DcFragment extends CommonFragment implements PullToRefreshLayout.On
     @Override
     protected void setListener() {
         ptrl.setOnRefreshListener(this);
+        plv.setOnItemClickListener(this);
     }
 
     @Override
     protected void loadData() {
         DcBean d0 = new DcBean();
         d0.setTitle("优惠一");
-        d0.setUrl("https://www.baidu.com/");
+        d0.setUrl("http://www.toutiao.com/");
         DcBean d1 = new DcBean();
         d1.setTitle("优惠二");
-        d1.setUrl("https://www.baidu.com/");
+        d1.setUrl("http://www.toutiao.com/");
         DcBean d2 = new DcBean();
         d2.setTitle("优惠三");
-        d2.setUrl("https://www.baidu.com/");
+        d2.setUrl("http://www.toutiao.com/");
         list.add(d0);
         list.add(d1);
         list.add(d2);
@@ -95,5 +99,12 @@ public class DcFragment extends CommonFragment implements PullToRefreshLayout.On
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
         state = StateConfig.LOAD_LOAD;
         loadData();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String url = list.get(position).getUrl();
+        if (!TextUtils.isEmpty(url))
+            Utils.skipBrowser(getActivity(), url);
     }
 }

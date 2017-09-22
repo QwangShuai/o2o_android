@@ -203,9 +203,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/y100"
             android:background="@android:color/white"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:orientation="vertical" />
 
     </LinearLayout>
 

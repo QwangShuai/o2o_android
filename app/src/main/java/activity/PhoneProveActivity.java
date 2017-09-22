@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -162,12 +161,9 @@ public class PhoneProveActivity extends CommonActivity implements View.OnClickLi
                 case CodeTimerService.IN_RUNNING:
                     if (resendTv.isEnabled())
                         resendTv.setEnabled(false);
-                    // 正在倒计时
                     resendTv.setText(intent.getStringExtra("time"));
-                    Log.e("TAG", intent.getStringExtra("time"));
                     break;
                 case CodeTimerService.END_RUNNING:
-                    // 完成倒计时
                     resendTv.setEnabled(true);
                     resendTv.setText(VarConfig.pwdResendTip);
                     break;
@@ -178,14 +174,12 @@ public class PhoneProveActivity extends CommonActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        // 注册广播
         registerReceiver(mUpdateReceiver, updateIntentFilter());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // 移除注册
         unregisterReceiver(mUpdateReceiver);
     }
 }

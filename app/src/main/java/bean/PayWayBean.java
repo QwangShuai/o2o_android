@@ -1,38 +1,96 @@
 package bean;
 
-/**
- * 创建日期：2017/8/7 on 14:19
- * 作者:孙明明
- * 描述:
- */
-
+//支付方式
 public class PayWayBean {
 
-    private int imageResource;
-    private String content;
-    private boolean yesOrno;
+    private String p_id;
+    private String p_type;
+    private String p_name;
+    private String p_info;
+    private String p_status;
+    private String p_author;
+    private String p_last_editor;
+    private String p_last_edit_time;
+    private String p_default;
+    private boolean check;
 
-    public int getImageResource() {
-        return imageResource;
+    public String getP_id() {
+        return p_id;
     }
 
-    public void setImageResource(int imageResource) {
-        this.imageResource = imageResource;
+    public void setP_id(String p_id) {
+        this.p_id = p_id;
     }
 
-    public String getContent() {
-        return content;
+    public String getP_type() {
+        return p_type;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setP_type(String p_type) {
+        this.p_type = p_type;
     }
 
-    public boolean isYesOrno() {
-        return yesOrno;
+    public String getP_name() {
+        return p_name;
     }
 
-    public void setYesOrno(boolean yesOrno) {
-        this.yesOrno = yesOrno;
+    public void setP_name(String p_name) {
+        this.p_name = p_name;
+    }
+
+    public String getP_info() {
+        return p_info;
+    }
+
+    public void setP_info(String p_info) {
+        this.p_info = p_info;
+    }
+
+    public String getP_status() {
+        return p_status;
+    }
+
+    public void setP_status(String p_status) {
+        this.p_status = p_status;
+    }
+
+    public String getP_author() {
+        return p_author;
+    }
+
+    public void setP_author(String p_author) {
+        this.p_author = p_author;
+    }
+
+    public String getP_last_editor() {
+        return p_last_editor;
+    }
+
+    public void setP_last_editor(String p_last_editor) {
+        this.p_last_editor = p_last_editor;
+    }
+
+    public String getP_last_edit_time() {
+        return p_last_edit_time;
+    }
+
+    public void setP_last_edit_time(String p_last_edit_time) {
+        this.p_last_edit_time = p_last_edit_time;
+    }
+
+    public String getP_default() {
+        return p_default;
+    }
+
+    public void setP_default(String p_default) {
+        this.p_default = p_default;
+    }
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 }

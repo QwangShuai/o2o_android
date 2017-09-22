@@ -1,11 +1,9 @@
 package adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,80 +11,47 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import bean.PayWay;
-import listener.ListItemClickHelp;
+import bean.PayWayBean;
 
-/**
- * 创建日期：2017/8/7 on 14:18
- * 作者:孙明明
- * 描述:
- */
+//支付方式适配器
+public class PayWayAdapter extends CommonAdapter<PayWayBean> {
 
-public class PayWayAdapter extends BaseAdapter {
-
-    private Context context;
-    private List<PayWay> list;
-    private ListItemClickHelp clickHelp;
-    private ViewHolder holder;
-
-    public PayWayAdapter(Context context, List<PayWay> list, ListItemClickHelp clickHelp) {
-        this.context = context;
-        this.list = list;
-        this.clickHelp = clickHelp;
+    public PayWayAdapter(Context context, List<PayWayBean> list) {
+        super(context, list);
     }
 
     @Override
-    public int getCount() {
-        return list.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, final ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_pay_way, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_pay_way, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        PayWay payWay = list.get(position);
-        final View view = convertView;
-        final int p = position;
-        final int id = holder.yesOrnoCb.getId();
-        holder.yesOrnoCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                clickHelp.onClick(view, parent, p, id, isChecked);
+        PayWayBean payWayBean = list.get(position);
+        if (payWayBean != null) {
+            holder.iconIv.setImageResource(R.mipmap.person_face_default);
+            holder.nameTv.setText(payWayBean.getP_name());
+            if (payWayBean.isCheck()) {
+                holder.checkIv.setImageResource(R.mipmap.pay_choosed);
+            } else {
+                holder.checkIv.setImageResource(R.mipmap.point_gray);
             }
-        });
-        if (payWay != null) {
-            holder.imageIv.setImageResource(payWay.getImageResource());
-            holder.contentTv.setText(payWay.getContent());
-            holder.yesOrnoCb.setChecked(payWay.isYesOrno());
         }
         return convertView;
     }
 
     private class ViewHolder {
 
-        private ImageView imageIv;
-        private TextView contentTv;
-        private CheckBox yesOrnoCb;
+        private ImageView iconIv, checkIv;
+        private TextView nameTv;
 
         public ViewHolder(View itemView) {
-            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_pay_way_image);
-            contentTv = (TextView) itemView.findViewById(R.id.tv_item_pay_way_content);
-            yesOrnoCb = (CheckBox) itemView.findViewById(R.id.cb_item_pay_way_yes_or_no);
+            iconIv = (ImageView) itemView.findViewById(R.id.iv_item_pay_way_icon);
+            checkIv = (ImageView) itemView.findViewById(R.id.iv_item_pay_way_check);
+            nameTv = (TextView) itemView.findViewById(R.id.tv_item_pay_way_name);
         }
     }
 }

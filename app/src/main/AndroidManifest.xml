@@ -48,9 +48,11 @@
         <activity android:name="activity.SevClsActivity" />
         <activity android:name="activity.LoginActivity" />
         <activity
-            android:name="activity.RechargeActivity"
+            android:name="activity.PayWayActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name="activity.SendJobActivity" />
+        <activity
+            android:name="activity.SendJobActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity android:name="activity.WalletActivity" />
         <activity android:name="activity.AccountDetailActivity" />
         <activity android:name="activity.InviteActivity" />
@@ -72,10 +74,13 @@
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
         <activity android:name="activity.ProjectActivity" />
         <activity android:name="activity.ResignActivity" />
-        <activity android:name="activity.ComplainActivity" />
+        <activity
+            android:name="activity.ComplainActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity android:name="activity.PicActivity" />
 
         <service android:name="service.CodeTimerService" />
+        <service android:name="service.GetLoginCodeTimerService" />
 
         <activity android:name="activity.IdActivity" />
         <activity
@@ -86,7 +91,7 @@
         <activity
             android:name="activity.EvaluateActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity android:name="activity.PersonDetailActivity"></activity>
+        <activity android:name="activity.PersonDetailActivity" />
     </application>
 
 </manifest>

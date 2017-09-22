@@ -1,96 +1,62 @@
 package adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gjzg.R;
 
 import java.util.List;
 
-/**
- * 创建日期：2017/8/13 on 15:24
- * 作者:孙明明
- * 描述:
- */
+import bean.JobBean;
 
-public class JobAdapter extends RecyclerView.Adapter<JobAdapter.MyViewHolder> {
+//工作适配器
+public class JobAdapter extends CommonAdapter<JobBean> {
 
-    private Context context;
-    private List<String> list;
-    private MyViewHolder holder;
-
-    public JobAdapter(Context context, List<String> list) {
-        this.context = context;
-        this.list = list;
-    }
-
-    public interface OnItemClickLitener {
-        void onItemClick(View view, int position);
-
-        void onItemLongClick(View view, int position);
-    }
-
-    private OnItemClickLitener mOnItemClickLitener;
-
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
-        this.mOnItemClickLitener = mOnItemClickLitener;
-    }
-
-    public void addData(int position) {
-        list.add(position, "Insert One");
-        notifyItemInserted(position);
-    }
-
-    public void removeData(int position) {
-        list.remove(position);
-        notifyItemRemoved(position);
+    public JobAdapter(Context context, List<JobBean> list) {
+        super(context, list);
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        holder = new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_job, parent, false));
-        return holder;
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.tv.setText(list.get(position));
-        if (mOnItemClickLitener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = holder.getPosition();
-                    mOnItemClickLitener.onItemClick(holder.itemView, pos);
-                }
-            });
-
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    int pos = holder.getPosition();
-                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos);
-                    return false;
-                }
-            });
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_job, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
+        JobBean jobBean = list.get(position);
+        if (jobBean != null) {
+            holder.titleTv.setText(jobBean.getT_title());
+            holder.infoTv.setText(jobBean.getT_info());
+            String status = jobBean.getT_status();
+            if (status.equals("0")) {
+                holder.statusIv.setImageResource(R.mipmap.worker_wait);
+            } else if (status.equals("1")) {
+                holder.statusIv.setImageResource(R.mipmap.worker_talk);
+            } else if (status.equals("2")) {
+                holder.statusIv.setImageResource(R.mipmap.worker_mid);
+            } else if (status.equals("3")) {
+                holder.statusIv.setImageResource(R.mipmap.worker_over);
+            }
+        }
+        return convertView;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    private class ViewHolder {
 
-        TextView tv;
+        private TextView titleTv, infoTv;
+        private ImageView statusIv;
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            tv = (TextView) itemView.findViewById(R.id.tv_item_job_name);
+        public ViewHolder(View itemView) {
+            statusIv = (ImageView) itemView.findViewById(R.id.iv_item_job_status);
+            titleTv = (TextView) itemView.findViewById(R.id.tv_item_job_title);
+            infoTv = (TextView) itemView.findViewById(R.id.tv_item_job_info);
         }
     }
 }

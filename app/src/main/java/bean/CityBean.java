@@ -2,8 +2,8 @@ package bean;
 
 import java.io.Serializable;
 
-//工种
-public class KindBean implements Serializable {
+//城市
+public class CityBean implements Serializable{
 
     private String id;
     private String name;
@@ -22,5 +22,13 @@ public class KindBean implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "CityBean{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -1,7 +1,10 @@
 package utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,30 +18,28 @@ import java.security.MessageDigest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * 创建日期：2017/7/28 on 13:38
- * 作者:孙明明
- * 描述:工具类
- */
+import activity.LoginActivity;
 
+//工具类
 public class Utils {
 
+    //吐司
     public static void toast(Context c, String s) {
         Toast.makeText(c, s, Toast.LENGTH_SHORT).show();
     }
 
+    //日志
     public static void log(Context c, String s) {
         Log.e(c.getClass().getSimpleName(), s);
     }
 
+    //设置ListView高度
     public static void setListViewHeight(ListView listView) {
-        //获取listView的adapter
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             return;
         }
         int totalHeight = 0;
-        //listAdapter.getCount()返回数据项的数目
         for (int i = 0, len = listAdapter.getCount(); i < len; i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);
@@ -49,6 +50,7 @@ public class Utils {
         listView.setLayoutParams(params);
     }
 
+    //设置GridView高度
     public static void setGridViewHeight(GridView gridview, int numColumes) {
         ListAdapter listAdapter = gridview.getAdapter();
         if (listAdapter == null) {
@@ -82,6 +84,7 @@ public class Utils {
         }
     }
 
+    //MD5加密
     public static String md5Encode(String inStr)
             throws UnsupportedEncodingException {
         MessageDigest md5 = null;
@@ -104,4 +107,27 @@ public class Utils {
         }
         return hexValue.toString();
     }
+
+    //跳到浏览器
+    public static void skipBrowser(Context context, String url) {
+        if (context != null && !TextUtils.isEmpty(url)) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            context.startActivity(intent);
+        }
+    }
+
+    //是否登录
+    public static boolean isLogin(Context context) {
+        return false;
+    }
+
+    //跳到登录
+    public static void skipLogin(Context context) {
+        if (context != null) {
+            context.startActivity(new Intent(context, LoginActivity.class));
+        }
+    }
+
 }
