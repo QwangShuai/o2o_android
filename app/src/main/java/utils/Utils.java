@@ -2,9 +2,13 @@ package utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +17,33 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gjzg.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import activity.LoginActivity;
+import login.view.LoginActivity;
+import bean.PositionBean;
+import cache.LruJsonCache;
+import config.NetConfig;
+import view.CProgressDialog;
 
 //工具类
 public class Utils {
+
+    public static String Bitmap2StrByBase64(Bitmap bit) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bit.compress(Bitmap.CompressFormat.JPEG, 40, bos);//参数100表示不压缩
+        byte[] bytes = bos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+    }
 
     //吐司
     public static void toast(Context c, String s) {
@@ -129,5 +151,91 @@ public class Utils {
             context.startActivity(new Intent(context, LoginActivity.class));
         }
     }
+
+
+    public static CProgressDialog initProgressDialog(Context context, CProgressDialog cpd) {
+        return cpd = new CProgressDialog(context, R.style.dialog_cprogress);
+    }
+
+    //获取版本号
+    public static String getVersion(Context context) {
+        try {
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            String appName = info.applicationInfo.loadLabel(manager).toString();
+            String version = info.versionName;
+            return appName + version;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void caculateLongLat(double longitude, double latitude, double distance) {
+        double pi = Math.PI;
+        double radius = 6371229;
+        double x = (180 * distance) / (pi * radius * Math.cos(longitude * pi / 180));
+        double y = (180 * distance) / (pi * radius * Math.cos(latitude * pi / 180));
+        Log.e("TAG", "pi:" + pi + "\nradius:" + radius + "\nx:" + x + "\ny:" + y);
+    }
+
+    public static void writeCache(Context context, String id, String key, String value, String time) {
+        int t = Integer.parseInt(time);
+        LruJsonCache lruJsonCache = LruJsonCache.get(context);
+        lruJsonCache.put(id + "" + key, value, t);
+    }
+
+    public static String readCache(Context context, String id, String key) {
+        LruJsonCache lruJsonCache = LruJsonCache.get(context);
+        return lruJsonCache.getAsString(id + "" + key);
+    }
+
+    public static String getLocCityId(Context context, String cityName, String json) {
+        String cityId = null;
+        try {
+            JSONObject objBean = new JSONObject(json);
+            if (objBean.optInt("code") == 200) {
+                JSONObject objData = objBean.optJSONObject("data");
+                String[] arr = context.getResources().getStringArray(R.array.lowerletter);
+                for (int i = 0; i < arr.length; i++) {
+                    JSONArray arrLetter = objData.optJSONArray(arr[i]);
+                    if (arrLetter != null) {
+                        for (int j = 0; j < arrLetter.length(); j++) {
+                            JSONObject o = arrLetter.optJSONObject(j);
+                            if (o != null) {
+                                if (cityName.equals(o.optString("r_name"))) {
+                                    cityId = o.optString("r_id");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cityId;
+    }
+
+    //工人信息url
+    public static String getWorkerInfoUrl(String workerKindId, PositionBean positionBean) {
+        return NetConfig.workerUrl + "?s_id=" + workerKindId + "&users_posit_x=" + positionBean.getPositionX() + "&users_posit_y=" + positionBean.getPositionY();
+    }
+
+    //头像上传url
+    public static String getIconUpdateUrl(String userId, String imgName) {
+        return NetConfig.iconUpdateUrl + "?u_id=" + userId + "&img_name=" + imgName;
+    }
+
+    //切割出json
+    public static String cutJson(String result) {
+        if (TextUtils.isEmpty(result)) {
+            return null;
+        } else {
+            int first = result.indexOf("{");
+            return result.substring(first);
+        }
+    }
+
 
 }

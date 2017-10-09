@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context="activity.PersonMagActivity">
+    tools:context="personmanage.view.PersonInfoManageActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -84,26 +84,6 @@
                 android:layout_marginBottom="@dimen/y5"
                 android:layout_marginTop="@dimen/y5"
                 android:text="编辑信息"
-                android:textColor="@color/gray_a0a0a0"
-                android:textSize="@dimen/x15" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_person_manage_record"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true">
-
-            <TextView
-                android:id="@+id/tv_person_manage_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginTop="@dimen/y5"
-                android:text="投递记录"
                 android:textColor="@color/gray_a0a0a0"
                 android:textSize="@dimen/x15" />
 

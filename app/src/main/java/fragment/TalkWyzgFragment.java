@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import activity.ProjectActivity;
-import activity.TalkActivity;
+import project.view.ProjectActivity;
+import talk.view.TalkActivity;
 import config.VarConfig;
 
 public class TalkWyzgFragment extends CommonFragment implements View.OnClickListener {

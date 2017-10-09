@@ -166,13 +166,13 @@ public class WorkerMagAdapter extends BaseAdapter {
         private TextView cancelTv, changeTv, quitTv, refuseTv, complainTv, deleteTv, evaluateTv;
 
         public ViewHolder(View itemView) {
-            iconIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_image);
-            stateIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_state);
-            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_collect);
-            titleTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_name);
-            contentTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_play);
+            iconIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_icon);
+            stateIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_status);
+            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_collect);
+            titleTv = (TextView) itemView.findViewById(R.id.tv_item_worker_name);
+            contentTv = (TextView) itemView.findViewById(R.id.tv_item_worker_brief);
             priceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_show);
-            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_distance);
+            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_distance);
             waitLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_wait);
             talkingLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_talking);
             workingLl = (LinearLayout) itemView.findViewById(R.id.ll_item_worker_mag_working);

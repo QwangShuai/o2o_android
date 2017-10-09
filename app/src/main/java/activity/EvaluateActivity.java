@@ -89,15 +89,15 @@ public class EvaluateActivity extends CommonActivity implements View.OnClickList
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_evaluate_return);
-        fl = (FrameLayout) rootView.findViewById(R.id.fl_evaluate);
-        conLl = (LinearLayout) rootView.findViewById(R.id.ll_evaluate_con);
-        nameTv = (TextView) rootView.findViewById(R.id.tv_evaluate_name);
-        identityTv = (TextView) rootView.findViewById(R.id.tv_evaluate_identity);
-        countTv = (TextView) rootView.findViewById(R.id.tv_evaluate_count);
-        complainTv = (TextView) rootView.findViewById(R.id.tv_evaluate_complain);
+        fl = (FrameLayout) rootView.findViewById(R.id.fl_resign);
+        conLl = (LinearLayout) rootView.findViewById(R.id.ll_resign_con);
+        nameTv = (TextView) rootView.findViewById(R.id.tv_resign_name);
+        identityTv = (TextView) rootView.findViewById(R.id.tv_resign_identity);
+        countTv = (TextView) rootView.findViewById(R.id.tv_resign_count);
+        complainTv = (TextView) rootView.findViewById(R.id.tv_resign_complain);
         priceTv = (TextView) rootView.findViewById(R.id.tv_evaluate_price);
-        iconIv = (ImageView) rootView.findViewById(R.id.iv_evaluate_icon);
-        sexIv = (ImageView) rootView.findViewById(R.id.iv_evaluate_sex);
+        iconIv = (ImageView) rootView.findViewById(R.id.iv_resign_icon);
+        sexIv = (ImageView) rootView.findViewById(R.id.iv_resign_sex);
         praise1Iv = (ImageView) rootView.findViewById(R.id.iv_evaluate_praise_1);
         praise2Iv = (ImageView) rootView.findViewById(R.id.iv_evaluate_praise_2);
         praise3Iv = (ImageView) rootView.findViewById(R.id.iv_evaluate_praise_3);
@@ -206,7 +206,7 @@ public class EvaluateActivity extends CommonActivity implements View.OnClickList
             case R.id.rl_evaluate_return:
                 finish();
                 break;
-            case R.id.tv_evaluate_complain:
+            case R.id.tv_resign_complain:
                 startActivity(new Intent(this, ComplainActivity.class));
                 break;
             case R.id.ll_evaluate_detail:

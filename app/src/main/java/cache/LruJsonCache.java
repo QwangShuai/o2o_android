@@ -32,6 +32,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import listener.OnLoadComCityListener;
+import listener.OnLoadHotCityListener;
+
 /**
  * 创建日期：2017/7/28 on 13:47
  * 作者:孙明明
@@ -39,6 +42,18 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 
 public class LruJsonCache {
+
+    private OnLoadHotCityListener onLoadHotCityListener;
+
+        public void setOnLoadHotCityListener(OnLoadHotCityListener onLoadHotCityListener) {
+        this.onLoadHotCityListener = onLoadHotCityListener;
+    }
+//
+    private OnLoadComCityListener onLoadComCityListener;
+//
+    public void setOnLoadComCityListener(OnLoadComCityListener onLoadComCityListener) {
+        this.onLoadComCityListener = onLoadComCityListener;
+    }
 
     public static final int TIME_HOUR = 60 * 60;
     public static final int TIME_DAY = TIME_HOUR * 24;
@@ -109,6 +124,15 @@ public class LruJsonCache {
                 try {
                     out.flush();
                     out.close();
+                    if (key.contains("hotCity")) {
+                        if (onLoadHotCityListener != null) {
+                            onLoadHotCityListener.hotResult();
+                        }
+                    } else if (key.contains("comCity")) {
+                        if (onLoadComCityListener != null) {
+                            onLoadComCityListener.comResult();
+                        }
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

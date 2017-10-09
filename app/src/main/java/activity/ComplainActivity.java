@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +30,12 @@ import java.util.Date;
 import java.util.List;
 
 import adapter.ComplainImageAdapter;
+import config.IntentConfig;
 import config.PathConfig;
 import config.PermissionConfig;
 import utils.Utils;
 
+//投诉
 public class ComplainActivity extends CommonActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private View rootView;
@@ -50,6 +51,8 @@ public class ComplainActivity extends CommonActivity implements View.OnClickList
     private ComplainImageAdapter adapter;
 
     private String picPath;//相机照片路径
+
+    private List<String> upLoadImageList;
 
     @Override
     protected View getRootView() {
@@ -93,7 +96,7 @@ public class ComplainActivity extends CommonActivity implements View.OnClickList
             @Override
             public void onClick(View v) {
                 pop.dismiss();
-                startActivity(new Intent(ComplainActivity.this, PicActivity.class));
+                startActivityForResult(new Intent(ComplainActivity.this, PicActivity.class), IntentConfig.PIC_REQUEST);
             }
         });
         cancelTv.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +111,7 @@ public class ComplainActivity extends CommonActivity implements View.OnClickList
     protected void initData() {
         list = new ArrayList<>();
         adapter = new ComplainImageAdapter(this, list);
+        upLoadImageList = new ArrayList<>();
     }
 
     @Override
@@ -210,24 +214,38 @@ public class ComplainActivity extends CommonActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case PermissionConfig.CAMERA:
-                Log.e("TAG", picPath);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 10;
-                options.inTempStorage = new byte[1024];
-                Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
+        if (requestCode == PermissionConfig.CAMERA && resultCode == RESULT_OK) {
+            Utils.log(ComplainActivity.this, "camera=" + picPath);
+            upLoadImageList.add(picPath);
+            Utils.log(ComplainActivity.this, "upLoadImageList=" + upLoadImageList.toString());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 10;
+            options.inTempStorage = new byte[1024];
+            Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
+            list.add(bitmap);
+            adapter.notifyDataSetChanged();
+        }
+        if (requestCode == IntentConfig.PIC_REQUEST && resultCode == IntentConfig.PIC_RESULT && data != null) {
+            List<String> l = new ArrayList<>();
+            l.addAll(data.getStringArrayListExtra(IntentConfig.PIC));
+            upLoadImageList.addAll(l);
+            Utils.log(ComplainActivity.this, "upLoadImageList=" + upLoadImageList.toString());
+            Utils.log(ComplainActivity.this, "l=" + l.toString());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 10;
+            options.inTempStorage = new byte[1024];
+            for (int i = 0; i < l.size(); i++) {
+                Bitmap bitmap = BitmapFactory.decodeFile(l.get(i), options);
                 list.add(bitmap);
-                adapter.notifyDataSetChanged();
-                break;
-            default:
-                break;
+            }
+            adapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         list.remove(position);
+        upLoadImageList.remove(position);
         adapter.notifyDataSetChanged();
     }
 

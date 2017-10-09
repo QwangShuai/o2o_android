@@ -1,6 +1,8 @@
 package activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,16 +10,28 @@ import android.widget.RelativeLayout;
 
 import com.gjzg.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.PersonAdapter;
-import bean.PersonBean;
+import adapter.WorkerAdapter;
+import bean.PositionBean;
 import bean.ScreenBean;
+import bean.WorkerBean;
 import config.CodeConfig;
 import config.StateConfig;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.Utils;
 
 //工人
 public class WorkerActivity extends CommonActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
@@ -27,9 +41,28 @@ public class WorkerActivity extends CommonActivity implements View.OnClickListen
     private RelativeLayout screenRl;
     private PullToRefreshLayout ptrl;
     private PullableListView plv;
-    private List<PersonBean> list;
-    private PersonAdapter adapter;
+    private List<WorkerBean> list;
+    private WorkerAdapter adapter;
     private int state = StateConfig.LOAD_DONE;
+    private OkHttpClient okHttpClient;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg == null) {
+                Utils.log(WorkerActivity.this, "msg = null");
+            } else {
+                switch (msg.what) {
+                    case 1:
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    };
 
     @Override
     protected View getRootView() {
@@ -51,7 +84,8 @@ public class WorkerActivity extends CommonActivity implements View.OnClickListen
     @Override
     protected void initData() {
         list = new ArrayList<>();
-        adapter = new PersonAdapter(this, list);
+        adapter = new WorkerAdapter(WorkerActivity.this, list);
+        okHttpClient = new OkHttpClient();
     }
 
     @Override
@@ -69,40 +103,72 @@ public class WorkerActivity extends CommonActivity implements View.OnClickListen
 
     @Override
     protected void loadData() {
-        PersonBean p0 = new PersonBean();
-        p0.setName("专业水泥工");
-        p0.setPlay("精通XX，XX，XX");
-        p0.setShow("完成过xx项目，个人家装");
-        p0.setState(StateConfig.LEISURE);
-        p0.setCollect(false);
-        p0.setDistance("距离3公里");
-        PersonBean p1 = new PersonBean();
-        p1.setName("专业水泥工");
-        p1.setPlay("精通XX，XX，XX");
-        p1.setShow("完成过xx项目，个人家装");
-        p1.setState(StateConfig.WORKING);
-        p1.setCollect(false);
-        p1.setDistance("距离3公里");
-        PersonBean p2 = new PersonBean();
-        p2.setName("专业水泥工");
-        p2.setPlay("精通XX，XX，XX");
-        p2.setShow("完成过xx项目，个人家装");
-        p2.setState(StateConfig.TALKING);
-        p2.setCollect(true);
-        p2.setDistance("距离3公里");
-        list.add(p0);
-        list.add(p1);
-        list.add(p2);
-        adapter.notifyDataSetChanged();
-        switch (state) {
-            case StateConfig.LOAD_REFRESH:
-                ptrl.hideHeadView();
-                break;
-            case StateConfig.LOAD_LOAD:
-                ptrl.hideFootView();
-                break;
-            default:
-                break;
+        PositionBean positionBean = new PositionBean();
+        positionBean.setPositionX("126.65771686");
+        positionBean.setPositionY("45");
+        String url = Utils.getWorkerUrl("2", positionBean);
+        if (url == null) {
+            Utils.log(WorkerActivity.this, "url = null");
+        } else {
+            Request request = new Request.Builder().url(url).get().build();
+            okHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String result = response.body().string();
+                        String json = Utils.cutJson(result);
+                        Utils.log(WorkerActivity.this, "json:" + json);
+                        parseJson(json);
+                    }
+                }
+            });
+        }
+    }
+
+    private void parseJson(String json) {
+        try {
+            JSONObject objBean = new JSONObject(json);
+            if (objBean.optInt("code") == 1) {
+                JSONObject objData = objBean.optJSONObject("data");
+                if (objData == null) {
+                    Utils.log(WorkerActivity.this, "objData = null");
+                } else {
+                    JSONArray arrData = objData.optJSONArray("data");
+                    if (arrData == null) {
+                        Utils.log(WorkerActivity.this, "arrData = null");
+                    } else {
+                        for (int i = 0; i < arrData.length(); i++) {
+                            JSONObject o = arrData.optJSONObject(i);
+                            if (o == null) {
+                                Utils.log(WorkerActivity.this, "o = null");
+                            } else {
+                                WorkerBean wb = new WorkerBean();
+                                wb.setId(o.optString("u_id"));
+                                wb.setIcon(o.optString("u_img"));
+                                wb.setName(o.optString("u_true_name"));
+                                wb.setBrief(o.optString("uei_info"));
+                                wb.setStatus(o.optString("u_task_status"));
+                                wb.setDistance("离我" + o.optDouble("distance") + "公里");
+                                wb.setPositionX(o.optString("ucp_posit_x"));
+                                wb.setPositionY(o.optString("ucp_posit_y"));
+                                Utils.log(WorkerActivity.this, "wb:" + wb.toString());
+                                list.add(wb);
+                            }
+                        }
+                        handler.sendEmptyMessage(1);
+                    }
+                }
+            } else {
+                Utils.log(WorkerActivity.this, "code:" + objBean.optInt("code"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Utils.log(WorkerActivity.this, "exception:" + e.getMessage());
         }
     }
 
@@ -138,14 +204,11 @@ public class WorkerActivity extends CommonActivity implements View.OnClickListen
 
     @Override
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-        list.clear();
-        state = StateConfig.LOAD_REFRESH;
-        loadData();
+        ptrl.hideHeadView();
     }
 
     @Override
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-        state = StateConfig.LOAD_LOAD;
-        loadData();
+        ptrl.hideFootView();
     }
 }

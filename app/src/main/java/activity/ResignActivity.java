@@ -1,15 +1,19 @@
 package activity;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.gjzg.R;
 
+//辞职
 public class ResignActivity extends CommonActivity implements View.OnClickListener {
 
     private View rootView;
     private RelativeLayout returnRl;
+    private LinearLayout complainEmployerLl;
 
     @Override
     protected View getRootView() {
@@ -23,6 +27,7 @@ public class ResignActivity extends CommonActivity implements View.OnClickListen
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_resign_return);
+        complainEmployerLl = (LinearLayout) rootView.findViewById(R.id.ll_resign_complain_employer);
     }
 
     @Override
@@ -38,6 +43,7 @@ public class ResignActivity extends CommonActivity implements View.OnClickListen
     @Override
     protected void setListener() {
         returnRl.setOnClickListener(this);
+        complainEmployerLl.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +56,9 @@ public class ResignActivity extends CommonActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.rl_resign_return:
                 finish();
+                break;
+            case R.id.ll_resign_complain_employer:
+                startActivity(new Intent(this, ComplainActivity.class));
                 break;
             default:
                 break;

@@ -11,14 +11,27 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.DetailAdapter;
 import bean.AccountDetailBean;
+import bean.WithDrawBean;
+import config.NetConfig;
 import config.StateConfig;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.Utils;
 
 public class AccountDetailActivity extends CommonActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
 
@@ -34,6 +47,13 @@ public class AccountDetailActivity extends CommonActivity implements View.OnClic
     private List<AccountDetailBean> list;
     private DetailAdapter adapter;
     private int state = StateConfig.LOAD_DONE;
+    private OkHttpClient okHttpClient;
+
+    private int id = 2, page = 1;
+    private final String CATEGORY_ALL = "all";
+    private final String CATEGORY_WITHDRAW = "withdraw";
+    private final String CATEGORY_RECHARGE = "recharge";
+    private String category = CATEGORY_ALL;
 
     @Override
     protected View getRootView() {
@@ -76,6 +96,7 @@ public class AccountDetailActivity extends CommonActivity implements View.OnClic
     protected void initData() {
         list = new ArrayList<>();
         adapter = new DetailAdapter(this, list);
+        okHttpClient = new OkHttpClient();
     }
 
     @Override
@@ -130,12 +151,66 @@ public class AccountDetailActivity extends CommonActivity implements View.OnClic
             default:
                 break;
         }
+        loadAccountDetailData();
+    }
+
+    private void loadAccountDetailData() {
+        String url = NetConfig.accountDetailUrl + "?u_id=" + id + "&page=" + page + "&category=" + category;
+        Request request = new Request.Builder().url(url).get().build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    Utils.log(AccountDetailActivity.this, "json=" + json);
+                    if (category.equals("withdraw")) {
+                        parseWithDrawJson(json);
+                    }
+                }
+            }
+        });
     }
 
     private void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha;
         getWindow().setAttributes(lp);
+    }
+
+    private void parseWithDrawJson(String json) {
+        Utils.log(AccountDetailActivity.this, "withDraw=" + json);
+        try {
+            JSONObject objBean = new JSONObject(json);
+            if (objBean.optInt("code") == 1) {
+                JSONObject objData = objBean.optJSONObject("data");
+                if (objData != null) {
+                    JSONArray arrWithDraw = objData.optJSONArray("withdraw_list");
+                    if (arrWithDraw != null) {
+                        for (int i = 0; i < arrWithDraw.length(); i++) {
+                            JSONObject o = arrWithDraw.optJSONObject(i);
+                            if (o != null) {
+                                WithDrawBean w = new WithDrawBean();
+                                w.setUwl_id(o.optString("uwl_id"));
+                                w.setUwl_amount(o.optString("uwl_amount"));
+                                w.setUwl_in_time(o.optString("uwl_in_time"));
+                                w.setUwl_status(o.optString("uwl_status"));
+                                w.setUwl_solut_time(o.optString("uwl_solut_time"));
+                                w.setUwl_card(o.optString("uwl_card"));
+                                w.setP_id(o.optString("p_id"));
+                                Utils.log(AccountDetailActivity.this, "withDrawBean=" + w.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -154,18 +229,27 @@ public class AccountDetailActivity extends CommonActivity implements View.OnClic
                 if (menuPopWindow.isShowing()) {
                     menuPopWindow.dismiss();
                     menuContentTv.setText("全部");
+                    page = 1;
+                    category = CATEGORY_ALL;
+                    loadAccountDetailData();
                 }
                 break;
             case R.id.rl_popwindow_detail_menu_out:
                 if (menuPopWindow.isShowing()) {
                     menuPopWindow.dismiss();
                     menuContentTv.setText("支出");
+                    page = 1;
+                    category = CATEGORY_WITHDRAW;
+                    loadAccountDetailData();
                 }
                 break;
             case R.id.rl_popwindow_detail_menu_in:
                 if (menuPopWindow.isShowing()) {
                     menuPopWindow.dismiss();
                     menuContentTv.setText("收入");
+                    page = 1;
+                    category = CATEGORY_RECHARGE;
+                    loadAccountDetailData();
                 }
                 break;
         }

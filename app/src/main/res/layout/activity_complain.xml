@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_ffffff"
     android:orientation="vertical"
-    tools:context="activity.ComplainActivity">
+    tools:context="complain.view.ComplainActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 

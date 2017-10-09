@@ -31,74 +31,36 @@ public class PersonDetailAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        if (personDetailBean.isWorker()) {
-            return 5;
-        } else {
-            return 4;
-        }
+        return 4;
     }
 
     @Override
     public int getItemViewType(int position) {
-        int type = -1;
-        if (getViewTypeCount() == 10 + personDetailBean.getEvaluateBeanList().size()) {
-            switch (position) {
-                case 0:
-                    type = 0;
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    type = 1;
-                    break;
-                case 8:
-                    type = 2;
-                    break;
-                case 9:
-                    type = 3;
-                    break;
-                default:
-                    type = 4;
-                    break;
-            }
-        } else if (getViewTypeCount() == 9 + personDetailBean.getEvaluateBeanList().size()) {
-            switch (position) {
-                case 0:
-                    type = 0;
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    type = 1;
-                    break;
-                case 8:
-                    type = 3;
-                    break;
-                default:
-                    type = 4;
-                    break;
-            }
+        int type;
+        switch (position) {
+            case 0:
+                type = 0;
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                type = 1;
+                break;
+            case 6:
+                type = 2;
+                break;
+            default:
+                type = 3;
+                break;
         }
         return type;
     }
 
     @Override
     public int getCount() {
-        if (personDetailBean == null) {
-            return 0;
-        } else if (personDetailBean.isWorker()) {
-            return 10 + personDetailBean.getEvaluateBeanList().size();
-        } else {
-            return 9 + personDetailBean.getEvaluateBeanList().size();
-        }
+        return personDetailBean == null ? 0 : 7 + personDetailBean.getEvaluateBeanList().size();
     }
 
     @Override
@@ -117,7 +79,6 @@ public class PersonDetailAdapter extends BaseAdapter {
         ViewHolder1 holder1;
         ViewHolder2 holder2;
         ViewHolder3 holder3;
-        ViewHolder4 holder4;
         switch (getItemViewType(position)) {
             case 0:
                 if (convertView == null) {
@@ -148,35 +109,31 @@ public class PersonDetailAdapter extends BaseAdapter {
                         break;
                     case 2:
                         holder1.titleTv.setText("性别");
-                        if (personDetailBean.isMale()) {
-                            holder1.contentTv.setText("男");
-                        } else {
-                            holder1.contentTv.setText("女");
+                        switch (personDetailBean.getMale()) {
+                            case "-1":
+                                holder1.contentTv.setText("无");
+                                break;
+                            case "0":
+                                holder1.contentTv.setText("女");
+                                break;
+                            case "1":
+                                holder1.contentTv.setText("男");
+                                break;
+                            default:
+                                break;
                         }
                         break;
                     case 3:
-                        holder1.titleTv.setText("年龄");
-                        holder1.contentTv.setText(personDetailBean.getAge() + "");
-                        break;
-                    case 4:
                         holder1.titleTv.setText("现居地");
                         holder1.contentTv.setText(personDetailBean.getAddress());
                         break;
-                    case 5:
+                    case 4:
                         holder1.titleTv.setText("户口所在地");
                         holder1.contentTv.setText(personDetailBean.getHousehold());
                         break;
-                    case 6:
+                    case 5:
                         holder1.titleTv.setText("个人简介");
                         holder1.contentTv.setText(personDetailBean.getBrief());
-                        break;
-                    case 7:
-                        holder1.titleTv.setText("角色选择");
-                        if (personDetailBean.isWorker()) {
-                            holder1.contentTv.setText("工人");
-                        } else {
-                            holder1.contentTv.setText("雇主");
-                        }
                         break;
                     default:
                         break;
@@ -190,6 +147,9 @@ public class PersonDetailAdapter extends BaseAdapter {
                 } else {
                     holder2 = (ViewHolder2) convertView.getTag();
                 }
+                holder2.titleTv.setText("角色选择");
+                holder2.contentTv.setText("");
+                holder2.gv.setVisibility(View.VISIBLE);
                 if (personDetailBean.getRoleBeanList() != null && personDetailBean.getRoleBeanList().size() != 0) {
                     holder2.gv.setAdapter(new RoleAdapter(context, 0, personDetailBean.getRoleBeanList()));
                     Utils.setGridViewHeight(holder2.gv, 4);
@@ -203,25 +163,21 @@ public class PersonDetailAdapter extends BaseAdapter {
                 } else {
                     holder3 = (ViewHolder3) convertView.getTag();
                 }
-                holder3.countTv.setText("Ta收到的评价（" + personDetailBean.getCount() + "）");
-                break;
-            case 4:
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(context).inflate(R.layout.item_person_detail_4, null);
-                    holder4 = new ViewHolder4(convertView);
-                    convertView.setTag(holder4);
-                } else {
-                    holder4 = (ViewHolder4) convertView.getTag();
-                }
                 if (personDetailBean.getEvaluateBeanList() != null && personDetailBean.getEvaluateBeanList().size() != 0) {
-                    EvaluateBean evaluateBean = personDetailBean.getEvaluateBeanList().get(position - 10);
-                    if (TextUtils.isEmpty(evaluateBean.getIcon())) {
-                        holder4.iconIv.setImageResource(R.mipmap.person_face_default);
+                    EvaluateBean evaluateBean = personDetailBean.getEvaluateBeanList().get(position - 7);
+                    if (position == 8) {
+                        holder3.countTv.setText("Ta收到的评价（" + personDetailBean.getCount() + ")");
+                        holder3.countTv.setVisibility(View.VISIBLE);
                     } else {
-                        Picasso.with(context).load(evaluateBean.getIcon()).placeholder(holder4.iconIv.getDrawable()).into(holder4.iconIv);
+                        holder3.countTv.setVisibility(View.GONE);
                     }
-                    holder4.descriptionTv.setText(evaluateBean.getContent());
-                    holder4.dateTv.setText(evaluateBean.getTime());
+                    if (TextUtils.isEmpty(evaluateBean.getIcon())) {
+                        holder3.iconIv.setImageResource(R.mipmap.person_face_default);
+                    } else {
+                        Picasso.with(context).load(evaluateBean.getIcon()).placeholder(holder3.iconIv.getDrawable()).into(holder3.iconIv);
+                    }
+                    holder3.descriptionTv.setText(evaluateBean.getContent());
+                    holder3.dateTv.setText(evaluateBean.getTime());
                 }
                 break;
             default:
@@ -251,31 +207,26 @@ public class PersonDetailAdapter extends BaseAdapter {
 
     private class ViewHolder2 {
 
+        private TextView titleTv, contentTv;
         private GridView gv;
 
         public ViewHolder2(View itemView) {
+            titleTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_2_title);
+            contentTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_2_content);
             gv = (GridView) itemView.findViewById(R.id.gv_item_person_detail_2);
         }
     }
 
     private class ViewHolder3 {
 
-        private TextView countTv;
+        private ImageView iconIv;
+        private TextView countTv, descriptionTv, dateTv;
 
         public ViewHolder3(View itemView) {
-            countTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_3);
-        }
-    }
-
-    private class ViewHolder4 {
-
-        private ImageView iconIv;
-        private TextView descriptionTv, dateTv;
-
-        public ViewHolder4(View itemView) {
-            iconIv = (ImageView) itemView.findViewById(R.id.civ_item_person_detail_4_icon);
-            descriptionTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_4_description);
-            dateTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_4_date);
+            iconIv = (ImageView) itemView.findViewById(R.id.civ_item_person_detail_3_icon);
+            countTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_3_count);
+            descriptionTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_3_description);
+            dateTv = (TextView) itemView.findViewById(R.id.tv_item_person_detail_3_date);
         }
     }
 }

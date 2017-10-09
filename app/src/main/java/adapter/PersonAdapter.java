@@ -29,7 +29,7 @@ public class PersonAdapter extends CommonAdapter<PersonBean> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_worker, null);
+            convertView = View.inflate(context, R.layout.item_worker_info, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -76,13 +76,13 @@ public class PersonAdapter extends CommonAdapter<PersonBean> {
         private TextView nameTv, playTv, showTv, distanceTv;
 
         public ViewHolder(View itemView) {
-            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_image);
-            stateIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_state);
-            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_mag_collect);
-            nameTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_name);
-            playTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_play);
+            imageIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_icon);
+            stateIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_status);
+            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_collect);
+            nameTv = (TextView) itemView.findViewById(R.id.tv_item_worker_name);
+            playTv = (TextView) itemView.findViewById(R.id.tv_item_worker_brief);
             showTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_show);
-            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_mag_distance);
+            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_distance);
         }
     }
 }

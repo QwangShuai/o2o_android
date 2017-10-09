@@ -3,7 +3,7 @@ package activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,21 +17,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.CityAdapter;
 import bean.CityBean;
+import config.CacheConfig;
 import config.IntentConfig;
-import config.NetConfig;
-import config.StateConfig;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import view.CProgressDialog;
+import utils.Utils;
 import view.SlideBar;
 
 //城市
@@ -39,46 +32,32 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
 
     private View rootView;
     private RelativeLayout returnRl;
-    private CProgressDialog cpd;
     private SlideBar sb;
     private ListView lv;
 
     private List<CityBean> list;
-    private List<CityBean> tempList;
     private CityAdapter adapter;
     private String[] lowerLetter;
-    private OkHttpClient okHttpClient;
+
+    private String userId = "-100";
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg != null) {
-                cpd.dismiss();
                 switch (msg.what) {
-                    case StateConfig.LOAD_NO_NET:
-                        notifyNet();
+                    case 1:
+                        loadComCityData();
                         break;
-                    case 100:
-                        loadComData();
-                        break;
-                    case StateConfig.LOAD_DONE:
-                        notifyData();
-                        break;
+                    case 2:
+                        adapter.notifyDataSetChanged();
                     default:
                         break;
                 }
             }
         }
     };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeMessages(StateConfig.LOAD_NO_NET);
-        handler.removeMessages(100);
-        handler.removeMessages(StateConfig.LOAD_DONE);
-    }
 
     @Override
     protected View getRootView() {
@@ -88,7 +67,6 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
     @Override
     protected void initView() {
         initRootView();
-        initDialogView();
     }
 
     private void initRootView() {
@@ -97,21 +75,15 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
         lv = (ListView) rootView.findViewById(R.id.lv_city);
     }
 
-    private void initDialogView() {
-        cpd = new CProgressDialog(this, R.style.dialog_cprogress);
-    }
-
     @Override
     protected void initData() {
         list = new ArrayList<>();
-        tempList = new ArrayList<>();
         adapter = new CityAdapter(this, list);
         lowerLetter = getResources().getStringArray(R.array.lowerletter);
-        okHttpClient = new OkHttpClient();
         Intent intent = getIntent();
         if (intent != null) {
             CityBean c = (CityBean) intent.getSerializableExtra(IntentConfig.LOCAL_CITY);
-            tempList.add(c);
+            list.add(c);
         }
     }
 
@@ -138,27 +110,21 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
 
     @Override
     protected void loadData() {
-        cpd.show();
-        loadHotData();
+        loadHotCityData();
     }
 
-    private void loadHotData() {
-        Request request = new Request.Builder().url(NetConfig.baseCityUrl + NetConfig.hotCityUrl).get().build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
-            }
+    private void loadHotCityData() {
+        String hotCityJson = Utils.readCache(CityActivity.this, userId, CacheConfig.hotCity);
+        if (!TextUtils.isEmpty(hotCityJson)) {
+            parseHotJson(hotCityJson);
+        }
+    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String result = response.body().string();
-                    Log.e("TAG", result);
-                    parseHotJson(result);
-                }
-            }
-        });
+    private void loadComCityData() {
+        String comCityJson = Utils.readCache(CityActivity.this, userId, CacheConfig.comCity);
+        if (!TextUtils.isEmpty(comCityJson)) {
+            parseComJson(comCityJson);
+        }
     }
 
     private void parseHotJson(String json) {
@@ -168,7 +134,7 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
                 CityBean b = new CityBean();
                 b.setId("-1");
                 b.setName("热门城市");
-                tempList.add(b);
+                list.add(b);
                 JSONArray arrData = objBean.optJSONArray("data");
                 for (int i = 0; i < arrData.length(); i++) {
                     JSONObject o = arrData.optJSONObject(i);
@@ -176,32 +142,14 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
                         CityBean cb = new CityBean();
                         cb.setId(o.optString("r_id"));
                         cb.setName(o.optString("r_name"));
-                        tempList.add(cb);
+                        list.add(cb);
                     }
                 }
-                handler.sendEmptyMessage(100);
+                handler.sendEmptyMessage(1);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void loadComData() {
-        Request request = new Request.Builder().url(NetConfig.baseCityUrl + NetConfig.letterCityUrl).get().build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String result = response.body().string();
-                    parseComJson(result);
-                }
-            }
-        });
     }
 
     private void parseComJson(String json) {
@@ -215,33 +163,23 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
                         CityBean cb = new CityBean();
                         cb.setId("-1");
                         cb.setName(lowerLetter[i].toUpperCase());
-                        tempList.add(cb);
+                        list.add(cb);
                         for (int j = 0; j < lowArr.length(); j++) {
                             JSONObject o = lowArr.optJSONObject(j);
                             if (o != null) {
                                 CityBean c = new CityBean();
                                 c.setId(o.optString("r_id"));
                                 c.setName(o.optString("r_name"));
-                                tempList.add(c);
+                                list.add(c);
                             }
                         }
                     }
                 }
-                handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+                handler.sendEmptyMessage(2);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void notifyNet() {
-        Log.e("TAG", "notifyNet");
-    }
-
-    private void notifyData() {
-        list.addAll(tempList);
-        adapter.notifyDataSetChanged();
-        sb.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -257,11 +195,9 @@ public class CityActivity extends CommonActivity implements View.OnClickListener
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CityBean c = list.get(position);
         if (c != null) {
-            if (position != 0) {
-                Intent intent = new Intent();
-                intent.putExtra(IntentConfig.CITY, c);
-                setResult(IntentConfig.CITY_RESULT, intent);
-            }
+            Intent intent = new Intent();
+            intent.putExtra(IntentConfig.CITY, c);
+            setResult(IntentConfig.CITY_RESULT, intent);
             finish();
         }
     }

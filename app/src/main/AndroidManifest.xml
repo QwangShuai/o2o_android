@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gjzg">
+    package="com.gjzg"
+    android:versionName="1.0">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,72 +27,76 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="dN4Fk4zH7UukSYGgGuytm391lB5wqirE" />
 
-        <activity android:name="activity.MainActivity">
+        <activity android:name="main.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="activity.KindActivity" />
-        <activity android:name="activity.WorkerActivity" />
-        <activity android:name="activity.LeftRightActivity" />
-        <activity android:name="activity.CityActivity" />
-        <activity android:name="activity.TalkActivity" />
-        <activity android:name="activity.WorkerMagActivity" />
-        <activity android:name="activity.EmpMagActivity" />
+        <activity android:name="workerkind.view.WorkerKindActivity" />
+        <activity android:name="workerInfo.view.WorkerInfoActivity" />
+        <activity android:name="leftright.view.LeftRightActivity" />
+        <activity android:name="city.view.CityActivity" />
+        <activity android:name="talk.view.TalkActivity" />
+        <activity android:name="workermanage.view.WorkerManageActivity" />
+        <activity android:name="employermanage.view.EmpMagActivity" />
         <activity
-            android:name="activity.PersonMagActivity"
+            android:name="personmanage.view.PersonInfoManageActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="activity.JobActivity" />
-        <activity android:name="activity.SetActivity" />
-        <activity android:name="activity.SevClsActivity" />
-        <activity android:name="activity.LoginActivity" />
+        <activity android:name="jobinfo.view.JobInfoActivity" />
+        <activity android:name="set.view.SetActivity" />
+        <activity android:name="serviceclause.view.SevClsActivity" />
+        <activity android:name="login.view.LoginActivity" />
         <activity
-            android:name="activity.PayWayActivity"
+            android:name="pay.view.PayWayActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name="activity.SendJobActivity"
+            android:name="publishjob.PublishJobActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity android:name="activity.WalletActivity" />
-        <activity android:name="activity.AccountDetailActivity" />
-        <activity android:name="activity.InviteActivity" />
+        <activity android:name="wallet.view.WalletActivity" />
+        <activity android:name="accountdetail.view.AccountDetailActivity" />
+        <activity android:name="invite.view.InviteActivity" />
         <activity
-            android:name="activity.WithDrawActivity"
+            android:name="withdraw.view.WithDrawActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name="activity.WorkerScnActivity"
+            android:name="workerscreen.view.WorkerScnActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name="activity.JobScnActivity"
+            android:name="jobscreen.view.JobScnActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name="activity.SetPwdActivity" />
+        <activity android:name="passwordset.view.SetPwdActivity" />
         <activity
-            android:name="activity.PwdActivity"
+            android:name="password.view.PwdActivity"
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
         <activity
-            android:name="activity.PhoneProveActivity"
+            android:name="phoneprove.view.PhoneProveActivity"
             android:windowSoftInputMode="stateAlwaysVisible|adjustPan" />
-        <activity android:name="activity.ProjectActivity" />
-        <activity android:name="activity.ResignActivity" />
+        <activity android:name="project.view.ProjectActivity" />
         <activity
-            android:name="activity.ComplainActivity"
+            android:name="resign.view.ResignActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity android:name="activity.PicActivity" />
+        <activity
+            android:name="complain.view.ComplainActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity android:name="pic.view.PicActivity" />
 
         <service android:name="service.CodeTimerService" />
         <service android:name="service.GetLoginCodeTimerService" />
 
-        <activity android:name="activity.IdActivity" />
+        <activity android:name="identity.view.IdActivity" />
         <activity
-            android:name="activity.PhoneBindActivity"
+            android:name="phonebind.view.PhoneBindActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="activity.DraftActivity" />
-        <activity android:name="activity.RefuseOrderActivity" />
+        <activity android:name="draft.view.DraftActivity" />
+        <activity android:name="refuseorder.view.RefuseOrderActivity" />
         <activity
-            android:name="activity.EvaluateActivity"
+            android:name="evaluate.view.EvaluateActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity android:name="activity.PersonDetailActivity" />
+        <activity android:name="persondetailinfo.view.PersonDetailActivity" />
+        <activity android:name="redpacket.view.RedPacketActivity" />
+        <activity android:name="voucher.view.VoucherActivity"></activity>
     </application>
 
 </manifest>

@@ -9,10 +9,10 @@ import com.gjzg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import activity.ComplainActivity;
-import activity.EvaluateActivity;
-import activity.RefuseOrderActivity;
-import activity.ResignActivity;
+import complain.view.ComplainActivity;
+import evaluate.view.EvaluateActivity;
+import refuseorder.view.RefuseOrderActivity;
+import resign.view.ResignActivity;
 import adapter.WorkerMagAdapter;
 import bean.PersonBean;
 import config.StateConfig;

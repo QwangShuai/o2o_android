@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import activity.TalkActivity;
+import talk.view.TalkActivity;
 import config.VarConfig;
 
 public class TalkQrkgFragment extends CommonFragment implements View.OnClickListener {

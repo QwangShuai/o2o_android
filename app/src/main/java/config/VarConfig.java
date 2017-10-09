@@ -6,7 +6,6 @@ public interface VarConfig {
     String onlineTip = "公开信息";
     String offlineTip = "隐藏信息";
     long exitTime = 3000;//退出计时(单位：毫秒)
-    String exitTip = "再次点击退出";//退出提示
     String notyetTip = "该功能暂未开通";//暂未开通提示
     int PWD_FIRST = 0;//第一次设置密码
     int PWD_AGAIN = 1;//二次密码验证

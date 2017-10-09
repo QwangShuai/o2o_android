@@ -2,11 +2,12 @@ package activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Bundle;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,14 +19,24 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import bean.PersonPreviewBean;
 import config.PermissionConfig;
+import fragment.DeliveryRecordFragment;
 import fragment.EditInfoFragment;
 import fragment.PicaViewFragment;
-import fragment.DeliveryRecordFragment;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import utils.Utils;
 
 public class PersonMagActivity extends CommonActivity implements View.OnClickListener {
 
@@ -47,6 +58,8 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
             }
         }
     };
+
+    private OkHttpClient okHttpClient;
 
     @Override
     protected void onDestroy() {
@@ -99,6 +112,7 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
 
     @Override
     protected void initData() {
+        okHttpClient = new OkHttpClient();
         Fragment picaViewFragment = new PicaViewFragment();
         Fragment editInfoFragment = new EditInfoFragment();
         Fragment deliveryRecordFragment = new DeliveryRecordFragment();
@@ -190,9 +204,58 @@ public class PersonMagActivity extends CommonActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PermissionConfig.GALLERY && resultCode == RESULT_OK && data != null) {
-            Bundle bundle = data.getExtras();
-            Bitmap bitmap = (Bitmap) bundle.get("data");
-            iconIv.setImageBitmap(bitmap);
+            Uri uri = data.getData();
+            if (uri == null) {
+                Utils.log(PersonMagActivity.this, "uri == null");
+            } else {
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = PersonMagActivity.this.getContentResolver().query(uri, filePathColumn, null, null, null);
+                if (cursor == null) {
+                    Utils.log(PersonMagActivity.this, "cursor == null");
+                } else {
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picPath = cursor.getString(columnIndex);
+                    Utils.log(PersonMagActivity.this, "picPath=" + picPath);
+                    cursor.close();
+
+                    File file = new File(picPath);
+
+                    Utils.log(PersonMagActivity.this, "file.length=" + file.length());
+
+                    String imgName = file.getName();
+
+                    Utils.log(PersonMagActivity.this, "file.getName = " + file.getName());
+
+                    RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), file);
+
+                    String url = Utils.getIconUpdateUrl("1", imgName);
+
+                    Utils.log(PersonMagActivity.this, "url=" + url);
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(fileBody)
+                            .build();
+
+                    okHttpClient.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Utils.log(PersonMagActivity.this, e.getMessage());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                String result = response.body().string();
+                                Utils.log(PersonMagActivity.this, "result=" + result);
+                            } else {
+                                Utils.log(PersonMagActivity.this, "response:failure");
+                            }
+                        }
+                    });
+                }
+            }
         }
     }
 }

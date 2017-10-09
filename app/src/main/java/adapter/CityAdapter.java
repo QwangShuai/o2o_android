@@ -42,7 +42,11 @@ public class CityAdapter extends CommonAdapter<CityBean> {
         }
         CityBean cityBean = list.get(position);
         if (cityBean != null) {
-            holder.tv.setText(cityBean.getName());
+            if (position == 0) {
+                holder.tv.setText("当前定位城市：" + cityBean.getName());
+            } else {
+                holder.tv.setText(cityBean.getName());
+            }
             if (cityBean.getId().equals("-1")) {
                 holder.rl.setBackgroundColor(ColorConfig.gray_c4ced3);
                 holder.tv.setTextColor(ColorConfig.gray_a0a0a0);

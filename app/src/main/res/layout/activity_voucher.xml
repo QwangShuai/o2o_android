@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_voucher"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="voucher.view.VoucherActivity">
+
+    <RelativeLayout style="@style/rl_top_bar">
+
+        <RelativeLayout
+            android:id="@+id/rl_voucher_return"
+            style="@style/rl_return">
+
+            <ImageView style="@style/iv_return" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/tv_top_title"
+            android:text="我的优惠券" />
+
+    </RelativeLayout>
+
+    <View style="@style/v_split" />
+
+    <ListView
+        android:id="@+id/lv_voucher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

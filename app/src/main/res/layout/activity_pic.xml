@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="activity.PicActivity">
+    tools:context="pic.view.PicActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -21,6 +21,25 @@
         <TextView
             style="@style/tv_top_title"
             android:text="选取图片" />
+
+        <RelativeLayout
+            android:id="@+id/rl_pic_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/y10"
+                android:layout_marginRight="@dimen/y10"
+                android:text="确定"
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y10" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

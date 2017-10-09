@@ -29,12 +29,15 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import utils.Utils;
 import view.CProgressDialog;
 
+//用户详细信息
 public class PersonDetailActivity extends CommonActivity implements View.OnClickListener {
 
     private View rootView, emptyNetView;
     private TextView emptyNetTv;
+    private TextView titleTv;
     private RelativeLayout returnRl;
     private CProgressDialog cpd;
     private ListView lv;
@@ -42,6 +45,8 @@ public class PersonDetailActivity extends CommonActivity implements View.OnClick
     private OkHttpClient okHttpClient;
     private PersonDetailBean personDetailBean;
     private PersonDetailAdapter adapter;
+
+    private String userId = "1";
 
     private Handler handler = new Handler() {
         @Override
@@ -84,6 +89,7 @@ public class PersonDetailActivity extends CommonActivity implements View.OnClick
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_person_detail_return);
+        titleTv = (TextView) rootView.findViewById(R.id.tv_person_detail_title);
         lv = (ListView) rootView.findViewById(R.id.lv_person_detail);
     }
 
@@ -109,13 +115,12 @@ public class PersonDetailActivity extends CommonActivity implements View.OnClick
     @Override
     protected void initData() {
         okHttpClient = new OkHttpClient();
-        personDetailBean = new PersonDetailBean();
-        adapter = new PersonDetailAdapter(this, personDetailBean);
+
     }
 
     @Override
     protected void setData() {
-        lv.setAdapter(adapter);
+
     }
 
     @Override
@@ -130,7 +135,7 @@ public class PersonDetailActivity extends CommonActivity implements View.OnClick
 
     private void loadNetData() {
         cpd.show();
-        Request request = new Request.Builder().url(NetConfig.testUrl).get().build();
+        Request request = new Request.Builder().url(NetConfig.personDetailUrl + userId).get().build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -141,47 +146,67 @@ public class PersonDetailActivity extends CommonActivity implements View.OnClick
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String result = response.body().string();
-                    parseJson(result);
+                    Utils.log(PersonDetailActivity.this, "result:" + result);
+                    String json = cutJson(result);
+                    Utils.log(PersonDetailActivity.this, "cutJson:" + json);
+                    parseJson(json);
                 }
             }
         });
     }
 
+    private String cutJson(String result) {
+        int first = result.indexOf("{");
+        return result.substring(first);
+    }
+
     private void parseJson(String json) {
         try {
             JSONObject objBean = new JSONObject(json);
-            if (objBean.optInt("code") == 200) {
-                personDetailBean.setIcon("");
-                personDetailBean.setName("王小二");
-                personDetailBean.setMale(true);
-                personDetailBean.setAge(22);
-                personDetailBean.setAddress("哈尔滨-道里区");
-                personDetailBean.setHousehold("蓬莱");
-                personDetailBean.setBrief("专业水泥工，精通水暖，刮大白");
-                personDetailBean.setWorker(true);
-                List<RoleBean> roleBeanList = new ArrayList<>();
-                RoleBean rb0 = new RoleBean();
-                rb0.setContent("水泥工");
-                RoleBean rb1 = new RoleBean();
-                rb1.setContent("水暖工");
-                RoleBean rb2 = new RoleBean();
-                rb2.setContent("瓦工");
-                roleBeanList.add(rb0);
-                roleBeanList.add(rb1);
-                roleBeanList.add(rb2);
-                personDetailBean.setRoleBeanList(roleBeanList);
-                personDetailBean.setCount(10);
-                List<EvaluateBean> evaluateBeanList = new ArrayList<>();
-                EvaluateBean eb0 = new EvaluateBean();
-                eb0.setContent("小伙子干活特麻利，必须好评！");
-                eb0.setTime("2015年5月1日 10:25");
-                EvaluateBean eb1 = new EvaluateBean();
-                eb1.setContent("不错的小老弟儿");
-                eb1.setTime("2015年5月1日 10:25");
-                evaluateBeanList.add(eb0);
-                evaluateBeanList.add(eb1);
-                personDetailBean.setEvaluateBeanList(evaluateBeanList);
-                handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+            if (objBean.optInt("code") == 1) {
+                JSONObject objData = objBean.optJSONObject("data");
+                if (objData == null) {
+                    Utils.log(PersonDetailActivity.this, "objData = null");
+                } else {
+                    JSONObject o = objData.optJSONObject("data");
+                    if (o == null) {
+                        Utils.log(PersonDetailActivity.this, "o = null");
+                    } else {
+                        personDetailBean = new PersonDetailBean();
+                        personDetailBean.setIcon("");
+                        personDetailBean.setName(o.optString("u_true_name"));
+                        personDetailBean.setMale(o.optString("u_sex"));
+                        personDetailBean.setBrief(o.optString("u_info"));
+                        JSONObject objArea = o.optJSONObject("area");
+                        if (objArea == null) {
+                            Utils.log(PersonDetailActivity.this, "objArea = null");
+                        } else {
+                            personDetailBean.setAddress(objArea.optString("uei_address"));
+                            personDetailBean.setHousehold(objArea.optString("user_area_name"));
+                        }
+                        List<RoleBean> roleBeanList = new ArrayList<>();
+                        RoleBean rb0 = new RoleBean();
+                        rb0.setContent("水泥工");
+                        RoleBean rb1 = new RoleBean();
+                        rb1.setContent("水暖工");
+                        RoleBean rb2 = new RoleBean();
+                        rb2.setContent("瓦工");
+                        roleBeanList.add(rb0);
+                        roleBeanList.add(rb1);
+                        roleBeanList.add(rb2);
+                        personDetailBean.setRoleBeanList(roleBeanList);
+                        personDetailBean.setCount(10);
+                        List<EvaluateBean> evaluateBeanList = new ArrayList<>();
+                        for (int i = 0; i < 10; i++) {
+                            EvaluateBean eb0 = new EvaluateBean();
+                            eb0.setContent("小伙子干活特麻利，必须好评！");
+                            eb0.setTime("2015年5月1日 10:25");
+                            evaluateBeanList.add(eb0);
+                        }
+                        personDetailBean.setEvaluateBeanList(evaluateBeanList);
+                        handler.sendEmptyMessage(StateConfig.LOAD_DONE);
+                    }
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -196,7 +221,9 @@ public class PersonDetailActivity extends CommonActivity implements View.OnClick
     private void notifyData() {
         emptyNetView.setVisibility(View.GONE);
         lv.setVisibility(View.VISIBLE);
-        adapter.notifyDataSetChanged();
+        adapter = new PersonDetailAdapter(this, personDetailBean);
+        lv.setAdapter(adapter);
+        titleTv.setText(personDetailBean.getName());
     }
 
     @Override

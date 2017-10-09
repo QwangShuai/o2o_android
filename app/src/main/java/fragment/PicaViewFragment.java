@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import activity.PersonMagActivity;
+import personmanage.view.PersonInfoManageActivity;
 import adapter.PersonPrivewAdapter;
-import bean.PersonPreviewBean;
+import personmanage.bean.PersonPreviewBean;
 import bean.RoleBean;
 import config.NetConfig;
 import config.StateConfig;
@@ -85,7 +85,7 @@ public class PicaViewFragment extends CommonFragment {
 
     @Override
     protected void initData() {
-        personPreviewHandler = ((PersonMagActivity) getActivity()).handler;
+        personPreviewHandler = ((PersonInfoManageActivity) getActivity()).handler;
         personPreviewBean = new PersonPreviewBean();
         personPrivewAdapter = new PersonPrivewAdapter(getActivity(), personPreviewBean);
         okHttpClient = new OkHttpClient();

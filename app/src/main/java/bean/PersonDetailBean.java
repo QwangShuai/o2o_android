@@ -7,12 +7,10 @@ public class PersonDetailBean {
 
     private String icon;
     private String name;
-    private boolean male;
-    private int age;
+    private String male;
     private String address;
     private String household;
     private String brief;
-    private boolean worker;
     private List<RoleBean> roleBeanList;
     private int count;
     private List<EvaluateBean> evaluateBeanList;
@@ -33,20 +31,12 @@ public class PersonDetailBean {
         this.name = name;
     }
 
-    public boolean isMale() {
+    public String getMale() {
         return male;
     }
 
-    public void setMale(boolean male) {
+    public void setMale(String male) {
         this.male = male;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getAddress() {
@@ -71,14 +61,6 @@ public class PersonDetailBean {
 
     public void setBrief(String brief) {
         this.brief = brief;
-    }
-
-    public boolean isWorker() {
-        return worker;
-    }
-
-    public void setWorker(boolean worker) {
-        this.worker = worker;
     }
 
     public List<RoleBean> getRoleBeanList() {

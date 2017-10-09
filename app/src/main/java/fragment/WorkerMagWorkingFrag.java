@@ -9,7 +9,7 @@ import com.gjzg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import activity.ResignActivity;
+import resign.view.ResignActivity;
 import adapter.WorkerMagAdapter;
 import bean.PersonBean;
 import config.StateConfig;

@@ -16,4 +16,8 @@ public interface IntentConfig {
     String LOCAL_CITY = "LOCAL_CITY";//定位城市意图名称
     int CITY_REQUEST = 4;//城市请求码
     int CITY_RESULT = 5;//城市结果码
+    String PIC = "PIC";//选取图片意图
+    int PIC_REQUEST = 6;//选取图片请求码
+    int PIC_RESULT = 7;//选取图片结果码
+    String WORKER_KIND = "WORKER_KIND";//工人种类意图名称
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="activity.CityActivity">
+    tools:context="city.view.CityActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -40,9 +40,7 @@
             android:layout_width="@dimen/y10"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/y5"
-            android:visibility="gone" />
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 

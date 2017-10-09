@@ -30,12 +30,16 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
     private RelativeLayout fpRl, magRl, dcRl, meRl;
     private ImageView fpIv, magIv, dcIv, meIv;
     private TextView fpTv, magTv, dcTv, meTv;
-
     private List<Fragment> fragmentList = new ArrayList<>();
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private final int FP = 0, MAG = 1, DC = 2, ME = 3;
     private int curState = FP, tarState = -1;
     private long lastBackTime = 0;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     protected View getRootView() {
@@ -197,4 +201,5 @@ public class MainActivity extends CommonActivity implements View.OnClickListener
             Utils.toast(this, VarConfig.exitTip);
         }
     }
+
 }

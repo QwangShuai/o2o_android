@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="activity.WalletActivity">
+    tools:context="wallet.view.WalletActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -60,12 +60,12 @@
             android:textSize="@dimen/y9" />
 
         <TextView
+            android:id="@+id/tv_wallet_overage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/y25"
             android:layout_marginLeft="@dimen/y20"
             android:layout_marginTop="@dimen/y20"
-            android:text="0.00"
             android:textColor="@color/red_ff3e50"
             android:textSize="@dimen/y20" />
 

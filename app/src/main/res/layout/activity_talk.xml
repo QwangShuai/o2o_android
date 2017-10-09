@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="activity.TalkActivity">
+    tools:context="talk.view.TalkActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 

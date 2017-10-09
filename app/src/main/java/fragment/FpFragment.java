@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,41 +22,76 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.gjzg.R;
 
+import java.io.IOException;
 import java.util.List;
 
 import activity.CityActivity;
 import activity.JobActivity;
-import activity.KindActivity;
+import activity.WorkerKindActivity;
 import activity.LeftRightActivity;
 import activity.SendJobActivity;
 import bean.CityBean;
+import cache.LruJsonCache;
+import config.CacheConfig;
 import config.IntentConfig;
+import config.NetConfig;
 import config.PermissionConfig;
+import listener.OnLoadComCityListener;
+import listener.OnLoadHotCityListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import utils.Utils;
+import view.CProgressDialog;
 
 //首页
-public class FpFragment extends CommonFragment implements View.OnClickListener {
+public class FpFragment extends CommonFragment implements View.OnClickListener, OnLoadHotCityListener, OnLoadComCityListener {
 
     private View rootView;
     private RelativeLayout cityRl, msgRl;
     private ImageView findWorkerIv, findJobIv, sendJobIv;
     private TextView cityTv;
+    private String cityId;
+    private String localCityId;
     private String localCity;
+    private CProgressDialog cpd;
 
     private LocationClient locationClient;
     private BDLocationListener bdLocationListener;
+    private OkHttpClient okHttpClient;
+    private LruJsonCache lruJsonCache;
+    private String userId = "-100";
+    private String cacheTime = "60";
+    private boolean loadHot = false, loadCom = false;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg != null) {
-                if (msg.what == 1) {
-                    cityTv.setText(localCity);
+                switch (msg.what) {
+                    case 1:
+                        cityTv.setText(localCity);
+                        loadCityData();
+                        break;
+                    case 2:
+                        toGetCityId();
+                        break;
+                    default:
+                        break;
                 }
             }
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeMessages(1);
+        handler.removeMessages(2);
+    }
 
     @Override
     protected View getRootView() {
@@ -74,17 +110,20 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
         findJobIv = (ImageView) rootView.findViewById(R.id.iv_frag_first_page_find_job);
         sendJobIv = (ImageView) rootView.findViewById(R.id.iv_frag_first_page_send_job);
         cityTv = (TextView) rootView.findViewById(R.id.tv_fp_city);
+        cpd = Utils.initProgressDialog(getActivity(), cpd);
     }
 
     @Override
     protected void initData() {
-        locationClient = new LocationClient(getActivity());
-        bdLocationListener = new MyLocationListener();
-        locationClient.registerLocationListener(bdLocationListener);
         initLocation();
+        okHttpClient = new OkHttpClient();
+        lruJsonCache = LruJsonCache.get(getActivity());
     }
 
     private void initLocation() {
+        locationClient = new LocationClient(getActivity());
+        bdLocationListener = new MyLocationListener();
+        locationClient.registerLocationListener(bdLocationListener);
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         //可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
@@ -112,6 +151,11 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
         locationClient.setLocOption(option);
     }
 
+    private void toLocation() {
+        cpd.show();
+        locationClient.start();
+    }
+
     @Override
     protected void setData() {
     }
@@ -123,11 +167,58 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
         findWorkerIv.setOnClickListener(this);
         findJobIv.setOnClickListener(this);
         sendJobIv.setOnClickListener(this);
+        lruJsonCache.setOnLoadHotCityListener(this);
+        lruJsonCache.setOnLoadComCityListener(this);
     }
 
     @Override
     protected void loadData() {
         checkLocPermisson();
+    }
+
+    private void loadCityData() {
+        if (TextUtils.isEmpty(Utils.readCache(getActivity(), userId, CacheConfig.hotCity))) {
+            Request hotRequest = new Request.Builder().url(NetConfig.baseCityUrl + NetConfig.hotCityUrl).get().build();
+            okHttpClient.newCall(hotRequest).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String result = response.body().string();
+                        Utils.log(getActivity(), "hot=" + result);
+                        Utils.writeCache(getActivity(), userId, CacheConfig.hotCity, result, cacheTime);
+                    }
+                }
+            });
+        } else {
+            loadHot = true;
+            handler.sendEmptyMessage(2);
+        }
+        if (TextUtils.isEmpty(Utils.readCache(getActivity(), userId, CacheConfig.comCity))) {
+            Request comRequest = new Request.Builder().url(NetConfig.baseCityUrl + NetConfig.letterCityUrl).get().build();
+            okHttpClient.newCall(comRequest).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String result = response.body().string();
+                        Utils.log(getActivity(), "com=" + result);
+                        Utils.writeCache(getActivity(), userId, CacheConfig.comCity, result, cacheTime);
+                    }
+                }
+            });
+        } else {
+            loadCom = true;
+            handler.sendEmptyMessage(2);
+        }
     }
 
     @Override
@@ -136,8 +227,8 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
             case R.id.rl_frag_first_page_city:
                 Intent cityIntent = new Intent(getActivity(), CityActivity.class);
                 CityBean c = new CityBean();
-                c.setId("-2");
-                c.setName("当前定位城市：" + localCity);
+                c.setId(localCityId);
+                c.setName(localCity);
                 cityIntent.putExtra(IntentConfig.LOCAL_CITY, c);
                 startActivityForResult(cityIntent, IntentConfig.CITY_REQUEST);
                 break;
@@ -147,7 +238,7 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
                 startActivity(msgIntent);
                 break;
             case R.id.iv_frag_first_page_find_worker:
-                startActivity(new Intent(getActivity(), KindActivity.class));
+                startActivity(new Intent(getActivity(), WorkerKindActivity.class));
                 break;
             case R.id.iv_frag_first_page_find_job:
                 startActivity(new Intent(getActivity(), JobActivity.class));
@@ -160,16 +251,24 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
         }
     }
 
+    private void toGetCityId() {
+        String json = lruJsonCache.getAsString(userId + CacheConfig.comCity);
+        if (!TextUtils.isEmpty(json)) {
+            localCityId = Utils.getLocCityId(getActivity(), localCity, json);
+            cpd.dismiss();
+        }
+    }
+
     private void checkLocPermisson() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int permisson = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
             if (permisson != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PermissionConfig.LOCATION);
             } else {
-                locationClient.start();
+                toLocation();
             }
         } else {
-            locationClient.start();
+            toLocation();
         }
     }
 
@@ -180,6 +279,8 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
             CityBean cityBean = (CityBean) data.getSerializableExtra(IntentConfig.CITY);
             if (cityBean != null) {
                 cityTv.setText(cityBean.getName());
+                cityId = cityBean.getId();
+                Utils.toast(getActivity(), "localCityId:" + localCityId + "\ncityId:" + cityId);
             }
         }
     }
@@ -190,12 +291,24 @@ public class FpFragment extends CommonFragment implements View.OnClickListener {
         switch (requestCode) {
             case PermissionConfig.LOCATION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationClient.start();
+                    toLocation();
                 } else {
                     Utils.toast(getActivity(), "请在系统设置中打开定位权限");
                 }
                 break;
         }
+    }
+
+    @Override
+    public void comResult() {
+        loadCom = true;
+        handler.sendEmptyMessage(2);
+    }
+
+    @Override
+    public void hotResult() {
+        loadHot = true;
+        handler.sendEmptyMessage(2);
     }
 
     public class MyLocationListener implements BDLocationListener {

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import bean.PersonPreviewBean;
+import personmanage.bean.PersonPreviewBean;
 import utils.Utils;
 
 /**

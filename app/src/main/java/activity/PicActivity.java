@@ -1,5 +1,12 @@
 package activity;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,16 +20,38 @@ import java.util.List;
 
 import adapter.ComplainPicAdapter;
 import bean.Pic;
-import config.PathConfig;
+import config.IntentConfig;
+import utils.Utils;
+import view.CProgressDialog;
 
 public class PicActivity extends CommonActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private View rootView;
-    private RelativeLayout returnRl;
+    private RelativeLayout returnRl, sureRl;
     private GridView gv;
+    private CProgressDialog cpd;
 
     private List<Pic> list;
     private ComplainPicAdapter adapter;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg == null) {
+
+            } else {
+                switch (msg.what) {
+                    case 1:
+                        cpd.dismiss();
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    };
 
     @Override
     protected View getRootView() {
@@ -36,7 +65,9 @@ public class PicActivity extends CommonActivity implements View.OnClickListener,
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_pic_return);
+        sureRl = (RelativeLayout) rootView.findViewById(R.id.rl_pic_sure);
         gv = (GridView) rootView.findViewById(R.id.gv_pic);
+        cpd = Utils.initProgressDialog(PicActivity.this, cpd);
     }
 
     @Override
@@ -53,18 +84,40 @@ public class PicActivity extends CommonActivity implements View.OnClickListener,
     @Override
     protected void setListener() {
         returnRl.setOnClickListener(this);
+        sureRl.setOnClickListener(this);
         gv.setOnItemClickListener(this);
     }
 
     @Override
     protected void loadData() {
-        for (int i = 0; i < 10; i++) {
-            Pic p = new Pic();
-            p.setChoose(false);
-            p.setPath(PathConfig.cameraPath + "IMG_20170911_105345.jpg");
-            list.add(p);
-        }
-        adapter.notifyDataSetChanged();
+        cpd.show();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                if (mImageUri == null) {
+                    Utils.log(PicActivity.this, "mImageUri = null");
+                } else {
+                    ContentResolver mContentResolver = PicActivity.this.getContentResolver();
+                    if (mContentResolver == null) {
+                        Utils.log(PicActivity.this, "mContentResolver = null");
+                    } else {
+                        Cursor mCursor = mContentResolver.query(mImageUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED);
+                        Utils.log(PicActivity.this, "总计图片数量=" + mCursor.getCount() + "");
+                        while (mCursor.moveToNext()) {
+                            String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                            Utils.log(PicActivity.this, "path=" + path);
+                            Pic pic = new Pic();
+                            pic.setChoose(false);
+                            pic.setPath(path);
+                            list.add(pic);
+                        }
+                        handler.sendEmptyMessage(1);
+                    }
+                }
+            }
+        }.start();
     }
 
     @Override
@@ -72,6 +125,9 @@ public class PicActivity extends CommonActivity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.rl_pic_return:
                 finish();
+                break;
+            case R.id.rl_pic_sure:
+                sure();
                 break;
             default:
                 break;
@@ -83,5 +139,34 @@ public class PicActivity extends CommonActivity implements View.OnClickListener,
         boolean b = list.get(position).isChoose();
         list.get(position).setChoose(!b);
         adapter.notifyDataSetChanged();
+    }
+
+    private int getPicAmount() {
+        int picAmount = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isChoose()) {
+                picAmount++;
+            }
+        }
+        return picAmount;
+    }
+
+    private void sure() {
+        int picAmount = getPicAmount();
+        if (picAmount == 0) {
+            Utils.toast(PicActivity.this, "你还没有选择图片");
+        } else {
+            List<String> strList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).isChoose()) {
+                    strList.add(list.get(i).getPath());
+                }
+            }
+            Utils.log(PicActivity.this, strList.toString());
+            Intent intent = new Intent();
+            intent.putStringArrayListExtra(IntentConfig.PIC, (ArrayList<String>) strList);
+            setResult(IntentConfig.PIC_RESULT, intent);
+            finish();
+        }
     }
 }

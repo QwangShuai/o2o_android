@@ -10,7 +10,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -171,6 +170,7 @@ public class LoginActivity extends CommonActivity implements View.OnClickListene
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String result = response.body().string();
+                    Utils.log(LoginActivity.this, "获取验证码：" + result);
                     try {
                         JSONObject objBean = new JSONObject(result);
                         if (objBean.optInt("code") == 1) {
@@ -204,7 +204,7 @@ public class LoginActivity extends CommonActivity implements View.OnClickListene
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String result = response.body().string();
-                    Log.e("TAG", result);
+                    Utils.log(LoginActivity.this, "登录：" + result);
                     parseLoginJson(result);
                 }
             }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="activity.ResignActivity">
+    tools:context="resign.view.ResignActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -25,5 +25,271 @@
 
     <View style="@style/v_split" />
 
+    <FrameLayout
+        android:id="@+id/fl_resign"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_resign_con"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_resign_icon"
+                    android:layout_width="@dimen/y35"
+                    android:layout_height="@dimen/y35"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/y10"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/person_face_default" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_resign_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="王二妮"
+                            android:textColor="@color/black_252323"
+                            android:textSize="@dimen/y10" />
+
+                        <ImageView
+                            android:id="@+id/iv_resign_sex"
+                            android:layout_width="@dimen/y10"
+                            android:layout_height="@dimen/y10"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/y10"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/female" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_resign_identity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y5"
+                        android:text="老板"
+                        android:textColor="@color/gray_a0a0a0"
+                        android:textSize="@dimen/y8" />
+
+                    <TextView
+                        android:id="@+id/tv_resign_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y5"
+                        android:text="好评1次"
+                        android:textColor="@color/red_ff3e50"
+                        android:textSize="@dimen/y9" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_resign_complain_employer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/y10"
+                    android:background="@drawable/sl_me_login"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/y5"
+                    android:paddingLeft="@dimen/y8"
+                    android:paddingRight="@dimen/y8"
+                    android:paddingTop="@dimen/y5">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="投诉"
+                        android:textColor="@color/gray_a0a0a0"
+                        android:textSize="@dimen/y8" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="雇主"
+                        android:textColor="@color/gray_a0a0a0"
+                        android:textSize="@dimen/y8" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y5"
+                android:text="收到工资"
+                android:textColor="@color/black_252323"
+                android:textSize="@dimen/y11" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_evaluate_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="200"
+                    android:textColor="@color/red_ff3e50"
+                    android:textSize="@dimen/y30"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="元"
+                    android:textColor="@color/red_ff3e50"
+                    android:textSize="@dimen/y9" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_evaluate_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="查看明细"
+                    android:textColor="@color/gray_a0a0a0"
+                    android:textSize="@dimen/y9" />
+
+                <ImageView
+                    android:layout_width="@dimen/y8"
+                    android:layout_height="@dimen/y8"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/arrow_r" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y5"
+                android:text="辞职后，系统将按照已完成工时为您计算工资"
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y5"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="工资将在XX时间内发放至您的钢建众工账户"
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y9" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y10"
+                android:text="点击这里为Ta评分"
+                android:textColor="@color/black_252323"
+                android:textSize="@dimen/y10" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y5"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_evaluate_praise_1"
+                    android:layout_width="@dimen/y25"
+                    android:layout_height="@dimen/y25"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/praise_no" />
+
+                <ImageView
+                    android:id="@+id/iv_evaluate_praise_2"
+                    android:layout_width="@dimen/y25"
+                    android:layout_height="@dimen/y25"
+                    android:layout_marginLeft="@dimen/y5"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/praise_no" />
+
+                <ImageView
+                    android:id="@+id/iv_evaluate_praise_3"
+                    android:layout_width="@dimen/y25"
+                    android:layout_height="@dimen/y25"
+                    android:layout_marginLeft="@dimen/y5"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/praise_no" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_evaluate_des"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginLeft="@dimen/y20"
+                android:layout_marginRight="@dimen/y20"
+                android:layout_marginTop="@dimen/y5"
+                android:layout_weight="1"
+                android:background="@drawable/sl_me_login"
+                android:gravity="start"
+                android:hint="请填写辞职原因"
+                android:padding="@dimen/y5"
+                android:textColorHint="@color/gray_a0a0a0"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/y9" />
+
+            <TextView
+                android:id="@+id/tv_evaluate_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginLeft="@dimen/y5"
+                android:layout_marginRight="@dimen/y5"
+                android:background="@drawable/sp_login_get"
+                android:gravity="center"
+                android:paddingBottom="@dimen/y5"
+                android:paddingTop="@dimen/y5"
+                android:text="提交"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/y11" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

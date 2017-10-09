@@ -1,11 +1,6 @@
 package bean;
 
-/**
- * 创建日期：2017/8/9 on 10:54
- * 作者:孙明明
- * 描述:明细数据类
- */
-
+//明细
 public class AccountDetailBean {
 
     private String title;

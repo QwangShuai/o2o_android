@@ -19,11 +19,11 @@ import com.gjzg.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import activity.PersonMagActivity;
+import personmanage.view.PersonInfoManageActivity;
 import adapter.AddKindAdapter;
 import adapter.RoleAdapter;
 import bean.AddKindBean;
-import bean.PersonPreviewBean;
+import personmanage.bean.PersonPreviewBean;
 import bean.RoleBean;
 import listener.ListItemClickHelp;
 import utils.Utils;
@@ -124,7 +124,7 @@ public class EditInfoFragment extends CommonFragment implements View.OnClickList
     @Override
     protected void initData() {
         //初始化信息预览数据类
-        personPreviewBean = ((PersonMagActivity) getActivity()).personPreviewBean;
+        personPreviewBean = ((PersonInfoManageActivity) getActivity()).personPreviewBean;
         //初始化工人种类数据类集合
         roleBeanList = new ArrayList<>();
         //初始化工人种类适配器
