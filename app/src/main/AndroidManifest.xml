@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name="application.CApplication"
@@ -96,7 +97,10 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity android:name="persondetailinfo.view.PersonDetailActivity" />
         <activity android:name="redpacket.view.RedPacketActivity" />
-        <activity android:name="voucher.view.VoucherActivity"></activity>
+        <activity android:name="voucher.view.VoucherActivity" />
+        <activity android:name="collect.view.CollectActivity" />
+        <activity android:name="myevaluate.view.MyEvaluateActivity" />
+        <activity android:name="aboutus.view.AboutUsActivity"></activity>
     </application>
 
 </manifest>

@@ -49,4 +49,10 @@ public interface NetConfig {
     String redPacketUrl = "http://api.gangjianwang.com/Bouns/index?action=list&bt_id=2";
     //代金券
     String voucherUrl = "http://api.gangjianwang.com/Bouns/index?action=list&bt_id=1";
+
+    /**
+     * 投诉
+     */
+    //用户投诉问题 ct_type = 0,1,2; 0:平台;1:雇主;2:工人;
+    String useCplIs = "http://api.gangjianwang.com/Users/complaintsType?ct_type=";
 }

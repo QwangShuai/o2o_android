@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import collect.view.CollectActivity;
 import config.IntentConfig;
 import config.VarConfig;
 import invite.view.InviteActivity;
 import leftright.view.LeftRightActivity;
 import login.view.LoginActivity;
+import myevaluate.view.MyEvaluateActivity;
 import passwordset.view.SetPwdActivity;
 import redpacket.view.RedPacketActivity;
 import set.view.SetActivity;
@@ -81,14 +83,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_mine_collect:
-                Intent collectIntent = new Intent(getActivity(), LeftRightActivity.class);
-                collectIntent.putExtra(IntentConfig.intentName, IntentConfig.COLLECT);
-                startActivity(collectIntent);
+                startActivity(new Intent(getActivity(), CollectActivity.class));
                 break;
             case R.id.rl_mine_evaluate:
-                Intent evaluateIntent = new Intent(getActivity(), LeftRightActivity.class);
-                evaluateIntent.putExtra(IntentConfig.intentName, IntentConfig.EVALUATE);
-                startActivity(evaluateIntent);
+                startActivity(new Intent(getActivity(), MyEvaluateActivity.class));
                 break;
             case R.id.rl_mine_wallet:
                 Intent walletIntent = new Intent(getActivity(), WalletActivity.class);

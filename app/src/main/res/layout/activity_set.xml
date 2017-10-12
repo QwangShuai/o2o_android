@@ -70,7 +70,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y10"
+                android:layout_marginTop="@dimen/y5"
                 android:background="@android:color/white">
 
                 <RelativeLayout
@@ -92,7 +92,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y10"
+                android:layout_marginTop="@dimen/y5"
                 android:background="@android:color/white">
 
                 <RelativeLayout
@@ -104,6 +104,28 @@
                     <TextView
                         style="@style/tv_set"
                         android:text="消息提示" />
+
+                    <ImageView style="@style/iv_set" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@android:color/white">
+
+                <RelativeLayout
+                    android:id="@+id/rl_set_about_us"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true">
+
+                    <TextView
+                        style="@style/tv_set"
+                        android:text="关于我们" />
 
                     <ImageView style="@style/iv_set" />
 

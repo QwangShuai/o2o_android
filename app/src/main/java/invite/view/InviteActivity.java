@@ -3,6 +3,7 @@ package invite.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -10,9 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gjzg.R;
-
-import config.VarConfig;
-import utils.Utils;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,8 +49,27 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.tv_invite:
-                Utils.toast(this, VarConfig.notyetTip);
+                invite();
                 break;
         }
+    }
+
+    private void invite() {
+        Log.e("Invite", "invite");
+//        String text = "123";
+//        WXTextObject textObj = new WXTextObject();
+//        textObj.text = text;
+//
+//        WXMediaMessage msg = new WXMediaMessage();
+//        msg.mediaObject = textObj;
+//        msg.description = text;
+//
+//        SendMessageToWX.Req req = new SendMessageToWX.Req();
+//        req.transaction = String.valueOf(System.currentTimeMillis());
+//        req.message = msg;
+//        req.scene = SendMessageToWX.Req.WXSceneSession;
+//
+//        IWXAPI api = WXAPIFactory.createWXAPI(this, "wx88a7414f850651c8", true);
+//        api.sendReq(req);
     }
 }

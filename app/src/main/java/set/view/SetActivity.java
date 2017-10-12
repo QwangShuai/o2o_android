@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
+import aboutus.view.AboutUsActivity;
 import phonebind.view.PhoneBindActivity;
 import cache.LruJsonCache;
 import config.VarConfig;
@@ -23,6 +24,7 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
     private RelativeLayout phoneBindRl;
     private RelativeLayout clearCacheRl;
     private RelativeLayout msgTipRl;
+    private RelativeLayout aboutUsRl;
     private RelativeLayout quitRl;
     private AlertDialog cacheDialog;
     private View cacheDialogView;
@@ -52,6 +54,7 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
         phoneBindRl = (RelativeLayout) rootView.findViewById(R.id.rl_set_phone_bind);
         clearCacheRl = (RelativeLayout) rootView.findViewById(R.id.rl_set_cache_clear);
         msgTipRl = (RelativeLayout) rootView.findViewById(R.id.rl_set_msg_tip);
+        aboutUsRl = (RelativeLayout) rootView.findViewById(R.id.rl_set_about_us);
         quitRl = (RelativeLayout) rootView.findViewById(R.id.rl_set_quit);
     }
 
@@ -87,6 +90,7 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
         phoneBindRl.setOnClickListener(this);
         clearCacheRl.setOnClickListener(this);
         msgTipRl.setOnClickListener(this);
+        aboutUsRl.setOnClickListener(this);
         quitRl.setOnClickListener(this);
     }
 
@@ -106,6 +110,9 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.rl_set_msg_tip:
                 Utils.toast(this, VarConfig.notyetTip);
+                break;
+            case R.id.rl_set_about_us:
+                startActivity(new Intent(SetActivity.this, AboutUsActivity.class));
                 break;
             case R.id.rl_set_quit:
                 Utils.toast(this, VarConfig.notyetTip);

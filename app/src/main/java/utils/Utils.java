@@ -237,5 +237,8 @@ public class Utils {
         }
     }
 
-
+    //获取用户投诉问题url
+    public static String getUserCplIsUrl(String baseUrl, String typeId) {
+        return baseUrl + typeId;
+    }
 }

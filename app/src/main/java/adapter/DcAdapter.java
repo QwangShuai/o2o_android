@@ -10,7 +10,7 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import bean.DcBean;
+import discount.bean.DiscountBean;
 
 /**
  * 创建日期：2017/8/31 on 15:29
@@ -18,9 +18,9 @@ import bean.DcBean;
  * 描述:优惠适配器
  */
 
-public class DcAdapter extends CommonAdapter<DcBean> {
+public class DcAdapter extends CommonAdapter<DiscountBean> {
 
-    public DcAdapter(Context context, List<DcBean> list) {
+    public DcAdapter(Context context, List<DiscountBean> list) {
         super(context, list);
     }
 
@@ -34,7 +34,7 @@ public class DcAdapter extends CommonAdapter<DcBean> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        DcBean d = list.get(position);
+        DiscountBean d = list.get(position);
         if (d != null) {
             holder.tv.setText(d.getTitle());
         }

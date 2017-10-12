@@ -105,6 +105,7 @@
             android:textSize="@dimen/y10" />
 
         <TextView
+            android:id="@+id/tv_complain_issue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="选择投诉问题"

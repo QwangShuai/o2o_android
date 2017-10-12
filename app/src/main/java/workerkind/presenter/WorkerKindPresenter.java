@@ -24,7 +24,6 @@ public class WorkerKindPresenter implements IWorkerKindPresenter {
 
     @Override
     public void load() {
-        iWorkerKindActivity.showLoading();
         iWorkerKindModule.load(new LoadWorkerKindListener() {
             @Override
             public void loadSuccess(final List<WorkerKindBean> workerKindBeanList) {
@@ -32,7 +31,6 @@ public class WorkerKindPresenter implements IWorkerKindPresenter {
                     @Override
                     public void run() {
                         iWorkerKindActivity.showSuccess(workerKindBeanList);
-                        iWorkerKindActivity.hideLoading();
                     }
                 });
             }

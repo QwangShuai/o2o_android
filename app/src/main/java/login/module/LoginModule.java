@@ -41,6 +41,7 @@ public class LoginModule implements ILoginModule {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String json = response.body().string();
+                    getSecurityCodeListener.getSecurityCodeFailure(json);
                     try {
                         JSONObject objBean = new JSONObject(json);
                         int code = objBean.optInt("code");

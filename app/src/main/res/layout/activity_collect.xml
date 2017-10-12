@@ -4,9 +4,8 @@
     android:id="@+id/activity_collect"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:orientation="vertical"
-    tools:context="activity.CollectActivity">
+    tools:context="collect.view.CollectActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -36,7 +35,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/selector_press_or_not"
             android:clickable="true">
 
             <TextView
@@ -47,8 +45,8 @@
                 android:layout_marginBottom="@dimen/y10"
                 android:layout_marginTop="@dimen/y10"
                 android:text="收藏的工作"
-                android:textColor="@color/red"
-                android:textSize="@dimen/x15" />
+                android:textColor="@color/red_ff3e50"
+                android:textSize="@dimen/y12" />
 
         </RelativeLayout>
 
@@ -57,7 +55,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/selector_press_or_not"
             android:clickable="true">
 
             <TextView
@@ -68,8 +65,8 @@
                 android:layout_marginBottom="@dimen/y10"
                 android:layout_marginTop="@dimen/y10"
                 android:text="收藏的工人"
-                android:textColor="@color/side"
-                android:textSize="@dimen/x15" />
+                android:textColor="@color/gray_a0a0a0"
+                android:textSize="@dimen/y12" />
 
         </RelativeLayout>
 

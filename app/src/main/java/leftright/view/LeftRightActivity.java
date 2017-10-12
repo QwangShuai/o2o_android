@@ -20,11 +20,7 @@ import java.util.List;
 
 import config.ColorConfig;
 import config.IntentConfig;
-import fragment.CollectJobFragment;
-import fragment.CollectWorkerFragment;
-import fragment.EvaluateGiveFragment;
 import fragment.JobOfferFragment;
-import fragment.ReceiveEvaluateFragment;
 import fragment.SysMsgFragment;
 
 public class LeftRightActivity extends AppCompatActivity implements View.OnClickListener {
@@ -68,24 +64,6 @@ public class LeftRightActivity extends AppCompatActivity implements View.OnClick
         int status = intent.getIntExtra(IntentConfig.intentName, 0);
         if (status != 0) {
             switch (status) {
-                case IntentConfig.COLLECT:
-                    titleTv.setText("我的收藏");
-                    lTv.setText("收藏的工作");
-                    rTv.setText("收藏的工人");
-                    Fragment collectJobFragment = new CollectJobFragment();
-                    Fragment collectWorkerFragment = new CollectWorkerFragment();
-                    fragmentList.add(collectJobFragment);
-                    fragmentList.add(collectWorkerFragment);
-                    break;
-                case IntentConfig.EVALUATE:
-                    titleTv.setText("我的评价");
-                    lTv.setText("收到的评价");
-                    rTv.setText("给别人的评价");
-                    Fragment receiveEvaluateFragment = new ReceiveEvaluateFragment();
-                    Fragment evaluateGiveFragment = new EvaluateGiveFragment();
-                    fragmentList.add(receiveEvaluateFragment);
-                    fragmentList.add(evaluateGiveFragment);
-                    break;
                 case IntentConfig.MESSAGE:
                     titleTv.setText("我的消息");
                     lTv.setText("工作邀约");

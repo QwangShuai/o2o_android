@@ -11,8 +11,4 @@ public interface IWorkerKindActivity {
 
     void showFailure(String failure);
 
-    void showLoading();
-
-    void hideLoading();
-
 }

@@ -36,31 +36,23 @@ public class WorkerKindModule implements IWorkerKindModule {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                loadWorkerKindListener.loadFailure("WorkerKindModule:IOException:" + e.getMessage());
+                loadWorkerKindListener.loadFailure(e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    loadWorkerKindListener.loadFailure("WorkerKindModule:!response.isSuccessful");
-                } else {
+                if (response.isSuccessful()) {
                     String json = response.body().string();
-                    if (TextUtils.isEmpty(json)) {
-                        loadWorkerKindListener.loadFailure("WorkerKindModule:json == null");
-                    } else {
+                    if (!TextUtils.isEmpty(json)) {
                         try {
                             JSONObject objBean = new JSONObject(json);
                             if (objBean.optInt("code") == 200) {
                                 JSONArray arrData = objBean.optJSONArray("data");
-                                if (arrData == null) {
-                                    loadWorkerKindListener.loadFailure("WorkerKindModule:arr == null");
-                                } else {
+                                if (arrData != null) {
                                     List<WorkerKindBean> workerKindBeanList = new ArrayList<WorkerKindBean>();
                                     for (int i = 0; i < arrData.length(); i++) {
                                         JSONObject o = arrData.optJSONObject(i);
-                                        if (o == null) {
-                                            loadWorkerKindListener.loadFailure("WorkerKindModule:o == null");
-                                        } else {
+                                        if (o != null) {
                                             WorkerKindBean wkb = new WorkerKindBean();
                                             wkb.setId(o.optString("s_id"));
                                             wkb.setName(o.optString("s_name"));
@@ -69,12 +61,9 @@ public class WorkerKindModule implements IWorkerKindModule {
                                     }
                                     loadWorkerKindListener.loadSuccess(workerKindBeanList);
                                 }
-                            } else {
-                                loadWorkerKindListener.loadFailure("WorkerKindModule:code != 200");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            loadWorkerKindListener.loadFailure("WorkerKindModule:JSONException:" + e.getMessage());
                         }
                     }
                 }

@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,13 +36,18 @@ import java.util.Date;
 import java.util.List;
 
 import adapter.ComplainImageAdapter;
+import complain.adapter.CplIsAdapter;
+import complain.bean.ComplainIssueBean;
+import complain.presenter.ComplainPresenter;
+import complain.presenter.IComplainPresenter;
 import config.IntentConfig;
 import config.PathConfig;
 import config.PermissionConfig;
 import pic.view.PicActivity;
 import utils.Utils;
+import view.CProgressDialog;
 
-public class ComplainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class ComplainActivity extends AppCompatActivity implements IComplainActivity, View.OnClickListener, AdapterView.OnItemClickListener {
 
     private View rootView;
     private RelativeLayout returnRl;
@@ -49,6 +56,7 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
     private View popView;
     private PopupWindow pop;
     private TextView cameraTv, mapTv, cancelTv;
+    private CProgressDialog cpd;
 
     private GridView gv;
     private List<Bitmap> list;
@@ -57,6 +65,15 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
     private String picPath;
 
     private List<String> upLoadImageList;
+
+    private IComplainPresenter iComplainPresenter;
+
+    private TextView cplIsTv;
+    private View cplIsPopView;
+    private PopupWindow cplIsPop;
+    private ListView cplIsLv;
+    private List<ComplainIssueBean> cplIsList;
+    private CplIsAdapter cplIsAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,10 +85,12 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
         initData();
         setData();
         setListener();
+        loadData();
     }
 
     private void initView() {
         initRootView();
+        initCplIsPopView();
         initPopView();
     }
 
@@ -80,6 +99,20 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
         addImageRl = (RelativeLayout) rootView.findViewById(R.id.rl_complain_add_image);
         submitTv = (TextView) rootView.findViewById(R.id.tv_complain_sumit);
         gv = (GridView) rootView.findViewById(R.id.gv_complain_image);
+        cpd = Utils.initProgressDialog(this, cpd);
+    }
+
+    private void initCplIsPopView() {
+        cplIsTv = (TextView) rootView.findViewById(R.id.tv_complain_issue);
+        cplIsPopView = LayoutInflater.from(ComplainActivity.this).inflate(R.layout.pop_lv, null);
+        cplIsLv = (ListView) cplIsPopView.findViewById(R.id.lv_pop_lv);
+        cplIsPop = new PopupWindow(cplIsPopView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        cplIsPop.setFocusable(true);
+        cplIsPop.setTouchable(true);
+        cplIsPop.setOutsideTouchable(true);
+        cplIsList = new ArrayList<>();
+        cplIsAdapter = new CplIsAdapter(ComplainActivity.this, cplIsList);
+        cplIsLv.setAdapter(cplIsAdapter);
     }
 
     private void initPopView() {
@@ -121,6 +154,7 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
         list = new ArrayList<>();
         adapter = new ComplainImageAdapter(this, list);
         upLoadImageList = new ArrayList<>();
+        iComplainPresenter = new ComplainPresenter(this);
     }
 
     private void setData() {
@@ -129,9 +163,15 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
 
     private void setListener() {
         returnRl.setOnClickListener(this);
+        cplIsTv.setOnClickListener(this);
         addImageRl.setOnClickListener(this);
         submitTv.setOnClickListener(this);
+        cplIsLv.setOnItemClickListener(this);
         gv.setOnItemClickListener(this);
+    }
+
+    private void loadData() {
+        iComplainPresenter.loadCplIs("2");
     }
 
     private void backgroundAlpha(float bgAlpha) {
@@ -170,6 +210,16 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.rl_complain_return:
                 finish();
+                break;
+            case R.id.tv_complain_issue:
+                cplIsPop.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+                backgroundAlpha(0.5f);
+                cplIsPop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        backgroundAlpha(1.0f);
+                    }
+                });
                 break;
             case R.id.rl_complain_add_image:
                 if (list.size() < 5) {
@@ -246,9 +296,38 @@ public class ComplainActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        list.remove(position);
-        upLoadImageList.remove(position);
-        adapter.notifyDataSetChanged();
+        switch (parent.getId()) {
+            case R.id.lv_pop_lv:
+                cplIsTv.setText(cplIsList.get(position).getName());
+                cplIsPop.dismiss();
+                break;
+            case R.id.gv_complain_image:
+                list.remove(position);
+                upLoadImageList.remove(position);
+                adapter.notifyDataSetChanged();
+                break;
+        }
     }
 
+    @Override
+    public void showLoading() {
+        cpd.show();
+    }
+
+    @Override
+    public void hideLoading() {
+        cpd.dismiss();
+    }
+
+    @Override
+    public void showLoadIssueSuccess(List<ComplainIssueBean> complainIssueBeanList) {
+        Log.e("CplIs", complainIssueBeanList.toString());
+        cplIsList.addAll(complainIssueBeanList);
+        cplIsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showLoadIssueFailure(String failure) {
+
+    }
 }

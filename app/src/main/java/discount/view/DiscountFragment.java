@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.DcAdapter;
-import bean.DcBean;
+import discount.bean.DiscountBean;
 import config.StateConfig;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
 import utils.Utils;
 
-public class DiscountFragment extends Fragment implements PullToRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+public class DiscountFragment extends Fragment implements IDiscountFragment, PullToRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     private View rootView;
     private PullToRefreshLayout ptrl;
     private PullableListView plv;
-    private List<DcBean> list;
+    private List<DiscountBean> list;
     private DcAdapter adapter;
     private int state = StateConfig.LOAD_DONE;
 
@@ -67,13 +67,13 @@ public class DiscountFragment extends Fragment implements PullToRefreshLayout.On
     }
 
     private void loadData() {
-        DcBean d0 = new DcBean();
+        DiscountBean d0 = new DiscountBean();
         d0.setTitle("优惠一");
         d0.setUrl("http://www.toutiao.com/");
-        DcBean d1 = new DcBean();
+        DiscountBean d1 = new DiscountBean();
         d1.setTitle("优惠二");
         d1.setUrl("http://www.toutiao.com/");
-        DcBean d2 = new DcBean();
+        DiscountBean d2 = new DiscountBean();
         d2.setTitle("优惠三");
         d2.setUrl("http://www.toutiao.com/");
         list.add(d0);
@@ -110,5 +110,15 @@ public class DiscountFragment extends Fragment implements PullToRefreshLayout.On
         String url = list.get(position).getUrl();
         if (!TextUtils.isEmpty(url))
             Utils.skipBrowser(getActivity(), url);
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
     }
 }
