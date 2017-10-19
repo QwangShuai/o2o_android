@@ -54,12 +54,15 @@ public class CollectWorkerModule implements ICollectWorkerModule {
                                         JSONObject o = arrData.optJSONObject(i);
                                         if (o != null) {
                                             CollectWorkerBean collectWorkerBean = new CollectWorkerBean();
-                                            collectWorkerBean.setU_id(o.optString("u_id"));
-                                            collectWorkerBean.setU_sex(o.optString("u_sex"));
-                                            collectWorkerBean.setU_online(o.optString("u_online"));
-                                            collectWorkerBean.setU_start(o.optString("u_start"));
-                                            collectWorkerBean.setU_worked_num(o.optString("u_worked_num"));
-                                            collectWorkerBean.setF_id(o.optString("f_id"));
+                                            collectWorkerBean.setuId(o.optString("u_id"));
+                                            collectWorkerBean.setuImg(o.optString("u_img"));
+                                            collectWorkerBean.setuName(o.optString("u_name"));
+                                            collectWorkerBean.setuTaskStatus(o.optString("u_task_status"));
+                                            collectWorkerBean.setuSex(o.optString("u_sex"));
+                                            collectWorkerBean.setUeiInfo(o.optString("uei_info"));
+                                            collectWorkerBean.setUcpPositX(o.optString("ucp_posit_x"));
+                                            collectWorkerBean.setUcpPositY(o.optString("ucp_posit_y"));
+                                            collectWorkerBean.setfId(o.optString("f_id"));
                                             collectWorkerBeanList.add(collectWorkerBean);
                                         }
                                     }

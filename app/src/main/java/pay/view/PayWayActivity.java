@@ -16,6 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gjzg.R;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +32,7 @@ import java.util.List;
 
 import adapter.PayWayAdapter;
 import bean.PayWayBean;
+import config.AppConfig;
 import config.NetConfig;
 import config.StateConfig;
 import okhttp3.Call;
@@ -173,6 +179,21 @@ public class PayWayActivity extends AppCompatActivity implements View.OnClickLis
         String money = moneyEt.getText().toString();
         if (TextUtils.isEmpty(money)) {
             Utils.toast(this, "请输入金额");
+            IWXAPI api = WXAPIFactory.createWXAPI(PayWayActivity.this, AppConfig.APP_ID, false);
+            api.registerApp(AppConfig.APP_ID);
+            //初始化一个WXTextObject对象
+            WXTextObject textObj = new WXTextObject();
+            textObj.text = "要分享的文字信息";
+            //用WXTextObject对象初始化一个WXMediaMessage对象
+            WXMediaMessage msg = new WXMediaMessage();
+            msg.mediaObject = textObj;
+            msg.description = "文字类型描述";
+
+            SendMessageToWX.Req req = new SendMessageToWX.Req();
+            req.transaction = buildTransaction("text");
+            req.message = msg;
+            req.scene = SendMessageToWX.Req.WXSceneSession;
+            api.sendReq(req);
         }
     }
 
@@ -201,5 +222,9 @@ public class PayWayActivity extends AppCompatActivity implements View.OnClickLis
             }
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 }

@@ -53,7 +53,7 @@
             android:name="pay.view.PayWayActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
-            android:name="publishjob.PublishJobActivity"
+            android:name="publishjob.view.PublishJobActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity android:name="wallet.view.WalletActivity" />
         <activity android:name="accountdetail.view.AccountDetailActivity" />
@@ -100,7 +100,9 @@
         <activity android:name="voucher.view.VoucherActivity" />
         <activity android:name="collect.view.CollectActivity" />
         <activity android:name="myevaluate.view.MyEvaluateActivity" />
-        <activity android:name="aboutus.view.AboutUsActivity"></activity>
+        <activity android:name="aboutus.view.AboutUsActivity" />
+        <activity android:name="selectaddress.view.SelectAddressActivity" />
+        <activity android:name="taskconfirm.view.TaskConfirmActivity"></activity>
     </application>
 
 </manifest>

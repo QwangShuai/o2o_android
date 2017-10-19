@@ -38,7 +38,7 @@ import config.PermissionConfig;
 import firstpage.presenter.FirstPagePresenter;
 import firstpage.presenter.IFirstPagePresenter;
 import jobinfo.view.JobInfoActivity;
-import publishjob.PublishJobActivity;
+import publishjob.view.PublishJobActivity;
 import utils.Utils;
 import view.CProgressDialog;
 import workerkind.view.WorkerKindActivity;

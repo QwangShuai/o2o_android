@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/y5">
+
+        <TextView
+            android:id="@+id/tv_item_select_voucher_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="五元优惠券"
+            android:textColor="@color/black_252323"
+            android:textSize="@dimen/y10"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_item_select_voucher_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y2"
+            android:text="任务金额满100元可以使用"
+            android:textColor="@color/black_252323"
+            android:textSize="@dimen/y8" />
+
+        <TextView
+            android:id="@+id/tv_item_select_voucher_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有效期2017.09.26-2017.09.30"
+            android:textColor="@color/black_252323"
+            android:textSize="@dimen/y8" />
+
+    </LinearLayout>
+
+</LinearLayout>

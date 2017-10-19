@@ -203,6 +203,7 @@
     <style name="dialog_cprogress" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/sl_pg</item>
         <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
     <!--雇主工作管理-->

@@ -19,6 +19,8 @@ import java.util.List;
 import collectjob.view.CollectJobFragment;
 import collectworker.view.CollectWorkerFragment;
 import config.ColorConfig;
+import utils.Utils;
+import view.CProgressDialog;
 
 public class CollectActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,6 +30,8 @@ public class CollectActivity extends AppCompatActivity implements View.OnClickLi
     private FragmentManager fragmentManager;
     private List<Fragment> fragmentList;
     private int curState = 0, tarState = -1;
+
+    private CProgressDialog cpd ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class CollectActivity extends AppCompatActivity implements View.OnClickLi
         workerRl = (RelativeLayout) rootView.findViewById(R.id.rl_collect_worker);
         jobTv = (TextView) rootView.findViewById(R.id.tv_collect_job);
         workerTv = (TextView) rootView.findViewById(R.id.tv_collect_worker);
+        cpd = Utils.initProgressDialog(this,cpd);
+        cpd.show();
     }
 
     private void initData() {

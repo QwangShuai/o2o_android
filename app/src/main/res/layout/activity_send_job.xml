@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="publishjob.PublishJobActivity">
+    tools:context="publishjob.view.PublishJobActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
         <RelativeLayout
-            android:id="@+id/rl_send_job_return"
+            android:id="@+id/rl_publish_job_return"
             style="@style/rl_return">
 
             <ImageView style="@style/iv_return" />
@@ -23,7 +23,7 @@
             android:text="发布工作" />
 
         <RelativeLayout
-            android:id="@+id/rl_send_job_add"
+            android:id="@+id/rl_publish_job_add"
             style="@style/rl_return"
             android:layout_alignParentRight="true">
 
@@ -37,188 +37,39 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/y5">
+        android:layout_margin="@dimen/y5"
+        android:background="@drawable/sl_ll_send_job"
+        android:orientation="vertical"
+        android:padding="@dimen/y5">
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/lv_publish_job"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/y5"
+            android:layout_weight="1" />
+
+        <RelativeLayout
+            android:id="@+id/rl_publish_job_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/sl_ll_send_job"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/y10"
-            android:paddingLeft="@dimen/y20"
-            android:paddingRight="@dimen/y20"
-            android:paddingTop="@dimen/y10">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="标题"
-                    android:textColor="@color/black_252323"
-                    android:textSize="@dimen/x15"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/et_send_job_project_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/y5"
-                    android:layout_weight="1"
-                    android:background="@null"
-                    android:hint="工程名称"
-                    android:textCursorDrawable="@null"
-                    android:textSize="@dimen/x15" />
-
-            </LinearLayout>
-
-            <View style="@style/v_split" />
+            android:background="@drawable/sl_black_stroke_corner"
+            android:clickable="true">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
-                android:text="描述"
-                android:textColor="@color/black_252323"
-                android:textSize="@dimen/x15"
-                android:textStyle="bold" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y50"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginTop="@dimen/y5"
-                android:background="@drawable/sl_black_stroke"
-                android:padding="@dimen/y5">
-
-                <EditText
-                    android:id="@+id/et_send_job_project_des"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="start"
-                    android:hint="描述一下工作内容和工作渠道"
-                    android:textCursorDrawable="@null"
-                    android:textSize="@dimen/x15" />
-
-            </RelativeLayout>
-
-            <View style="@style/v_split" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="工程类型"
-                    android:textColor="@color/black_252323"
-                    android:textSize="@dimen/x15"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_send_job_project_kind"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="选择项目类型"
-                    android:textSize="@dimen/x15" />
-
-            </LinearLayout>
-
-            <View style="@style/v_split" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="所在区域"
-                    android:textColor="@color/black_252323"
-                    android:textSize="@dimen/x15"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_send_job_project_area"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="选择工作所在区域"
-                    android:textSize="@dimen/x15" />
-
-            </LinearLayout>
-
-            <View style="@style/v_split" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
-                android:text="详细地址"
-                android:textColor="@color/black_252323"
-                android:textSize="@dimen/x15"
-                android:textStyle="bold" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y50"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginTop="@dimen/y5"
-                android:background="@drawable/sl_black_stroke"
-                android:padding="@dimen/y5">
-
-                <EditText
-                    android:id="@+id/et_send_job_project_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:gravity="start"
-                    android:hint="请填写详细地址，不少于5个字"
-                    android:textCursorDrawable="@null"
-                    android:textSize="@dimen/x15" />
-
-            </RelativeLayout>
-
-            <View style="@style/v_split" />
-
-            <ListView
-                android:id="@+id/lv_send_job"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/y5" />
-
-            <TextView
-                android:id="@+id/tv_send_job_submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginTop="@dimen/y5"
-                android:background="@drawable/sl_black_stroke_corner"
-                android:clickable="true"
-                android:gravity="center"
-                android:paddingBottom="@dimen/y5"
-                android:paddingTop="@dimen/y5"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/y5"
                 android:text="确认提交"
                 android:textColor="@color/black_252323"
                 android:textSize="@dimen/x15" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

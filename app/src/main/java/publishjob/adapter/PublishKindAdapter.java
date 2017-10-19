@@ -1,0 +1,108 @@
+package publishjob.adapter;
+
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.gjzg.R;
+
+import java.util.List;
+
+import listener.ListItemClickHelp;
+import publishjob.bean.PublishKindBean;
+
+public class PublishKindAdapter extends BaseAdapter {
+
+    private Context context;
+    private List<PublishKindBean> list;
+    private ListItemClickHelp clickHelp;
+
+    public PublishKindAdapter(Context context, List<PublishKindBean> list, ListItemClickHelp clickHelp) {
+        this.context = context;
+        this.list = list;
+        this.clickHelp = clickHelp;
+    }
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_publish_job, null);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        PublishKindBean publishKindBean = list.get(position);
+        if (publishKindBean != null) {
+            if (publishKindBean.getKind().equals("0")) {
+                holder.kindTv.setText("选择招聘工种");
+            } else {
+                holder.kindTv.setText(publishKindBean.getKind());
+            }
+            if (publishKindBean.getStartTime().equals("0")) {
+                holder.startTimeTv.setText("开始时间");
+            } else {
+                holder.startTimeTv.setText(publishKindBean.getStartTime());
+            }
+            if (publishKindBean.getEndTime().equals("0")) {
+                holder.endTimeTv.setText("结束时间");
+            } else {
+                holder.endTimeTv.setText(publishKindBean.getEndTime());
+            }
+            if (publishKindBean.getAmount().equals("0")) {
+                holder.amountEt.setHint("输入招工人数");
+            } else {
+                holder.amountEt.setText(publishKindBean.getAmount());
+            }
+            if (publishKindBean.getSalary().equals("0")) {
+                holder.salaryEt.setHint("输入工人工资");
+            } else {
+                holder.salaryEt.setText(publishKindBean.getSalary());
+            }
+        }
+        if (position == 0) {
+            holder.deleteRl.setVisibility(View.GONE);
+        } else {
+            holder.deleteRl.setVisibility(View.VISIBLE);
+        }
+        return convertView;
+    }
+
+    private class ViewHolder {
+
+        private TextView kindTv, startTimeTv, endTimeTv;
+        private EditText amountEt, salaryEt;
+        private RelativeLayout deleteRl;
+
+        public ViewHolder(View itemView) {
+            kindTv = (TextView) itemView.findViewById(R.id.tv_item_publish_job_kind);
+            startTimeTv = (TextView) itemView.findViewById(R.id.tv_item_publish_job_start_time);
+            endTimeTv = (TextView) itemView.findViewById(R.id.tv_item_publish_job_end_time);
+            amountEt = (EditText) itemView.findViewById(R.id.et_item_publish_job_amount);
+            salaryEt = (EditText) itemView.findViewById(R.id.et_item_publish_job_salary);
+            deleteRl = (RelativeLayout) itemView.findViewById(R.id.rl_item_publish_job_delete);
+        }
+    }
+}

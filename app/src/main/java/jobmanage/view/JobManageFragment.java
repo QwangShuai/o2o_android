@@ -15,7 +15,7 @@ import employermanage.view.EmpMagActivity;
 import wallet.view.WalletActivity;
 import workermanage.view.WorkerManageActivity;
 import personmanage.view.PersonInfoManageActivity;
-import publishjob.PublishJobActivity;
+import publishjob.view.PublishJobActivity;
 
 public class JobManageFragment extends Fragment implements View.OnClickListener {
 

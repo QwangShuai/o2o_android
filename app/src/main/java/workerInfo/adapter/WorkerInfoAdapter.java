@@ -26,7 +26,7 @@ public class WorkerInfoAdapter extends CommonAdapter<WorkerInfoBean> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_worker_info, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_person, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -52,12 +52,12 @@ public class WorkerInfoAdapter extends CommonAdapter<WorkerInfoBean> {
         private TextView nameTv, briefTv, distanceTv;
 
         public ViewHolder(View itemView) {
-            iconIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_icon);
-            statusIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_status);
-            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_worker_collect);
-            nameTv = (TextView) itemView.findViewById(R.id.tv_item_worker_name);
-            briefTv = (TextView) itemView.findViewById(R.id.tv_item_worker_brief);
-            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_worker_distance);
+            iconIv = (ImageView) itemView.findViewById(R.id.iv_item_person_img);
+            statusIv = (ImageView) itemView.findViewById(R.id.iv_item_person_status);
+            collectIv = (ImageView) itemView.findViewById(R.id.iv_item_person_collect);
+            nameTv = (TextView) itemView.findViewById(R.id.tv_item_person_name);
+            briefTv = (TextView) itemView.findViewById(R.id.tv_item_person_info);
+            distanceTv = (TextView) itemView.findViewById(R.id.tv_item_person_distance);
         }
     }
 }

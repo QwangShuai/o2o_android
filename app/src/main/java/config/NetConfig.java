@@ -55,4 +55,9 @@ public interface NetConfig {
      */
     //用户投诉问题 ct_type = 0,1,2; 0:平台;1:雇主;2:工人;
     String useCplIs = "http://api.gangjianwang.com/Users/complaintsType?ct_type=";
+
+    /**
+     * 选择区域（三级联动）
+     */
+    String selectAddressBaseUrl = "http://api.gangjianwang.com/Regions/index?action=list&r_pid=";
 }

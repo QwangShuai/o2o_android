@@ -5,70 +5,115 @@ import java.io.Serializable;
 
 public class CollectWorkerBean implements Serializable {
 
-    private String u_id;
-    private String u_sex;
-    private String u_online;
-    private String u_start;
-    private String u_worked_num;
-    private String f_id;
+    private String uId;
+    private String uImg;
+    private String uName;
+    private String uTaskStatus;
+    private String uSex;
+    private String ueiInfo;
+    private String ucpPositX;
+    private String ucpPositY;
+    private String fId;
 
-    public String getU_id() {
-        return u_id;
+    public CollectWorkerBean() {
     }
 
-    public void setU_id(String u_id) {
-        this.u_id = u_id;
+    public CollectWorkerBean(String uId, String uImg, String uName, String uTaskStatus, String uSex, String ueiInfo, String ucpPositX, String ucpPositY, String fId) {
+        this.uId = uId;
+        this.uImg = uImg;
+        this.uName = uName;
+        this.uTaskStatus = uTaskStatus;
+        this.uSex = uSex;
+        this.ueiInfo = ueiInfo;
+        this.ucpPositX = ucpPositX;
+        this.ucpPositY = ucpPositY;
+        this.fId = fId;
     }
 
-    public String getU_sex() {
-        return u_sex;
+    public String getuId() {
+        return uId;
     }
 
-    public void setU_sex(String u_sex) {
-        this.u_sex = u_sex;
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
-    public String getU_online() {
-        return u_online;
+    public String getuImg() {
+        return uImg;
     }
 
-    public void setU_online(String u_online) {
-        this.u_online = u_online;
+    public void setuImg(String uImg) {
+        this.uImg = uImg;
     }
 
-    public String getU_start() {
-        return u_start;
+    public String getuName() {
+        return uName;
     }
 
-    public void setU_start(String u_start) {
-        this.u_start = u_start;
+    public void setuName(String uName) {
+        this.uName = uName;
     }
 
-    public String getU_worked_num() {
-        return u_worked_num;
+    public String getuTaskStatus() {
+        return uTaskStatus;
     }
 
-    public void setU_worked_num(String u_worked_num) {
-        this.u_worked_num = u_worked_num;
+    public void setuTaskStatus(String uTaskStatus) {
+        this.uTaskStatus = uTaskStatus;
     }
 
-    public String getF_id() {
-        return f_id;
+    public String getuSex() {
+        return uSex;
     }
 
-    public void setF_id(String f_id) {
-        this.f_id = f_id;
+    public void setuSex(String uSex) {
+        this.uSex = uSex;
+    }
+
+    public String getUeiInfo() {
+        return ueiInfo;
+    }
+
+    public void setUeiInfo(String ueiInfo) {
+        this.ueiInfo = ueiInfo;
+    }
+
+    public String getUcpPositX() {
+        return ucpPositX;
+    }
+
+    public void setUcpPositX(String ucpPositX) {
+        this.ucpPositX = ucpPositX;
+    }
+
+    public String getUcpPositY() {
+        return ucpPositY;
+    }
+
+    public void setUcpPositY(String ucpPositY) {
+        this.ucpPositY = ucpPositY;
+    }
+
+    public String getfId() {
+        return fId;
+    }
+
+    public void setfId(String fId) {
+        this.fId = fId;
     }
 
     @Override
     public String toString() {
         return "CollectWorkerBean{" +
-                "u_id='" + u_id + '\'' +
-                ", u_sex='" + u_sex + '\'' +
-                ", u_online='" + u_online + '\'' +
-                ", u_start='" + u_start + '\'' +
-                ", u_worked_num='" + u_worked_num + '\'' +
-                ", f_id='" + f_id + '\'' +
+                "uId='" + uId + '\'' +
+                ", uImg='" + uImg + '\'' +
+                ", uName='" + uName + '\'' +
+                ", uTaskStatus='" + uTaskStatus + '\'' +
+                ", uSex='" + uSex + '\'' +
+                ", ueiInfo='" + ueiInfo + '\'' +
+                ", ucpPositX='" + ucpPositX + '\'' +
+                ", ucpPositY='" + ucpPositY + '\'' +
+                ", fId='" + fId + '\'' +
                 '}';
     }
 }
