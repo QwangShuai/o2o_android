@@ -1,38 +1,43 @@
 package redpacket.presenter;
 
-
 import android.os.Handler;
 
-import java.util.List;
-
-import redpacket.bean.RedPacketBean;
-import redpacket.listener.OnLoadRedPacketListener;
+import listener.JsonListener;
 import redpacket.module.IRedPacketModule;
 import redpacket.module.RedPacketModule;
 import redpacket.view.IRedPacketActivity;
 
 public class RedPacketPresenter implements IRedPacketPresenter {
 
-    private IRedPacketActivity iRedPacketActivity;
-    private IRedPacketModule iRedPacketModule;
-    private Handler mHandler = new Handler();
+    private IRedPacketActivity redPacketActivity;
+    private IRedPacketModule redPacketModule;
+    private Handler handler;
 
-    public RedPacketPresenter(IRedPacketActivity iRedPacketActivity) {
-        this.iRedPacketActivity = iRedPacketActivity;
-        iRedPacketModule = new RedPacketModule();
+    public RedPacketPresenter(IRedPacketActivity redPacketActivity) {
+        this.redPacketActivity = redPacketActivity;
+        redPacketModule = new RedPacketModule();
+        handler = new Handler();
     }
 
     @Override
-    public void load() {
-        iRedPacketActivity.showLoading();
-        iRedPacketModule.load(new OnLoadRedPacketListener() {
+    public void load(String url) {
+        redPacketModule.load(url, new JsonListener() {
             @Override
-            public void success(final List<RedPacketBean> redPacketBeanList) {
-                mHandler.post(new Runnable() {
+            public void success(final String json) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iRedPacketActivity.hideLoading();
-                        iRedPacketActivity.receiveData(redPacketBeanList);
+                        redPacketActivity.loadSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        redPacketActivity.loadFailure(failure);
                     }
                 });
             }
@@ -41,15 +46,15 @@ public class RedPacketPresenter implements IRedPacketPresenter {
 
     @Override
     public void destroy() {
-        if (iRedPacketModule != null) {
-            iRedPacketModule.cancelTask();
-            iRedPacketModule = null;
+        if (redPacketModule != null) {
+            redPacketModule.cancelTask();
+            redPacketModule = null;
         }
-        if (iRedPacketActivity != null) {
-            iRedPacketActivity = null;
+        if (redPacketActivity != null) {
+            redPacketActivity = null;
         }
-        if (mHandler != null) {
-            mHandler = null;
+        if (handler != null) {
+            handler = null;
         }
     }
 }

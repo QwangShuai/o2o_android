@@ -26,7 +26,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,122 +34,51 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/rl_set_cache_clear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y5"
-                android:background="@android:color/white">
+                android:background="@drawable/sl_press"
+                android:clickable="true">
 
-                <RelativeLayout
-                    android:id="@+id/rl_set_phone_bind"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true">
+                <TextView
+                    style="@style/tv_set"
+                    android:text="清除缓存" />
 
-                    <TextView
-                        style="@style/tv_set"
-                        android:text="手机绑定" />
-
-                    <ImageView
-                        android:id="@+id/iv_set_phone"
-                        style="@style/iv_set" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/y10"
-                        android:layout_toLeftOf="@+id/iv_set_phone"
-                        android:text="152****4239"
-                        android:textColor="@color/gray_a0a0a0"
-                        android:textSize="@dimen/y12" />
-
-                </RelativeLayout>
+                <ImageView style="@style/iv_set" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_set_about_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/y5"
-                android:background="@android:color/white">
+                android:background="@drawable/sl_press"
+                android:clickable="true">
 
-                <RelativeLayout
-                    android:id="@+id/rl_set_cache_clear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true">
+                <TextView
+                    style="@style/tv_set"
+                    android:text="关于我们" />
 
-                    <TextView
-                        style="@style/tv_set"
-                        android:text="清除缓存" />
-
-                    <ImageView style="@style/iv_set" />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
-                android:background="@android:color/white">
-
-                <RelativeLayout
-                    android:id="@+id/rl_set_msg_tip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true">
-
-                    <TextView
-                        style="@style/tv_set"
-                        android:text="消息提示" />
-
-                    <ImageView style="@style/iv_set" />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/y5"
-                android:background="@android:color/white">
-
-                <RelativeLayout
-                    android:id="@+id/rl_set_about_us"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true">
-
-                    <TextView
-                        style="@style/tv_set"
-                        android:text="关于我们" />
-
-                    <ImageView style="@style/iv_set" />
-
-                </RelativeLayout>
+                <ImageView style="@style/iv_set" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_set_quit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/y193"
+                android:layout_margin="@dimen/y5"
                 android:background="@drawable/sp_login_get"
-                android:clickable="true"
-                android:paddingBottom="@dimen/y7"
-                android:paddingLeft="@dimen/y27"
-                android:paddingRight="@dimen/y27"
-                android:paddingTop="@dimen/y7">
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/y5"
                     android:text="退出登录"
                     android:textColor="@color/white_ffffff"
                     android:textSize="@dimen/y12" />

@@ -1,25 +1,19 @@
 package firstpage.module;
 
-
-import android.content.Context;
-
-import firstpage.listener.LoadComCityListener;
-import firstpage.listener.LoadHotCityListener;
-import firstpage.listener.LocateCityListener;
-import listener.OnLoadComCityListener;
-import listener.OnLoadHotCityListener;
+import firstpage.listener.ComCityListener;
+import firstpage.listener.HotCityListener;
+import firstpage.listener.LocIdListener;
+import listener.JsonListener;
 
 public interface IFirstPageModule {
 
-    void loadHotCityData(String hotUrl, LoadHotCityListener loadHotCityListener);
+    void loadHotCity(String hotUrl, HotCityListener hotCityListener);
 
-    void loadComCityData(String comUrl, LoadComCityListener loadComCityListener);
+    void loadComCity(String comUrl, ComCityListener comCityListener);
 
-    void saveHotCityData(Context context, String userId, String hotJson, String cacheTime, OnLoadHotCityListener onLoadHotCityListener);
+    void getLocId(String[] letter, String locCity, String comJson, LocIdListener locIdListener);
 
-    void saveComCityData(Context context, String userId, String comJson, String cacheTime, OnLoadComCityListener onLoadComCityListener);
-
-    void locateCity(Context context,String userId,String cityName,LocateCityListener locateCityListener);
+    void changePosition(String url, JsonListener jsonListener);
 
     void cancelTask();
 }

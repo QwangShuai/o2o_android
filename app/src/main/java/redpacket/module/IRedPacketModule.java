@@ -1,11 +1,10 @@
 package redpacket.module;
 
-
-import redpacket.listener.OnLoadRedPacketListener;
+import listener.JsonListener;
 
 public interface IRedPacketModule {
 
-    void load(OnLoadRedPacketListener onLoadRedPacketListener);
+    void load(String url, JsonListener jsonListener);
 
     void cancelTask();
 }

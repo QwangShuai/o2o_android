@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="workerInfo.view.WorkerInfoActivity">
+    tools:context="worker.view.WorkerActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -43,7 +43,8 @@
         <refreshload.PullToRefreshLayout
             android:id="@+id/ptrl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/y5">
 
             <include layout="@layout/head" />
 

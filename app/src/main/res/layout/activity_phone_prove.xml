@@ -4,6 +4,7 @@
     android:id="@+id/activity_phone_prove"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="phoneprove.view.PhoneProveActivity">
 
@@ -25,46 +26,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:id="@+id/et_phone_prove"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:inputType="number"
-            android:maxLength="4"
-            android:singleLine="true"
-            android:textColor="@color/white_ffffff"
-            android:textCursorDrawable="@color/white_ffffff" />
-
-        <LinearLayout
-            android:id="@+id/ll_phone_prove_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/et_phone_prove"
-            android:layout_centerHorizontal="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="已给手机发出验证码" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="150****3456" />
-
-
-        </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/ll_phone_prove_pwd"
             style="@style/ll_pwd"
-            android:layout_below="@+id/ll_phone_prove_tip">
+            android:layout_centerInParent="true">
 
             <RelativeLayout style="@style/rl_pwd">
 
@@ -104,6 +72,52 @@
 
             </RelativeLayout>
 
+            <View style="@style/v_pwd" />
+
+            <RelativeLayout style="@style/rl_pwd">
+
+                <TextView
+                    android:id="@+id/tv_phone_prove_4"
+                    style="@style/tv_pwd" />
+
+            </RelativeLayout>
+
+            <View style="@style/v_pwd" />
+
+            <RelativeLayout style="@style/rl_pwd">
+
+                <TextView
+                    android:id="@+id/tv_phone_prove_5"
+                    style="@style/tv_pwd" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_phone_prove_pwd"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/y5"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="已给手机发出验证码"
+                android:textColor="@color/black_252323"
+                android:textSize="@dimen/y10" />
+
+            <TextView
+                android:id="@+id/tv_phone_prove_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/black_252323"
+                android:textSize="@dimen/y10" />
+
         </LinearLayout>
 
         <TextView
@@ -112,8 +126,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ll_phone_prove_pwd"
             android:layout_centerHorizontal="true"
-            android:text="重新发送" />
+            android:layout_marginTop="@dimen/y5"
+            android:text="重新发送"
+            android:textColor="@color/black_252323"
+            android:textSize="@dimen/y10" />
 
     </RelativeLayout>
+
+    <GridView
+        android:id="@+id/gv_phone_prove"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:numColumns="3" />
 
 </LinearLayout>

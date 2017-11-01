@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_talk"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="talkemployer.view.TalkEmployerActivity">
+
+    <RelativeLayout style="@style/rl_top_bar">
+
+        <RelativeLayout
+            android:id="@+id/rl_talk_employer_return"
+            style="@style/rl_return">
+
+            <ImageView style="@style/iv_return" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_talk_employer_complain"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/sl_press">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/y5"
+                android:layout_marginRight="@dimen/y5"
+                android:text="投诉"
+                android:textColor="@color/blue_2681fc"
+                android:textSize="@dimen/y10" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/lv_talk_employer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_talk_employer_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/y5"
+        android:background="@drawable/sp_login_get">
+
+        <TextView
+            android:id="@+id/tv_talk_employer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/y5"
+            android:text="woejfidfjsdiddjfksddfjlsdjf"
+            android:textColor="@color/white_ffffff"
+            android:textSize="@dimen/y10" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,11 +1,11 @@
 package voucher.module;
 
 
-import voucher.listener.OnLoadVoucherListener;
+import listener.JsonListener;
 
 public interface IVoucherModule {
 
-    void load(OnLoadVoucherListener onLoadVoucherListener);
+    void load(String url, JsonListener jsonListener);
 
     void cancelTask();
 }

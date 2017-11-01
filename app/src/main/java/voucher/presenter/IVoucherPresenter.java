@@ -3,7 +3,7 @@ package voucher.presenter;
 
 public interface IVoucherPresenter {
 
-    void load();
+    void load(String url);
 
     void destroy();
 }

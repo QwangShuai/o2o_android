@@ -6,6 +6,7 @@ import android.os.Handler;
 import login.bean.UserBean;
 import login.listener.GetSecurityCodeListener;
 import login.listener.LoginListener;
+import login.listener.PostOnLineListener;
 import login.module.ILoginModule;
 import login.module.LoginModule;
 import login.view.ILoginActivity;
@@ -71,6 +72,31 @@ public class LoginPresenter implements ILoginPresenter {
                     public void run() {
                         iLoginActivity.loginFailure(loginFailure);
                         iLoginActivity.hideLoading();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void postOnLine(String id) {
+        iLoginModule.postOnLine(id, new PostOnLineListener() {
+            @Override
+            public void success() {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        iLoginActivity.postOnlineSuccess();
+                    }
+                });
+            }
+
+            @Override
+            public void failure() {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        iLoginActivity.postOnlineFailure();
                     }
                 });
             }

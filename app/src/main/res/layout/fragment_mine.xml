@@ -15,7 +15,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y5">
+        android:layout_marginTop="@dimen/x1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,53 +24,116 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y50"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white">
 
                 <view.CImageView
-                    android:id="@+id/iv_mine_head_shot"
-                    android:layout_width="@dimen/x50"
-                    android:layout_height="@dimen/x50"
+                    android:id="@+id/iv_frag_me_login_icon"
+                    android:layout_width="@dimen/y34"
+                    android:layout_height="@dimen/y34"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x20"
-                    android:layout_marginRight="@dimen/x20"
+                    android:layout_marginBottom="@dimen/y9"
+                    android:layout_marginLeft="@dimen/y15"
+                    android:layout_marginRight="@dimen/y15"
+                    android:layout_marginTop="@dimen/y9"
                     android:scaleType="fitXY"
                     android:src="@mipmap/person_face_default" />
 
-                <TextView
-                    android:id="@+id/tv_mine_login"
+                <RelativeLayout
+                    android:id="@+id/rl_frag_me_login_right_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/iv_mine_head_shot"
-                    android:background="@drawable/shape_mine_login"
-                    android:paddingBottom="@dimen/y1"
-                    android:paddingLeft="@dimen/x10"
-                    android:paddingRight="@dimen/x10"
-                    android:paddingTop="@dimen/y1"
-                    android:text="立即登录"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/x15" />
+                    android:layout_toRightOf="@+id/iv_frag_me_login_icon"
+                    android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/tv_mine_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/iv_mine_head_shot"
-                    android:text="王二妮"
-                    android:textColor="@android:color/black"
-                    android:visibility="invisible" />
+                    <TextView
+                        android:id="@+id/tv_mine_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/sl_me_login"
+                        android:paddingBottom="@dimen/y2"
+                        android:paddingLeft="@dimen/y9"
+                        android:paddingRight="@dimen/y9"
+                        android:paddingTop="@dimen/y2"
+                        android:text="立即登录"
+                        android:textColor="@color/red_ff3e50"
+                        android:textSize="@dimen/y9" />
 
-                <ImageView
-                    android:id="@+id/iv_mine_sex"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/y4"
+                        android:layout_toRightOf="@+id/tv_mine_login"
+                        android:text="开启轻松生活"
+                        android:textColor="@color/gray_c4ced3"
+                        android:textSize="@dimen/y8" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_frag_me_login_done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_toRightOf="@+id/tv_mine_username"
-                    android:src="@mipmap/female"
-                    android:visibility="invisible" />
+                    android:layout_marginRight="@dimen/y15"
+                    android:layout_toRightOf="@+id/iv_frag_me_login_icon"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_frag_me_login_name"
+                        android:layout_width="@dimen/y50"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:singleLine="true"
+                        android:textColor="@color/black_252323"
+                        android:textSize="@dimen/y9" />
+
+                    <ImageView
+                        android:id="@+id/iv_frag_me_login_sex"
+                        android:layout_width="@dimen/y8"
+                        android:layout_height="@dimen/y8"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/y5"
+                        android:layout_toRightOf="@+id/tv_frag_me_login_name"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:id="@+id/iv_frag_me_login_online"
+                        android:layout_width="@dimen/y26"
+                        android:layout_height="@dimen/y14"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/user_on_line" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/y5"
+                        android:layout_toLeftOf="@+id/iv_frag_me_login_online">
+
+                        <ImageView
+                            android:layout_width="@dimen/y40"
+                            android:layout_height="@dimen/y25"
+                            android:scaleType="fitXY"
+                            android:src="@mipmap/user_line_border" />
+
+                        <TextView
+                            android:id="@+id/tv_frag_me_login_line_tip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/y2"
+                            android:text="公开信息"
+                            android:textColor="@color/gray_a0a0a0"
+                            android:textSize="@dimen/y8" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -88,18 +151,12 @@
                     <LinearLayout style="@style/ll_main">
 
                         <ImageView
-                            android:layout_width="@dimen/x30"
-                            android:layout_height="@dimen/x30"
-                            android:layout_gravity="center_horizontal"
-                            android:scaleType="fitXY"
+                            style="@style/iv_me_collect"
                             android:src="@mipmap/collect_blue" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="收藏"
-                            android:textColor="@color/tv_main_default" />
+                            style="@style/tv_me_collect"
+                            android:text="收藏" />
 
                     </LinearLayout>
 
@@ -112,18 +169,12 @@
                     <LinearLayout style="@style/ll_main">
 
                         <ImageView
-                            android:layout_width="@dimen/x30"
-                            android:layout_height="@dimen/x30"
-                            android:layout_gravity="center_horizontal"
-                            android:scaleType="fitXY"
+                            style="@style/iv_me_collect"
                             android:src="@mipmap/evaluate" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="评价"
-                            android:textColor="@color/tv_main_default" />
+                            style="@style/tv_me_collect"
+                            android:text="评价" />
 
                     </LinearLayout>
 
@@ -136,18 +187,12 @@
                     <LinearLayout style="@style/ll_main">
 
                         <ImageView
-                            android:layout_width="@dimen/x30"
-                            android:layout_height="@dimen/x30"
-                            android:layout_gravity="center_horizontal"
-                            android:scaleType="fitXY"
+                            style="@style/iv_me_collect"
                             android:src="@mipmap/wallet" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="钱包"
-                            android:textColor="@color/tv_main_default" />
+                            style="@style/tv_me_collect"
+                            android:text="钱包" />
 
                     </LinearLayout>
 
@@ -160,18 +205,12 @@
                     <LinearLayout style="@style/ll_main">
 
                         <ImageView
-                            android:layout_width="@dimen/x30"
-                            android:layout_height="@dimen/x30"
-                            android:layout_gravity="center_horizontal"
-                            android:scaleType="fitXY"
+                            style="@style/iv_me_collect"
                             android:src="@mipmap/message1" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="消息"
-                            android:textColor="@color/tv_main_default" />
+                            style="@style/tv_me_collect"
+                            android:text="消息" />
 
                     </LinearLayout>
 
@@ -189,17 +228,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/x5"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:layout_marginTop="@dimen/x5"
+                    android:layout_margin="@dimen/y8"
                     android:text="我的资产"
-                    android:textColor="@color/tv_main_default"
-                    android:textSize="@dimen/x15" />
+                    android:textColor="@color/blue_2681fc"
+                    android:textSize="@dimen/y11" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/x1"
-                    android:background="@color/tv_main_default" />
+                    android:layout_height="1dp"
+                    android:background="@color/blue_2681fc" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -214,18 +251,12 @@
                         <LinearLayout style="@style/ll_main">
 
                             <ImageView
-                                android:layout_width="@dimen/x30"
-                                android:layout_height="@dimen/x30"
-                                android:layout_gravity="center_horizontal"
-                                android:scaleType="fitXY"
+                                style="@style/iv_me_collect"
                                 android:src="@mipmap/redbag" />
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:text="红包"
-                                android:textColor="@color/tv_main_default" />
+                                style="@style/tv_me_collect"
+                                android:text="红包" />
 
                         </LinearLayout>
 
@@ -238,50 +269,20 @@
                         <LinearLayout style="@style/ll_main">
 
                             <ImageView
-                                android:layout_width="@dimen/x30"
-                                android:layout_height="@dimen/x30"
-                                android:layout_gravity="center_horizontal"
-                                android:scaleType="fitXY"
+                                style="@style/iv_me_collect"
                                 android:src="@mipmap/voucher" />
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:text="代金券"
-                                android:textColor="@color/tv_main_default" />
+                                style="@style/tv_me_collect"
+                                android:text="代金券" />
 
                         </LinearLayout>
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/rl_mine_point"
-                        style="@style/rl_main">
+                    <RelativeLayout style="@style/rl_main" />
 
-                        <LinearLayout style="@style/ll_main">
-
-                            <ImageView
-                                android:layout_width="@dimen/x30"
-                                android:layout_height="@dimen/x30"
-                                android:layout_gravity="center_horizontal"
-                                android:scaleType="fitXY"
-                                android:src="@mipmap/point" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:text="积分"
-                                android:textColor="@color/tv_main_default" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout style="@style/rl_main">
-
-                    </RelativeLayout>
+                    <RelativeLayout style="@style/rl_main" />
 
                 </LinearLayout>
 
@@ -290,34 +291,16 @@
             <LinearLayout style="@style/ll_mine_service_out">
 
                 <LinearLayout
-                    android:id="@+id/ll_mine_invite_friend"
+                    android:id="@+id/ll_mine_set_cash_pwd"
                     style="@style/ll_mine_service_in">
 
                     <ImageView
                         style="@style/iv_mine_service"
-                        android:src="@mipmap/invite_friend" />
+                        android:src="@mipmap/set_cash_pwd" />
 
                     <TextView
                         style="@style/tv_mine_service"
-                        android:text="邀请好友" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout style="@style/ll_mine_service_out">
-
-                <LinearLayout
-                    android:id="@+id/ll_mine_service_clause"
-                    style="@style/ll_mine_service_in">
-
-                    <ImageView
-                        style="@style/iv_mine_service"
-                        android:src="@mipmap/service_clause" />
-
-                    <TextView
-                        style="@style/tv_mine_service"
-                        android:text="服务条款" />
+                        android:text="设置交易密码" />
 
                 </LinearLayout>
 
@@ -336,24 +319,6 @@
                     <TextView
                         style="@style/tv_mine_service"
                         android:text="设置" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout style="@style/ll_mine_service_out">
-
-                <LinearLayout
-                    android:id="@+id/ll_mine_custom_service"
-                    style="@style/ll_mine_service_in">
-
-                    <ImageView
-                        style="@style/iv_mine_service"
-                        android:src="@mipmap/custom_service" />
-
-                    <TextView
-                        style="@style/tv_mine_service"
-                        android:text="客服" />
 
                 </LinearLayout>
 

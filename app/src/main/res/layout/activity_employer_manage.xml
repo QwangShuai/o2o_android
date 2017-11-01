@@ -4,9 +4,9 @@
     android:id="@+id/activity_employer_manage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="activity.EmployerManageActivity">
+    tools:context="employermanage.view.EmployerManageActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -22,32 +22,11 @@
             style="@style/tv_top_title"
             android:text="雇主工作管理" />
 
-        <RelativeLayout
-            android:id="@+id/rl_employer_manage_draft"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/selector_press_or_not"
-            android:clickable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/x10"
-                android:layout_marginRight="@dimen/x10"
-                android:text="草稿箱"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/x15" />
-
-        </RelativeLayout>
-
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/y5"
         android:layout_marginTop="@dimen/y5"
         android:background="@android:color/white"
         android:orientation="horizontal">
@@ -60,49 +39,49 @@
                 android:id="@+id/tv_employer_manage_all"
                 style="@style/tv_manage"
                 android:text="全部"
-                android:textColor="@color/red" />
+                android:textColor="@color/red_ff3e50" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_employer_manage_wait_contact"
+            android:id="@+id/rl_employer_manage_wait"
             style="@style/rl_manage">
 
             <TextView
-                android:id="@+id/tv_employer_manage_wait_contact"
+                android:id="@+id/tv_employer_manage_wait"
                 style="@style/tv_manage"
                 android:text="待联系" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_employer_manage_contacting"
+            android:id="@+id/rl_employer_manage_talk"
             style="@style/rl_manage">
 
             <TextView
-                android:id="@+id/tv_employer_manage_contacting"
+                android:id="@+id/tv_employer_manage_talk"
                 style="@style/tv_manage"
                 android:text="洽谈中" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_employer_manage_under_way"
+            android:id="@+id/rl_employer_manage_doing"
             style="@style/rl_manage">
 
             <TextView
-                android:id="@+id/tv_employer_manage_under_way"
+                android:id="@+id/tv_employer_manage_doing"
                 style="@style/tv_manage"
                 android:text="进行中" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_employer_manage_finished"
+            android:id="@+id/rl_employer_manage_done"
             style="@style/rl_manage">
 
             <TextView
-                android:id="@+id/tv_employer_manage_finished"
+                android:id="@+id/tv_employer_manage_done"
                 style="@style/tv_manage"
                 android:text="已结束" />
 
@@ -110,10 +89,29 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv_employer_manage"
+    <FrameLayout
+        android:id="@+id/fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null" />
+        android:layout_height="match_parent">
+
+        <refreshload.PullToRefreshLayout
+            android:id="@+id/ptrl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/y5">
+
+            <include layout="@layout/head" />
+
+            <refreshload.PullableListView
+                android:id="@+id/plv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+
+            <include layout="@layout/foot" />
+
+        </refreshload.PullToRefreshLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

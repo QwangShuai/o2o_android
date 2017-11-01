@@ -4,9 +4,9 @@
     android:id="@+id/activity_worker_manage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="activity.WorkerManageActivity">
+    tools:context="workermanage.view.WorkerManageActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -24,6 +24,83 @@
 
     </RelativeLayout>
 
-    <View style="@style/v_split" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y5"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_worker_manage_all"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_worker_manage_all"
+                style="@style/tv_manage"
+                android:text="全部"
+                android:textColor="@color/red_ff3e50" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_worker_manage_talk"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_worker_manage_talk"
+                style="@style/tv_manage"
+                android:text="洽谈中" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_worker_manage_doing"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_worker_manage_doing"
+                style="@style/tv_manage"
+                android:text="进行中" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_worker_manage_done"
+            style="@style/rl_manage">
+
+            <TextView
+                android:id="@+id/tv_worker_manage_done"
+                style="@style/tv_manage"
+                android:text="已结束" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <refreshload.PullToRefreshLayout
+            android:id="@+id/ptrl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/y5">
+
+            <include layout="@layout/head" />
+
+            <refreshload.PullableListView
+                android:id="@+id/plv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+
+            <include layout="@layout/foot" />
+
+        </refreshload.PullToRefreshLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

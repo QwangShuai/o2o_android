@@ -1,48 +1,128 @@
 package password.view;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gjzg.R;
 
-import config.ShareConfig;
-import config.VarConfig;
-import phoneprove.view.PhoneProveActivity;
-import utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PwdActivity extends AppCompatActivity implements View.OnClickListener {
+import login.bean.UserBean;
+import password.presenter.IPwdPresenter;
+import password.presenter.PwdPresenter;
+import phoneprove.view.PhoneProveActivity;
+import taskconfirm.adapter.InputPasswordAdapter;
+import taskconfirm.bean.InputPasswordBean;
+import utils.UserUtils;
+import utils.Utils;
+import view.CProgressDialog;
+
+public class PwdActivity extends AppCompatActivity implements IPwdActivity, View.OnClickListener, AdapterView.OnItemClickListener {
 
     private View rootView;
     private RelativeLayout returnRl;
-    private EditText editText;
     private TextView textView;
     private ImageView pIv0, pIv1, pIv2, pIv3, pIv4, pIv5;
-    private LinearLayout pwdLl;
     private TextView fgtTv;
+    private CProgressDialog cpd;
 
-    private String firstPwd;
-    private String secondPwd;
-    private String beforePwd;
+    private String firstPwd, againPwd, originPwd;
 
-    private int state = VarConfig.PWD_FIRST;
+    private final int FIRST = 0, AGAIN = 1, ORIGIN = 2, NEW = 3, NEW_AGAIN = 4;
+    private int state;
 
-    private SharedPreferences sharedPreferences;
+    private IPwdPresenter pwdPresenter;
+
+    private GridView inputPasswordGv;
+    private List<InputPasswordBean> inputPasswordBeanList;
+    private InputPasswordAdapter inputPasswordAdapter;
+    private StringBuilder passwordSb;
+
+    private final int SET_PWD_SUCCESS = 0;
+    private final int SET_PWD_FAILURE = 1;
+    private final int ORI_PWD_SUCCESS = 2;
+    private final int ORI_PWD_FAILURE = 3;
+    private final int EDIT_PWD_SUCCESS = 4;
+    private final int EDIT_PWD_FAILURE = 5;
+    private final int FORGET_PWD_SUCCESS = 6;
+    private final int FORGET_PWD_FAILURE = 7;
+    private String pwdTip;
+    private boolean fromIdCard = false;
+    private String verifycode;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg != null) {
+                switch (msg.what) {
+                    case SET_PWD_SUCCESS:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        UserBean userBean = UserUtils.readUserData(PwdActivity.this);
+                        userBean.setPass("1");
+                        UserUtils.saveUserData(PwdActivity.this, userBean);
+                        finish();
+                        break;
+                    case SET_PWD_FAILURE:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        passwordSb.delete(0, passwordSb.length());
+                        refreshView();
+                        break;
+                    case ORI_PWD_SUCCESS:
+                        cpd.dismiss();
+                        passwordSb.delete(0, passwordSb.length());
+                        state = NEW;
+                        refreshView();
+                        break;
+                    case ORI_PWD_FAILURE:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        passwordSb.delete(0, passwordSb.length());
+                        refreshView();
+                        break;
+                    case EDIT_PWD_SUCCESS:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        finish();
+                        break;
+                    case EDIT_PWD_FAILURE:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        passwordSb.delete(0, passwordSb.length());
+                        refreshView();
+                        break;
+                    case FORGET_PWD_SUCCESS:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        finish();
+                        break;
+                    case FORGET_PWD_FAILURE:
+                        cpd.dismiss();
+                        Utils.toast(PwdActivity.this, pwdTip);
+                        passwordSb.delete(0, passwordSb.length());
+                        refreshView();
+                        break;
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,13 +135,20 @@ public class PwdActivity extends AppCompatActivity implements View.OnClickListen
         setListener();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            handler = null;
+        }
+    }
+
     private void initView() {
         initRootView();
     }
 
     private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_pwd_return);
-        editText = (EditText) rootView.findViewById(R.id.et_pwd);
         textView = (TextView) rootView.findViewById(R.id.tv_pwd_tip);
         pIv0 = (ImageView) rootView.findViewById(R.id.iv_pwd_point_0);
         pIv1 = (ImageView) rootView.findViewById(R.id.iv_pwd_point_1);
@@ -69,64 +156,87 @@ public class PwdActivity extends AppCompatActivity implements View.OnClickListen
         pIv3 = (ImageView) rootView.findViewById(R.id.iv_pwd_point_3);
         pIv4 = (ImageView) rootView.findViewById(R.id.iv_pwd_point_4);
         pIv5 = (ImageView) rootView.findViewById(R.id.iv_pwd_point_5);
-        pwdLl = (LinearLayout) rootView.findViewById(R.id.ll_pwd);
         fgtTv = (TextView) rootView.findViewById(R.id.tv_pwd_fgt);
+        cpd = Utils.initProgressDialog(PwdActivity.this, cpd);
+        inputPasswordGv = (GridView) rootView.findViewById(R.id.gv_input_password);
     }
 
     private void initData() {
-        sharedPreferences = getSharedPreferences(ShareConfig.shareName, Context.MODE_PRIVATE);
-        String payPwd = sharedPreferences.getString(ShareConfig.payPwd, null);
-        if (TextUtils.isEmpty(payPwd)) {
-            state = VarConfig.PWD_FIRST;
+        Intent intent = getIntent();
+        verifycode = intent.getStringExtra("verifycode");
+        if (!TextUtils.isEmpty(verifycode)) {
+            state = NEW;
+            fromIdCard = true;
         } else {
-            beforePwd = payPwd;
-            state = VarConfig.PWD_ORIGIN;
-            fgtTv.setVisibility(View.VISIBLE);
+            if (TextUtils.isEmpty(UserUtils.readUserData(PwdActivity.this).getPass())) {
+                state = FIRST;
+            } else {
+                state = ORIGIN;
+            }
         }
+        passwordSb = new StringBuilder();
+        pwdPresenter = new PwdPresenter(this);
         refreshView();
-        refreshPoint(0);
+        InputPasswordBean inputPasswordBean0 = new InputPasswordBean(0, 1, "");
+        InputPasswordBean inputPasswordBean1 = new InputPasswordBean(0, 2, "ABC");
+        InputPasswordBean inputPasswordBean2 = new InputPasswordBean(0, 3, "DEF");
+        InputPasswordBean inputPasswordBean3 = new InputPasswordBean(0, 4, "GHI");
+        InputPasswordBean inputPasswordBean4 = new InputPasswordBean(0, 5, "JKL");
+        InputPasswordBean inputPasswordBean5 = new InputPasswordBean(0, 6, "MNO");
+        InputPasswordBean inputPasswordBean6 = new InputPasswordBean(0, 7, "PQRS");
+        InputPasswordBean inputPasswordBean7 = new InputPasswordBean(0, 8, "TUV");
+        InputPasswordBean inputPasswordBean8 = new InputPasswordBean(0, 9, "WXYZ");
+        InputPasswordBean inputPasswordBean9 = new InputPasswordBean(1, 0, "");
+        InputPasswordBean inputPasswordBean10 = new InputPasswordBean(0, 0, "");
+        InputPasswordBean inputPasswordBean11 = new InputPasswordBean(2, 0, "");
+        inputPasswordBeanList = new ArrayList<>();
+        inputPasswordBeanList.add(inputPasswordBean0);
+        inputPasswordBeanList.add(inputPasswordBean1);
+        inputPasswordBeanList.add(inputPasswordBean2);
+        inputPasswordBeanList.add(inputPasswordBean3);
+        inputPasswordBeanList.add(inputPasswordBean4);
+        inputPasswordBeanList.add(inputPasswordBean5);
+        inputPasswordBeanList.add(inputPasswordBean6);
+        inputPasswordBeanList.add(inputPasswordBean7);
+        inputPasswordBeanList.add(inputPasswordBean8);
+        inputPasswordBeanList.add(inputPasswordBean9);
+        inputPasswordBeanList.add(inputPasswordBean10);
+        inputPasswordBeanList.add(inputPasswordBean11);
+        inputPasswordAdapter = new InputPasswordAdapter(PwdActivity.this, inputPasswordBeanList);
+        inputPasswordGv.setAdapter(inputPasswordAdapter);
+        Utils.setGridViewHeight(inputPasswordGv, 3);
     }
 
     private void setListener() {
-        editText.addTextChangedListener(textWatcher);
-        pwdLl.setOnClickListener(this);
         returnRl.setOnClickListener(this);
         fgtTv.setOnClickListener(this);
-    }
-
-    private void judge() {
-        if (firstPwd.equals(secondPwd)) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(ShareConfig.payPwd, firstPwd);
-            editor.commit();
-            Utils.toast(this, VarConfig.pwdSuccessTip);
-            finish();
-        } else {
-            Utils.toast(this, VarConfig.pwdDifferTip);
-        }
+        inputPasswordGv.setOnItemClickListener(this);
     }
 
     private void refreshView() {
         switch (state) {
-            case VarConfig.PWD_FIRST:
-                textView.setText(VarConfig.pwdFirstTip);
+            case FIRST:
+                textView.setText("设置六位提现密码");
+                fgtTv.setVisibility(View.INVISIBLE);
                 break;
-            case VarConfig.PWD_AGAIN:
-                textView.setText(VarConfig.pwdAgainTip);
+            case AGAIN:
+                textView.setText("请再输入一次");
+                fgtTv.setVisibility(View.INVISIBLE);
                 break;
-            case VarConfig.PWD_ORIGIN:
-                textView.setText(VarConfig.pwdOriginTip);
+            case ORIGIN:
+                textView.setText("请输入原密码");
+                fgtTv.setVisibility(View.VISIBLE);
                 break;
-            case VarConfig.PWD_NEW:
-                textView.setText(VarConfig.pwdNewTip);
+            case NEW:
+                textView.setText("请输入新密码");
+                fgtTv.setVisibility(View.INVISIBLE);
                 break;
-            default:
+            case NEW_AGAIN:
+                textView.setText("再次输入新密码");
+                fgtTv.setVisibility(View.INVISIBLE);
                 break;
         }
-    }
-
-    private void refreshPoint(int length) {
-        switch (length) {
+        switch (passwordSb.length()) {
             case 0:
                 pIv0.setVisibility(View.GONE);
                 pIv1.setVisibility(View.GONE);
@@ -186,70 +296,139 @@ public class PwdActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            refreshPoint(s.length());
-            if (s.length() == 6) {
-                switch (state) {
-                    case VarConfig.PWD_FIRST:
-                        firstPwd = s.toString();
-                        editText.setText("");
-                        state = VarConfig.PWD_AGAIN;
-                        refreshView();
-                        refreshPoint(0);
-                        break;
-                    case VarConfig.PWD_AGAIN:
-                        secondPwd = s.toString();
-                        judge();
-                        break;
-                    case VarConfig.PWD_ORIGIN:
-                        if (beforePwd.equals(s.toString())) {
-                            editText.setText("");
-                            state = VarConfig.PWD_NEW;
-                            refreshView();
-                            refreshPoint(0);
-                        } else {
-                            Utils.toast(PwdActivity.this, VarConfig.pwdErrorTip);
-                        }
-                        break;
-                    case VarConfig.PWD_NEW:
-                        firstPwd = s.toString();
-                        editText.setText("");
-                        state = VarConfig.PWD_AGAIN;
-                        refreshView();
-                        refreshPoint(0);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    };
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_pwd_return:
                 finish();
                 break;
-            case R.id.ll_pwd:
-                editText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                break;
             case R.id.tv_pwd_fgt:
                 startActivity(new Intent(this, PhoneProveActivity.class));
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void showSetPwdSuccess(String success) {
+        pwdTip = success;
+        handler.sendEmptyMessage(SET_PWD_SUCCESS);
+    }
+
+    @Override
+    public void showSetPwdFailure(String failure) {
+        pwdTip = failure;
+        handler.sendEmptyMessage(SET_PWD_FAILURE);
+    }
+
+    @Override
+    public void showProveOriPwdSuccess(String success) {
+        handler.sendEmptyMessage(ORI_PWD_SUCCESS);
+    }
+
+    @Override
+    public void showProveOriPwdFailure(String failure) {
+        pwdTip = failure;
+        handler.sendEmptyMessage(ORI_PWD_FAILURE);
+    }
+
+    @Override
+    public void showEditPwdSuccess(String success) {
+        pwdTip = success;
+        handler.sendEmptyMessage(EDIT_PWD_SUCCESS);
+    }
+
+    @Override
+    public void showEditPwdFailure(String failure) {
+        pwdTip = failure;
+        handler.sendEmptyMessage(EDIT_PWD_FAILURE);
+    }
+
+    @Override
+    public void showForgetPwdSuccess(String success) {
+        pwdTip = success;
+        handler.sendEmptyMessage(FORGET_PWD_SUCCESS);
+    }
+
+    @Override
+    public void showForgetPwdFailure(String failure) {
+        pwdTip = failure;
+        handler.sendEmptyMessage(FORGET_PWD_FAILURE);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.gv_input_password:
+                InputPasswordBean inputPasswordBean = inputPasswordBeanList.get(position);
+                if (inputPasswordBean != null) {
+                    switch (inputPasswordBean.getType()) {
+                        case 0:
+                            if (passwordSb.length() < 6) {
+                                passwordSb.append(inputPasswordBean.getNumber());
+                            }
+                            if (passwordSb.length() == 6) {
+                                inputDone();
+                            }
+                            break;
+                        case 2:
+                            if (passwordSb.length() != 0) {
+                                passwordSb.deleteCharAt(passwordSb.length() - 1);
+                            }
+                            break;
+                    }
+                    refreshView();
+                }
+                break;
+        }
+    }
+
+    private void inputDone() {
+        switch (state) {
+            case FIRST:
+                firstPwd = passwordSb.toString();
+                state = AGAIN;
+                passwordSb.delete(0, passwordSb.length());
+                refreshView();
+                break;
+            case AGAIN:
+                againPwd = passwordSb.toString();
+                if (firstPwd.equals(againPwd)) {
+                    cpd.show();
+                    pwdPresenter.setPwd(UserUtils.readUserData(PwdActivity.this).getId(), againPwd);
+                } else {
+                    Utils.toast(this, "两次密码不正确");
+                    passwordSb.delete(0, passwordSb.length());
+                    refreshView();
+                }
+                break;
+            case ORIGIN:
+                originPwd = passwordSb.toString();
+                cpd.show();
+                pwdPresenter.proveOriPwd(UserUtils.readUserData(PwdActivity.this).getId(), originPwd);
+                break;
+            case NEW:
+                firstPwd = passwordSb.toString();
+                state = NEW_AGAIN;
+                passwordSb.delete(0, passwordSb.length());
+                refreshView();
+                break;
+            case NEW_AGAIN:
+                againPwd = passwordSb.toString();
+                if (firstPwd.equals(againPwd)) {
+                    cpd.show();
+                    if (fromIdCard) {
+                        UserBean userBean = UserUtils.readUserData(PwdActivity.this);
+                        pwdPresenter.forgetPwd(userBean.getMobile(), verifycode, againPwd, userBean.getIdcard());
+                        Log.e("PwdActivity", "forgetPwd");
+                    } else {
+                        pwdPresenter.editPwd(UserUtils.readUserData(PwdActivity.this).getId(), originPwd, againPwd);
+                    }
+                } else {
+                    Utils.toast(this, "两次密码不正确");
+                    passwordSb.delete(0, passwordSb.length());
+                    refreshView();
+                }
                 break;
         }
     }

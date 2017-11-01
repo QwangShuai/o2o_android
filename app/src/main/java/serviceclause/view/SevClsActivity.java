@@ -87,7 +87,7 @@ public class SevClsActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadData() {
-        sevClsWv.loadUrl(NetConfig.sevClsUrl);
+//        sevClsWv.loadUrl(NetConfig.sevClsUrl);
     }
 
     @Override

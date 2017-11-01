@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import config.ShareConfig;
 import config.VarConfig;
 import service.CodeTimerService;
 import utils.Utils;
@@ -28,8 +27,6 @@ public class PhoneBindActivity extends AppCompatActivity implements View.OnClick
     private RelativeLayout returnRl;
     private EditText phoneEt, pwdEt;
     private TextView getPwdTv, tipTv, sureTv;
-
-    private SharedPreferences sp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,10 +54,7 @@ public class PhoneBindActivity extends AppCompatActivity implements View.OnClick
 
     private void initData() {
         tipTv.setText("手机号码便于登录和接收雇主来电，重新绑定后，请使用新的手机号码登录");
-        sp = getSharedPreferences(ShareConfig.shareName, MODE_PRIVATE);
-        if (!sp.getBoolean(ShareConfig.getCode, false)) {
-            getPwdTv.setText(VarConfig.getPwdTip);
-        }
+        getPwdTv.setText(VarConfig.getPwdTip);
     }
 
     private void setListener() {
@@ -77,9 +71,6 @@ public class PhoneBindActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.tv_phone_bind_get_pwd:
                 if (Utils.isPhonenumber(phoneEt.getText().toString())) {
-                    SharedPreferences.Editor et = sp.edit();
-                    et.putBoolean(ShareConfig.getCode, true);
-                    et.commit();
                     startService(new Intent(PhoneBindActivity.this, CodeTimerService.class));
                 } else {
                     Utils.toast(this, VarConfig.phoneErrorTip);
@@ -117,9 +108,6 @@ public class PhoneBindActivity extends AppCompatActivity implements View.OnClick
                 case CodeTimerService.END_RUNNING:
                     getPwdTv.setEnabled(true);
                     getPwdTv.setText(VarConfig.getPwdTip);
-                    SharedPreferences.Editor et = sp.edit();
-                    et.putBoolean(ShareConfig.getCode, false);
-                    et.commit();
                     break;
             }
         }

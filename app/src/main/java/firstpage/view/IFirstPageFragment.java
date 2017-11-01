@@ -3,15 +3,19 @@ package firstpage.view;
 
 public interface IFirstPageFragment {
 
-    void showLoading();
+    void showHotSuccess(String json);
 
-    void showHotJson(String hotJson);
+    void showHotFailure(String failure);
 
-    void showComJson(String comJson);
+    void showComSuccess(String json);
 
-    void showSaveHotJsonSuccess();
+    void showComFailure(String failure);
 
-    void showSaveComJsonSuccess();
+    void showLocIdSuccess(String id);
 
-    void getLocateCityId(String cityId);
+    void showLocIdFailure(String failure);
+
+    void changePositionSuccess(String json);
+
+    void changePositionFailure(String failure);
 }

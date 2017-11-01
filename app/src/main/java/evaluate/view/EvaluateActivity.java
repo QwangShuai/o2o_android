@@ -22,17 +22,9 @@ import com.gjzg.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import complain.view.ComplainActivity;
-import config.NetConfig;
 import config.StateConfig;
-import config.VarConfig;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import utils.Utils;
 import view.CProgressDialog;
 
@@ -102,13 +94,13 @@ public class EvaluateActivity extends AppCompatActivity implements View.OnClickL
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_evaluate_return);
         fl = (FrameLayout) rootView.findViewById(R.id.fl_resign);
         conLl = (LinearLayout) rootView.findViewById(R.id.ll_resign_con);
-        nameTv = (TextView) rootView.findViewById(R.id.tv_resign_name);
-        identityTv = (TextView) rootView.findViewById(R.id.tv_resign_identity);
-        countTv = (TextView) rootView.findViewById(R.id.tv_resign_count);
-        complainTv = (TextView) rootView.findViewById(R.id.tv_resign_complain);
+        nameTv = (TextView) rootView.findViewById(R.id.tv_evaluate_name);
+        identityTv = (TextView) rootView.findViewById(R.id.tv_evaluate_skill);
+        countTv = (TextView) rootView.findViewById(R.id.tv_evaluate_count);
+        complainTv = (TextView) rootView.findViewById(R.id.tv_evaluate_complain);
         priceTv = (TextView) rootView.findViewById(R.id.tv_evaluate_price);
-        iconIv = (ImageView) rootView.findViewById(R.id.iv_resign_icon);
-        sexIv = (ImageView) rootView.findViewById(R.id.iv_resign_sex);
+        iconIv = (ImageView) rootView.findViewById(R.id.iv_evaluate_icon);
+        sexIv = (ImageView) rootView.findViewById(R.id.iv_evaluate_sex);
         praise1Iv = (ImageView) rootView.findViewById(R.id.iv_evaluate_praise_1);
         praise2Iv = (ImageView) rootView.findViewById(R.id.iv_evaluate_praise_2);
         praise3Iv = (ImageView) rootView.findViewById(R.id.iv_evaluate_praise_3);
@@ -165,21 +157,21 @@ public class EvaluateActivity extends AppCompatActivity implements View.OnClickL
 
     private void loadNetData() {
         cpd.show();
-        Request request = new Request.Builder().url(NetConfig.testUrl).get().build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String result = response.body().string();
-                    parseJson(result);
-                }
-            }
-        });
+//        Request request = new Request.Builder().url(NetConfig.testUrl).get().build();
+//        okHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    String result = response.body().string();
+//                    parseJson(result);
+//                }
+//            }
+//        });
     }
 
     private void parseJson(String json) {
@@ -209,11 +201,10 @@ public class EvaluateActivity extends AppCompatActivity implements View.OnClickL
             case R.id.rl_evaluate_return:
                 finish();
                 break;
-            case R.id.tv_resign_complain:
+            case R.id.tv_evaluate_complain:
                 startActivity(new Intent(this, ComplainActivity.class));
                 break;
             case R.id.ll_evaluate_detail:
-                Utils.toast(this, VarConfig.notyetTip);
                 break;
             case R.id.iv_evaluate_praise_1:
                 praise = 1;

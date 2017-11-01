@@ -1,11 +1,6 @@
 package city.module;
 
 
-import android.content.Context;
-import android.text.TextUtils;
-
-import com.gjzg.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,69 +9,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 import city.bean.CityBean;
-import city.listener.LoadCityListener;
-import config.CacheConfig;
-import utils.Utils;
+import city.bean.CityBigBean;
+import city.listener.CityListener;
 
 public class CityModule implements ICityModule {
 
     @Override
-    public void load(Context context, LoadCityListener loadCityListener) {
-        String hotCityJson = Utils.readCache(context, "-100", CacheConfig.hotCity);
-        if (!TextUtils.isEmpty(hotCityJson)) {
-            try {
-                JSONObject objBean = new JSONObject(hotCityJson);
-                if (objBean.optInt("code") == 200) {
-                    List<CityBean> cityBeanList = new ArrayList<>();
-                    CityBean b = new CityBean();
-                    b.setId("-1");
-                    b.setName("热门城市");
-                    cityBeanList.add(b);
-                    JSONArray arrData = objBean.optJSONArray("data");
-                    for (int i = 0; i < arrData.length(); i++) {
-                        JSONObject o = arrData.optJSONObject(i);
+    public void load(String[] letter, CityBigBean cityBigBean, CityListener cityListener) {
+        List<CityBean> cityBeanList = new ArrayList<>();
+        cityBeanList.add(cityBigBean.getCityBean());
+        try {
+            JSONObject hotObj = new JSONObject(cityBigBean.getHotJson());
+            if (hotObj.optInt("code") == 200) {
+                JSONArray dataArr = hotObj.optJSONArray("data");
+                if (dataArr != null) {
+                    CityBean cb = new CityBean();
+                    cb.setId("-1");
+                    cb.setName("热门城市");
+                    cityBeanList.add(cb);
+                    for (int i = 0; i < dataArr.length(); i++) {
+                        JSONObject o = dataArr.optJSONObject(i);
                         if (o != null) {
-                            CityBean cb = new CityBean();
-                            cb.setId(o.optString("r_id"));
-                            cb.setName(o.optString("r_name"));
-                            cityBeanList.add(cb);
-                        }
-                    }
-                    String comCityJson = Utils.readCache(context, "-100", CacheConfig.comCity);
-                    if (!TextUtils.isEmpty(comCityJson)) {
-                        try {
-                            JSONObject objBean0 = new JSONObject(comCityJson);
-                            if (objBean.optInt("code") == 200) {
-                                JSONObject objData = objBean0.optJSONObject("data");
-                                String[] lowerLetter = context.getResources().getStringArray(R.array.lowerletter);
-                                for (int i = 0; i < lowerLetter.length; i++) {
-                                    JSONArray lowArr = objData.optJSONArray(lowerLetter[i]);
-                                    if (lowArr != null) {
-                                        CityBean cb = new CityBean();
-                                        cb.setId("-1");
-                                        cb.setName(lowerLetter[i].toUpperCase());
-                                        cityBeanList.add(cb);
-                                        for (int j = 0; j < lowArr.length(); j++) {
-                                            JSONObject o = lowArr.optJSONObject(j);
-                                            if (o != null) {
-                                                CityBean c = new CityBean();
-                                                c.setId(o.optString("r_id"));
-                                                c.setName(o.optString("r_name"));
-                                                cityBeanList.add(c);
-                                            }
-                                        }
-                                    }
-                                }
-                                loadCityListener.loadSuccess(cityBeanList);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            CityBean c = new CityBean();
+                            c.setId(o.optString("r_id"));
+                            c.setName(o.optString("r_name"));
+                            cityBeanList.add(c);
                         }
                     }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            JSONObject comObj = new JSONObject(cityBigBean.getComJson());
+            if (comObj.optInt("code") == 200) {
+                JSONObject dataObj = comObj.optJSONObject("data");
+                if (dataObj != null) {
+                    for (int i = 0; i < letter.length; i++) {
+                        JSONArray arr = dataObj.optJSONArray(letter[i]);
+                        if (arr != null) {
+                            CityBean c = new CityBean();
+                            c.setId("-1");
+                            c.setName(letter[i].toUpperCase());
+                            cityBeanList.add(c);
+                            for (int j = 0; j < arr.length(); j++) {
+                                JSONObject o = arr.optJSONObject(j);
+                                if (o != null) {
+                                    CityBean cityBean = new CityBean();
+                                    cityBean.setId(o.optString("r_id"));
+                                    cityBean.setName(o.optString("r_name"));
+                                    cityBeanList.add(cityBean);
+                                }
+                            }
+                        }
+                    }
+                    cityListener.loadSuccess(cityBeanList);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -60,7 +60,6 @@ public class IdActivity extends AppCompatActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.tv_id_next:
-                Utils.toast(this, VarConfig.notyetTip);
                 break;
             default:
                 break;

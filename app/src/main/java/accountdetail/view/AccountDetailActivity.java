@@ -1,6 +1,8 @@
 package accountdetail.view;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -15,29 +17,19 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.DetailAdapter;
-import bean.AccountDetailBean;
-import bean.WithDrawBean;
-import config.NetConfig;
-import config.StateConfig;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import accountdetail.adapter.DetailAdapter;
+import accountdetail.bean.AccountDetailBean;
+import accountdetail.presenter.AccountDetailPresenter;
+import accountdetail.presenter.IAccountDetailPresenter;
 import refreshload.PullToRefreshLayout;
 import refreshload.PullableListView;
+import utils.UrlUtils;
 import utils.Utils;
 
-public class AccountDetailActivity extends AppCompatActivity implements View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
+public class AccountDetailActivity extends AppCompatActivity implements IAccountDetailActivity, View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
 
     private View rootView;
     private RelativeLayout returnRl;
@@ -50,14 +42,24 @@ public class AccountDetailActivity extends AppCompatActivity implements View.OnC
     private PullableListView plv;
     private List<AccountDetailBean> list;
     private DetailAdapter adapter;
-    private int state = StateConfig.LOAD_DONE;
-    private OkHttpClient okHttpClient;
 
-    private int id = 2, page = 1;
-    private final String CATEGORY_ALL = "all";
-    private final String CATEGORY_WITHDRAW = "withdraw";
-    private final String CATEGORY_RECHARGE = "recharge";
-    private String category = CATEGORY_ALL;
+    private final int ALL = 0, WITHDRAW = 1, RECHARGE = 2;
+    private int LOG_STATE = ALL;
+    private IAccountDetailPresenter accountDetailPresenter;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg != null) {
+                switch (msg.what) {
+                    case 1:
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +72,15 @@ public class AccountDetailActivity extends AppCompatActivity implements View.OnC
         setData();
         setListener();
         loadData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            handler.removeMessages(1);
+            handler = null;
+        }
     }
 
     private void initView() {
@@ -104,9 +115,9 @@ public class AccountDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initData() {
+        accountDetailPresenter = new AccountDetailPresenter(this);
         list = new ArrayList<>();
         adapter = new DetailAdapter(this, list);
-        okHttpClient = new OkHttpClient();
     }
 
     private void setData() {
@@ -123,101 +134,13 @@ public class AccountDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void loadData() {
-        AccountDetailBean d0 = new AccountDetailBean();
-        d0.setTitle("提现");
-        d0.setDes("-300.00");
-        d0.setTime("2017-08-06");
-        d0.setBalance("余额：100.00");
-        AccountDetailBean d1 = new AccountDetailBean();
-        d1.setTitle("支付");
-        d1.setDes("-300.00");
-        d1.setTime("2017-08-01");
-        d1.setBalance("余额：100.00");
-        AccountDetailBean d2 = new AccountDetailBean();
-        d2.setTitle("充值");
-        d2.setDes("+100.00");
-        d2.setTime("2017-07-06");
-        d2.setBalance("余额：200.00");
-        AccountDetailBean d3 = new AccountDetailBean();
-        d3.setTitle("收入");
-        d3.setDes("+100.00");
-        d3.setTime("2016-08-06");
-        d3.setBalance("余额：300.00");
-        list.add(d0);
-        list.add(d1);
-        list.add(d2);
-        list.add(d3);
-        adapter.notifyDataSetChanged();
-        switch (state) {
-            case StateConfig.LOAD_REFRESH:
-                ptrl.hideHeadView();
-                break;
-            case StateConfig.LOAD_LOAD:
-                ptrl.hideFootView();
-                break;
-            default:
-                break;
-        }
-        loadAccountDetailData();
-    }
-
-    private void loadAccountDetailData() {
-        String url = NetConfig.accountDetailUrl + "?u_id=" + id + "&page=" + page + "&category=" + category;
-        Request request = new Request.Builder().url(url).get().build();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String json = response.body().string();
-                    Utils.log(AccountDetailActivity.this, "json=" + json);
-                    if (category.equals("withdraw")) {
-                        parseWithDrawJson(json);
-                    }
-                }
-            }
-        });
+        accountDetailPresenter.load(UrlUtils.getUsersFundsLogUrl(AccountDetailActivity.this, LOG_STATE));
     }
 
     private void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha;
         getWindow().setAttributes(lp);
-    }
-
-    private void parseWithDrawJson(String json) {
-        Utils.log(AccountDetailActivity.this, "withDraw=" + json);
-        try {
-            JSONObject objBean = new JSONObject(json);
-            if (objBean.optInt("code") == 1) {
-                JSONObject objData = objBean.optJSONObject("data");
-                if (objData != null) {
-                    JSONArray arrWithDraw = objData.optJSONArray("withdraw_list");
-                    if (arrWithDraw != null) {
-                        for (int i = 0; i < arrWithDraw.length(); i++) {
-                            JSONObject o = arrWithDraw.optJSONObject(i);
-                            if (o != null) {
-                                WithDrawBean w = new WithDrawBean();
-                                w.setUwl_id(o.optString("uwl_id"));
-                                w.setUwl_amount(o.optString("uwl_amount"));
-                                w.setUwl_in_time(o.optString("uwl_in_time"));
-                                w.setUwl_status(o.optString("uwl_status"));
-                                w.setUwl_solut_time(o.optString("uwl_solut_time"));
-                                w.setUwl_card(o.optString("uwl_card"));
-                                w.setP_id(o.optString("p_id"));
-                                Utils.log(AccountDetailActivity.this, "withDrawBean=" + w.toString());
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -236,27 +159,24 @@ public class AccountDetailActivity extends AppCompatActivity implements View.OnC
                 if (menuPopWindow.isShowing()) {
                     menuPopWindow.dismiss();
                     menuContentTv.setText("全部");
-                    page = 1;
-                    category = CATEGORY_ALL;
-                    loadAccountDetailData();
+                    LOG_STATE = ALL;
+                    loadData();
                 }
                 break;
             case R.id.rl_popwindow_detail_menu_out:
                 if (menuPopWindow.isShowing()) {
                     menuPopWindow.dismiss();
                     menuContentTv.setText("支出");
-                    page = 1;
-                    category = CATEGORY_WITHDRAW;
-                    loadAccountDetailData();
+                    LOG_STATE = RECHARGE;
+                    loadData();
                 }
                 break;
             case R.id.rl_popwindow_detail_menu_in:
                 if (menuPopWindow.isShowing()) {
                     menuPopWindow.dismiss();
                     menuContentTv.setText("收入");
-                    page = 1;
-                    category = CATEGORY_RECHARGE;
-                    loadAccountDetailData();
+                    LOG_STATE = WITHDRAW;
+                    loadData();
                 }
                 break;
         }
@@ -264,14 +184,24 @@ public class AccountDetailActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-        list.clear();
-        state = StateConfig.LOAD_REFRESH;
-        loadData();
+        ptrl.hideHeadView();
     }
 
     @Override
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-        state = StateConfig.LOAD_LOAD;
-        loadData();
+        ptrl.hideFootView();
+    }
+
+    @Override
+    public void showSuccess(List<AccountDetailBean> accountDetailBeanList) {
+        Utils.log(AccountDetailActivity.this, accountDetailBeanList.toString());
+        list.clear();
+        list.addAll(accountDetailBeanList);
+        handler.sendEmptyMessage(1);
+    }
+
+    @Override
+    public void showFailure(String failure) {
+
     }
 }

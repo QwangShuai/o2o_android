@@ -1,11 +1,13 @@
 package collectworker.module;
 
 
-import collectworker.listener.OnLoadCollectWorkerListener;
+import listener.JsonListener;
 
 public interface ICollectWorkerModule {
 
-    void load(String id, OnLoadCollectWorkerListener onLoadCollectWorkerListener);
+    void load(String url, JsonListener jsonListener);
+
+    void cancelCollect(String url, JsonListener jsonListener);
 
     void cancelTask();
 }

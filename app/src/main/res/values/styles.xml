@@ -20,9 +20,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:clickable">true</item>
-        <item name="android:layout_marginTop">@dimen/y2</item>
-        <item name="android:layout_marginBottom">@dimen/y2</item>
-        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:background">@drawable/sl_press</item>
     </style>
     <!--主页底部按钮LinearLayout样式-->
     <style name="ll_main">
@@ -47,15 +45,19 @@
     </style>
     <!--首页三图样式-->
     <style name="iv_first_page">
-        <item name="android:layout_width">@dimen/x298</item>
-        <item name="android:layout_height">@dimen/y98</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_marginLeft">@dimen/y5</item>
+        <item name="android:layout_marginRight">@dimen/y5</item>
+        <item name="android:layout_marginTop">@dimen/y5</item>
     </style>
     <!--工作管理充值ImageView样式-->
     <style name="iv_job_mag_pay">
-        <item name="android:layout_width">@dimen/y29</item>
-        <item name="android:layout_height">@dimen/y29</item>
+        <item name="android:layout_width">@dimen/y24</item>
+        <item name="android:layout_height">@dimen/y24</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:scaleType">fitXY</item>
         <item name="android:layout_marginTop">@dimen/x10</item>
@@ -76,18 +78,18 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginLeft">@dimen/y15</item>
+        <item name="android:layout_marginLeft">@dimen/y20</item>
         <item name="android:textColor">@color/blue_2681fc</item>
         <item name="android:textSize">@dimen/y11</item>
         <item name="android:textStyle">bold</item>
     </style>
     <!--工作管理工人工作管理ImageView样式-->
     <style name="iv_job_mag_mag">
-        <item name="android:layout_width">@dimen/y25</item>
-        <item name="android:layout_height">@dimen/y25</item>
+        <item name="android:layout_width">@dimen/y20</item>
+        <item name="android:layout_height">@dimen/y20</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginRight">@dimen/y29</item>
+        <item name="android:layout_marginRight">@dimen/y20</item>
         <item name="android:scaleType">fitXY</item>
         <item name="android:src">@mipmap/right</item>
     </style>
@@ -148,9 +150,9 @@
     <style name="ll_mine_service_out">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/y6</item>
+        <item name="android:layout_marginTop">@dimen/y5</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">@color/white_ffffff</item>
     </style>
     <!--我的客服LinearLayout内部样式-->
     <style name="ll_mine_service_in">
@@ -158,6 +160,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/sl_press</item>
     </style>
     <!--我的客服图片样式-->
     <style name="iv_mine_service">
@@ -188,6 +191,7 @@
     <style name="rl_return">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/sl_press</item>
     </style>
     <!--返回图片样式-->
     <style name="iv_return">
@@ -212,6 +216,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/sl_press</item>
     </style>
 
     <style name="tv_manage">
@@ -220,7 +225,7 @@
         <item name="android:layout_centerInParent">true</item>
         <item name="android:layout_marginTop">@dimen/y5</item>
         <item name="android:layout_marginBottom">@dimen/y5</item>
-        <item name="android:textColor">@color/gray_a0a0a0</item>
+        <item name="android:textColor">@color/black_252323</item>
         <item name="android:textSize">@dimen/y11</item>
     </style>
 
@@ -255,6 +260,7 @@
     </style>
 
     <style name="tv_pwd">
+        <item name="android:textColor">@color/black_252323</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerInParent">true</item>

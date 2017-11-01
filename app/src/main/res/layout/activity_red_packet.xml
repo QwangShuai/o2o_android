@@ -4,6 +4,7 @@
     android:id="@+id/activity_red_packet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="redpacket.view.RedPacketActivity">
 
@@ -23,12 +24,29 @@
 
     </RelativeLayout>
 
-    <View style="@style/v_split" />
-
-    <ListView
-        android:id="@+id/lv_red_packet"
+    <FrameLayout
+        android:id="@+id/fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null" />
+        android:layout_height="match_parent">
+
+        <refreshload.PullToRefreshLayout
+            android:id="@+id/ptrl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/y5">
+
+            <include layout="@layout/head" />
+
+            <refreshload.PullableListView
+                android:id="@+id/plv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+
+            <include layout="@layout/foot" />
+
+        </refreshload.PullToRefreshLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

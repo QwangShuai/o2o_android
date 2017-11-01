@@ -60,7 +60,13 @@ public class InputPasswordAdapter extends BaseAdapter {
                     holder.rl.setVisibility(View.VISIBLE);
                     holder.ll.setVisibility(View.VISIBLE);
                     holder.deleteIv.setVisibility(View.INVISIBLE);
+                    if (inputPasswordBean.getNumber() == 0) {
+                        holder.letterTv.setVisibility(View.GONE);
+                    } else {
+                        holder.letterTv.setVisibility(View.VISIBLE);
+                    }
                     holder.numberTv.setText(inputPasswordBean.getNumber() + "");
+                    holder.letterTv.setText(inputPasswordBean.getLetter());
                     break;
                 case 1:
                     holder.rl.setVisibility(View.INVISIBLE);
@@ -78,13 +84,14 @@ public class InputPasswordAdapter extends BaseAdapter {
 
     private class ViewHolder {
 
-        private TextView numberTv;
+        private TextView numberTv, letterTv;
         private RelativeLayout rl;
         private LinearLayout ll;
         private ImageView deleteIv;
 
         public ViewHolder(View itemView) {
             numberTv = (TextView) itemView.findViewById(R.id.tv_item_pop_input_password_number);
+            letterTv = (TextView) itemView.findViewById(R.id.tv_item_pop_input_password_letter);
             rl = (RelativeLayout) itemView.findViewById(R.id.rl_item_pop_input_password);
             ll = (LinearLayout) itemView.findViewById(R.id.ll_item_pop_input_password);
             deleteIv = (ImageView) itemView.findViewById(R.id.iv_item_pop_input_password_delete);

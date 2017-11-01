@@ -10,17 +10,17 @@ import android.widget.TextView;
 
 import com.gjzg.R;
 
-import publishjob.bean.PublishJobBean;
-import publishjob.bean.PublishKindBean;
+import bean.PublishBean;
+import bean.PublishWorkerBean;
 
 public class TaskConfirmAdapter extends BaseAdapter {
 
     private Context context;
-    private PublishJobBean publishJobBean;
+    private PublishBean publishBean;
 
-    public TaskConfirmAdapter(Context context, PublishJobBean publishJobBean) {
+    public TaskConfirmAdapter(Context context, PublishBean publishBean) {
         this.context = context;
-        this.publishJobBean = publishJobBean;
+        this.publishBean = publishBean;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class TaskConfirmAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 1 + publishJobBean.getPublishKindBeanList().size();
+        return 1 + publishBean.getPublishWorkerBeanList().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return publishJobBean;
+        return publishBean;
     }
 
     @Override
@@ -65,11 +65,11 @@ public class TaskConfirmAdapter extends BaseAdapter {
                 } else {
                     holder0 = (ViewHolder0) convertView.getTag();
                 }
-                holder0.titleTv.setText(publishJobBean.getTitle());
-                holder0.descriptionTv.setText(publishJobBean.getDescription());
-                holder0.typeTv.setText(publishJobBean.getType());
-                holder0.areaTv.setText(publishJobBean.getArea());
-                holder0.addressTv.setText(publishJobBean.getAddress());
+                holder0.titleTv.setText(publishBean.getTitle());
+                holder0.descriptionTv.setText(publishBean.getInfo());
+                holder0.typeTv.setText(publishBean.getType());
+                holder0.areaTv.setText(publishBean.getArea());
+                holder0.addressTv.setText(publishBean.getAddress());
                 break;
             case 1:
                 if (convertView == null) {
@@ -79,11 +79,11 @@ public class TaskConfirmAdapter extends BaseAdapter {
                 } else {
                     holder1 = (ViewHolder1) convertView.getTag();
                 }
-                PublishKindBean publishKindBean = publishJobBean.getPublishKindBeanList().get(position - 1);
-                holder1.kindTv.setText(publishKindBean.getKind());
-                holder1.amountTv.setText(publishKindBean.getAmount() + "人");
-                holder1.salaryTv.setText(publishKindBean.getSalary() + "元/人/天");
-                holder1.durationTv.setText(publishKindBean.getStartTime() + "-" + publishKindBean.getEndTime());
+                PublishWorkerBean publishWorkerBean = publishBean.getPublishWorkerBeanList().get(position - 1);
+                holder1.kindTv.setText(publishWorkerBean.getKind());
+                holder1.amountTv.setText(publishWorkerBean.getAmount() + "人");
+                holder1.salaryTv.setText(publishWorkerBean.getSalary() + "元/人/天");
+                holder1.durationTv.setText(publishWorkerBean.getStartTime() + "-" + publishWorkerBean.getEndTime());
                 break;
         }
         return convertView;

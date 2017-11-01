@@ -4,6 +4,7 @@
     android:id="@+id/activity_pwd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical"
     tools:context="password.view.PwdActivity">
 
@@ -25,31 +26,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:id="@+id/et_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:background="@null"
-            android:inputType="number"
-            android:maxLength="6"
-            android:singleLine="true"
-            android:textColor="@color/white_ffffff"
-            android:textCursorDrawable="@color/white_ffffff" />
-
-        <TextView
-            android:id="@+id/tv_pwd_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/et_pwd"
-            android:layout_centerHorizontal="true" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ll_pwd"
             style="@style/ll_pwd"
-            android:layout_below="@+id/tv_pwd_tip">
+            android:layout_centerInParent="true">
 
             <RelativeLayout style="@style/rl_pwd">
 
@@ -112,14 +96,33 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_pwd_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_pwd"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/y5"
+            android:textColor="@color/black_252323"
+            android:textSize="@dimen/y14" />
+
+        <TextView
             android:id="@+id/tv_pwd_fgt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignRight="@+id/ll_pwd"
             android:layout_below="@+id/ll_pwd"
-            android:text="忘记密码"
-            android:visibility="gone" />
+            android:layout_marginTop="@dimen/y5"
+            android:text="忘记密码?"
+            android:textColor="@color/blue_2681fc"
+            android:textSize="@dimen/y8"
+            android:visibility="invisible" />
 
     </RelativeLayout>
+
+    <GridView
+        android:id="@+id/gv_input_password"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:numColumns="3" />
 
 </LinearLayout>

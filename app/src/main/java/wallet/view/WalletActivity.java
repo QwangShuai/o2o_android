@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import accountdetail.view.AccountDetailActivity;
+import bean.WalletBean;
 import config.NetConfig;
 import config.StateConfig;
 import okhttp3.Call;
@@ -29,15 +30,24 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import pay.view.PayWayActivity;
+import utils.DataUtils;
+import utils.UserUtils;
+import utils.Utils;
+import view.CProgressDialog;
+import wallet.presenter.IWalletPresenter;
+import wallet.presenter.WalletPresenter;
 import withdraw.view.WithDrawActivity;
 
-public class WalletActivity extends AppCompatActivity implements View.OnClickListener {
+public class WalletActivity extends AppCompatActivity implements IWalletActivity, View.OnClickListener {
 
     private View rootView;
     private RelativeLayout returnRl, detailRl, rechargeRl, withDrawRl;
     private TextView overageTv;
-    private String u_id, overage;
-    private OkHttpClient okHttpClient;
+    private CProgressDialog cpd;
+    private WalletBean walletBean;
+    private IWalletPresenter walletPresenter;
+    private final int LOAD_SUCCESS = 1;
+    private final int LOAD_FAILURE = 2;
 
     private Handler handler = new Handler() {
         @Override
@@ -45,13 +55,11 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
             super.handleMessage(msg);
             if (msg != null) {
                 switch (msg.what) {
-                    case StateConfig.LOAD_NO_NET:
+                    case LOAD_SUCCESS:
+                        cpd.dismiss();
+                        notifyData();
                         break;
-                    case StateConfig.LOAD_DONE:
-                        if (!TextUtils.isEmpty(overage))
-                            overageTv.setText(overage);
-                        break;
-                    default:
+                    case LOAD_FAILURE:
                         break;
                 }
             }
@@ -73,8 +81,11 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeMessages(StateConfig.LOAD_NO_NET);
-        handler.removeMessages(StateConfig.LOAD_DONE);
+        if (handler != null) {
+            handler.removeMessages(LOAD_SUCCESS);
+            handler.removeMessages(LOAD_FAILURE);
+            handler = null;
+        }
     }
 
     private void initView() {
@@ -87,16 +98,11 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
         rechargeRl = (RelativeLayout) rootView.findViewById(R.id.rl_wallet_recharge);
         withDrawRl = (RelativeLayout) rootView.findViewById(R.id.rl_wallet_withdraw);
         overageTv = (TextView) rootView.findViewById(R.id.tv_wallet_overage);
+        cpd = Utils.initProgressDialog(WalletActivity.this, cpd);
     }
 
     private void initData() {
-        okHttpClient = new OkHttpClient();
-        Intent intent = getIntent();
-        if (intent != null) {
-            u_id = intent.getStringExtra("u_id");
-            if (TextUtils.isEmpty(u_id))
-                u_id = "1";
-        }
+        walletPresenter = new WalletPresenter(this);
     }
 
     private void setListener() {
@@ -107,42 +113,12 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadData() {
-        if (!TextUtils.isEmpty(u_id)) {
-            Request request = new Request.Builder().url(NetConfig.userFundUrl + u_id).get().build();
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    handler.sendEmptyMessage(StateConfig.LOAD_NO_NET);
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String result = response.body().string();
-                        if (!TextUtils.isEmpty(result))
-                            parseJson(result);
-                    }
-                }
-            });
-        }
+        cpd.show();
+        walletPresenter.load(NetConfig.userFundUrl + "?u_id=" + UserUtils.readUserData(WalletActivity.this).getId());
     }
 
-    private void parseJson(String json) {
-        try {
-            JSONObject objBean = new JSONObject(json);
-            if (objBean.optInt("code") == 1) {
-                JSONObject objData = objBean.optJSONObject("data");
-                if (objData != null) {
-                    JSONObject o = objData.optJSONObject("data");
-                    if (o != null) {
-                        overage = o.optString("uef_overage");
-                        handler.sendEmptyMessage(StateConfig.LOAD_DONE);
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void notifyData() {
+        overageTv.setText(walletBean.getOverage());
     }
 
     @Override
@@ -161,5 +137,16 @@ public class WalletActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(new Intent(this, WithDrawActivity.class));
                 break;
         }
+    }
+
+    @Override
+    public void loadSuccess(String json) {
+        walletBean = DataUtils.getWalletBean(json);
+        handler.sendEmptyMessage(LOAD_SUCCESS);
+    }
+
+    @Override
+    public void loadFailure(String failure) {
+        handler.sendEmptyMessage(LOAD_FAILURE);
     }
 }

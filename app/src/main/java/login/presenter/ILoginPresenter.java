@@ -7,5 +7,7 @@ public interface ILoginPresenter {
 
     void login(String phoneNumber, String securityCode);
 
+    void postOnLine(String id);
+
     void destroy();
 }

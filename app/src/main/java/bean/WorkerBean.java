@@ -1,23 +1,31 @@
 package bean;
 
-//工人
-public class WorkerBean {
 
-    private String id;
+import java.io.Serializable;
+
+public class WorkerBean implements Serializable {
+
+    private String workerId;
     private String icon;
-    private String name;
-    private String brief;
+    private String title;
+    private String info;
     private String status;
-    private String distance;
+    private String collectId;
+    private int favorite;
     private String positionX;
     private String positionY;
+    private String sex;
+    private String mobile;
+    private String address;
+    private String skill;
+    private String skillName;
 
-    public String getId() {
-        return id;
+    public String getWorkerId() {
+        return workerId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setWorkerId(String workerId) {
+        this.workerId = workerId;
     }
 
     public String getIcon() {
@@ -28,20 +36,20 @@ public class WorkerBean {
         this.icon = icon;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getBrief() {
-        return brief;
+    public String getInfo() {
+        return info;
     }
 
-    public void setBrief(String brief) {
-        this.brief = brief;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public String getStatus() {
@@ -52,12 +60,20 @@ public class WorkerBean {
         this.status = status;
     }
 
-    public String getDistance() {
-        return distance;
+    public String getCollectId() {
+        return collectId;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
+    public void setCollectId(String collectId) {
+        this.collectId = collectId;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
     }
 
     public String getPositionX() {
@@ -76,17 +92,63 @@ public class WorkerBean {
         this.positionY = positionY;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSkill() {
+        return skill;
+    }
+
+    public void setSkill(String skill) {
+        this.skill = skill;
+    }
+
+    public String getSkillName() {
+        return skillName;
+    }
+
+    public void setSkillName(String skillName) {
+        this.skillName = skillName;
+    }
+
     @Override
     public String toString() {
         return "WorkerBean{" +
-                "id='" + id + '\'' +
+                "workerId='" + workerId + '\'' +
                 ", icon='" + icon + '\'' +
-                ", name='" + name + '\'' +
-                ", brief='" + brief + '\'' +
+                ", title='" + title + '\'' +
+                ", info='" + info + '\'' +
                 ", status='" + status + '\'' +
-                ", distance='" + distance + '\'' +
+                ", collectId='" + collectId + '\'' +
+                ", favorite=" + favorite +
                 ", positionX='" + positionX + '\'' +
                 ", positionY='" + positionY + '\'' +
+                ", sex='" + sex + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", address='" + address + '\'' +
+                ", skill='" + skill + '\'' +
+                ", skillName='" + skillName + '\'' +
                 '}';
     }
 }

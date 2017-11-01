@@ -1,11 +1,9 @@
 package city.module;
 
-
-import android.content.Context;
-
-import city.listener.LoadCityListener;
+import city.bean.CityBigBean;
+import city.listener.CityListener;
 
 public interface ICityModule {
 
-    void load(Context context, LoadCityListener loadCityListener);
+    void load(String[] letter,CityBigBean cityBigBean, CityListener cityListener);
 }

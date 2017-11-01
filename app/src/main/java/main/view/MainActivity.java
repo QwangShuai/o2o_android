@@ -21,7 +21,7 @@ import java.util.List;
 import config.ColorConfig;
 import discount.view.DiscountFragment;
 import firstpage.view.FirstPageFragment;
-import jobmanage.view.JobManageFragment;
+import manage.view.ManageFragment;
 import mine.view.MineFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initData() {
         Fragment fpFrag = new FirstPageFragment();
-        Fragment magFrag = new JobManageFragment();
+        Fragment magFrag = new ManageFragment();
         Fragment dcFrag = new DiscountFragment();
         Fragment meFrag = new MineFragment();
         fragmentList = new ArrayList<>();
@@ -167,4 +167,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
 }

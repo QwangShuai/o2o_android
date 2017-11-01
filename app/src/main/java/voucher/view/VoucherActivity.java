@@ -7,32 +7,49 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.gjzg.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import listener.ListItemClickHelp;
+import config.NetConfig;
+import config.VarConfig;
+import redpacket.view.RedPacketActivity;
+import refreshload.PullToRefreshLayout;
+import refreshload.PullableListView;
+import utils.DataUtils;
+import utils.UserUtils;
 import utils.Utils;
 import view.CProgressDialog;
-import voucher.adapter.VoucherAdapter;
-import voucher.bean.VoucherBean;
+import adapter.VoucherAdapter;
+import bean.VoucherBean;
 import voucher.presenter.IVoucherPresenter;
 import voucher.presenter.VoucherPresenter;
 
-public class VoucherActivity extends AppCompatActivity implements IVoucherActivity, View.OnClickListener, ListItemClickHelp {
+public class VoucherActivity extends AppCompatActivity implements IVoucherActivity, View.OnClickListener, PullToRefreshLayout.OnRefreshListener {
 
-    private View rootView;
+    private View rootView, emptyView, netView;
+    private PullToRefreshLayout ptrl;
+    private PullableListView plv;
+    private FrameLayout fl;
+    private TextView netTv;
     private RelativeLayout returnRl;
     private CProgressDialog cpd;
-    private ListView lv;
-    private List<VoucherBean> list;
-    private VoucherAdapter adapter;
+    private List<VoucherBean> voucherBeanList = new ArrayList<>();
+    private VoucherAdapter voucherAdapter;
 
-    private IVoucherPresenter iVoucherPresenter = new VoucherPresenter(this);
+    private IVoucherPresenter voucherPresenter;
+
+    private final int LOAD_SUCCESS = 1;
+    private final int LOAD_FAILURE = 2;
+    private final int FIRST = 3;
+    private final int REFRESH = 4;
+    private int STATE = FIRST;
 
     private Handler handler = new Handler() {
         @Override
@@ -40,10 +57,11 @@ public class VoucherActivity extends AppCompatActivity implements IVoucherActivi
             super.handleMessage(msg);
             if (msg != null) {
                 switch (msg.what) {
-                    case 1:
-                        adapter.notifyDataSetChanged();
+                    case LOAD_SUCCESS:
+                        notifyData();
                         break;
-                    default:
+                    case LOAD_FAILURE:
+                        notifyNet();
                         break;
                 }
             }
@@ -66,34 +84,102 @@ public class VoucherActivity extends AppCompatActivity implements IVoucherActivi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (iVoucherPresenter != null) {
-            iVoucherPresenter.destroy();
-            iVoucherPresenter = null;
+        if (voucherPresenter != null) {
+            voucherPresenter.destroy();
+            voucherPresenter = null;
         }
-        handler.removeMessages(1);
+        if (handler != null) {
+            handler.removeMessages(LOAD_SUCCESS);
+            handler.removeMessages(LOAD_FAILURE);
+            handler = null;
+        }
     }
 
     private void initView() {
+        initRootView();
+        initEmptyView();
+    }
+
+    private void initRootView() {
         returnRl = (RelativeLayout) rootView.findViewById(R.id.rl_voucher_return);
+        ptrl = (PullToRefreshLayout) rootView.findViewById(R.id.ptrl);
+        plv = (PullableListView) rootView.findViewById(R.id.plv);
         cpd = Utils.initProgressDialog(this, cpd);
-        lv = (ListView) rootView.findViewById(R.id.lv_voucher);
+    }
+
+    private void initEmptyView() {
+        fl = (FrameLayout) rootView.findViewById(R.id.fl);
+        emptyView = LayoutInflater.from(VoucherActivity.this).inflate(R.layout.empty_data, null);
+        fl.addView(emptyView);
+        emptyView.setVisibility(View.GONE);
+        netView = LayoutInflater.from(VoucherActivity.this).inflate(R.layout.empty_net, null);
+        netTv = (TextView) netView.findViewById(R.id.tv_no_net_refresh);
+        netTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ptrl.setVisibility(View.VISIBLE);
+                netView.setVisibility(View.GONE);
+                STATE = FIRST;
+                loadData();
+            }
+        });
+        fl.addView(netView);
+        netView.setVisibility(View.GONE);
     }
 
     private void initData() {
-        list = new ArrayList<>();
-        adapter = new VoucherAdapter(this, list, this);
+        voucherPresenter = new VoucherPresenter(this);
+        voucherAdapter = new VoucherAdapter(this, voucherBeanList);
     }
 
     private void setData() {
-        lv.setAdapter(adapter);
+        plv.setAdapter(voucherAdapter);
     }
 
     private void setListener() {
         returnRl.setOnClickListener(this);
+        ptrl.setOnRefreshListener(this);
     }
 
     private void loadData() {
-        iVoucherPresenter.load();
+        cpd.show();
+        voucherPresenter.load(NetConfig.redBagUrl + "?action=list&uid=" + UserUtils.readUserData(VoucherActivity.this).getId() + "&bt_id=1");
+    }
+
+    private void notifyData() {
+        switch (STATE) {
+            case FIRST:
+                cpd.dismiss();
+                if (voucherBeanList.size() == 0) {
+                    ptrl.setVisibility(View.GONE);
+                    netView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    ptrl.setVisibility(View.VISIBLE);
+                    netView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.GONE);
+                }
+                break;
+            case REFRESH:
+                ptrl.hideHeadView();
+                break;
+        }
+        voucherAdapter.notifyDataSetChanged();
+    }
+
+    private void notifyNet() {
+        switch (STATE) {
+            case FIRST:
+                cpd.dismiss();
+                ptrl.setVisibility(View.GONE);
+                emptyView.setVisibility(View.GONE);
+                netView.setVisibility(View.VISIBLE);
+                break;
+            case REFRESH:
+                ptrl.hideHeadView();
+                Utils.toast(VoucherActivity.this, VarConfig.noNetTip);
+                break;
+        }
     }
 
     @Override
@@ -102,35 +188,27 @@ public class VoucherActivity extends AppCompatActivity implements IVoucherActivi
             case R.id.rl_voucher_return:
                 finish();
                 break;
-            default:
-                break;
         }
     }
 
     @Override
-    public void showLoading() {
-        cpd.show();
+    public void loadSuccess(String json) {
+        voucherBeanList.addAll(DataUtils.getVoucherBeanList(json));
+        handler.sendEmptyMessage(LOAD_SUCCESS);
     }
 
     @Override
-    public void hideLoading() {
-        cpd.dismiss();
+    public void loadFailure(String failure) {
+        handler.sendEmptyMessage(LOAD_FAILURE);
     }
 
     @Override
-    public void receiveData(List<VoucherBean> voucherBeanList) {
-        list.addAll(voucherBeanList);
-        handler.sendEmptyMessage(1);
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+        ptrl.hideHeadView();
     }
 
     @Override
-    public void onClick(View item, View widget, int position, int which, boolean isChecked) {
-        switch (which) {
-            case R.id.tv_item_red_packet_status:
-                Utils.log(VoucherActivity.this, "您点击了第" + position + "个代金券");
-                break;
-            default:
-                break;
-        }
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        ptrl.hideFootView();
     }
 }

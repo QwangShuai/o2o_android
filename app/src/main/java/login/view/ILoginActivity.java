@@ -16,4 +16,8 @@ public interface ILoginActivity {
     void loginFailure(String loginFailure);
 
     void loginSuccess(UserBean userBean);
+
+    void postOnlineFailure();
+
+    void postOnlineSuccess();
 }

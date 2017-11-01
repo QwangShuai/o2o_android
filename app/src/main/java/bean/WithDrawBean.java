@@ -1,22 +1,26 @@
 package bean;
 
-//提现
-public class WithDrawBean {
+import java.io.Serializable;
 
-    private String uwl_id;
+/**
+ * Created by Administrator on 2017/10/24.
+ */
+
+public class WithDrawBean implements Serializable {
+
+    private String u_id;
     private String uwl_amount;
-    private String uwl_in_time;
-    private String uwl_status;
-    private String uwl_solut_time;
-    private String uwl_card;
     private String p_id;
+    private String uwl_card;
+    private String uwl_truename;
+    private String password;
 
-    public String getUwl_id() {
-        return uwl_id;
+    public String getU_id() {
+        return u_id;
     }
 
-    public void setUwl_id(String uwl_id) {
-        this.uwl_id = uwl_id;
+    public void setU_id(String u_id) {
+        this.u_id = u_id;
     }
 
     public String getUwl_amount() {
@@ -27,28 +31,12 @@ public class WithDrawBean {
         this.uwl_amount = uwl_amount;
     }
 
-    public String getUwl_in_time() {
-        return uwl_in_time;
+    public String getP_id() {
+        return p_id;
     }
 
-    public void setUwl_in_time(String uwl_in_time) {
-        this.uwl_in_time = uwl_in_time;
-    }
-
-    public String getUwl_status() {
-        return uwl_status;
-    }
-
-    public void setUwl_status(String uwl_status) {
-        this.uwl_status = uwl_status;
-    }
-
-    public String getUwl_solut_time() {
-        return uwl_solut_time;
-    }
-
-    public void setUwl_solut_time(String uwl_solut_time) {
-        this.uwl_solut_time = uwl_solut_time;
+    public void setP_id(String p_id) {
+        this.p_id = p_id;
     }
 
     public String getUwl_card() {
@@ -59,24 +47,31 @@ public class WithDrawBean {
         this.uwl_card = uwl_card;
     }
 
-    public String getP_id() {
-        return p_id;
+    public String getUwl_truename() {
+        return uwl_truename;
     }
 
-    public void setP_id(String p_id) {
-        this.p_id = p_id;
+    public void setUwl_truename(String uwl_truename) {
+        this.uwl_truename = uwl_truename;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return "WithDrawBean{" +
-                "uwl_id='" + uwl_id + '\'' +
+                "u_id='" + u_id + '\'' +
                 ", uwl_amount='" + uwl_amount + '\'' +
-                ", uwl_in_time='" + uwl_in_time + '\'' +
-                ", uwl_status='" + uwl_status + '\'' +
-                ", uwl_solut_time='" + uwl_solut_time + '\'' +
-                ", uwl_card='" + uwl_card + '\'' +
                 ", p_id='" + p_id + '\'' +
+                ", uwl_card='" + uwl_card + '\'' +
+                ", uwl_truename='" + uwl_truename + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

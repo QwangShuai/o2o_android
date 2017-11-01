@@ -57,17 +57,12 @@ public class ComplainActivity extends AppCompatActivity implements IComplainActi
     private PopupWindow pop;
     private TextView cameraTv, mapTv, cancelTv;
     private CProgressDialog cpd;
-
     private GridView gv;
     private List<Bitmap> list;
     private ComplainImageAdapter adapter;
-
     private String picPath;
-
     private List<String> upLoadImageList;
-
     private IComplainPresenter iComplainPresenter;
-
     private TextView cplIsTv;
     private View cplIsPopView;
     private PopupWindow cplIsPop;

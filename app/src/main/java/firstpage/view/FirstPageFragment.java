@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,20 +28,21 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import leftright.view.LeftRightActivity;
 import city.bean.CityBean;
+import city.bean.CityBigBean;
 import city.view.CityActivity;
-import config.CacheConfig;
 import config.IntentConfig;
 import config.NetConfig;
 import config.PermissionConfig;
 import firstpage.presenter.FirstPagePresenter;
 import firstpage.presenter.IFirstPagePresenter;
-import jobinfo.view.JobInfoActivity;
+import leftright.view.LeftRightActivity;
 import publishjob.view.PublishJobActivity;
+import skill.view.SkillActivity;
+import task.view.TaskActivity;
+import utils.UserUtils;
 import utils.Utils;
 import view.CProgressDialog;
-import workerkind.view.WorkerKindActivity;
 
 public class FirstPageFragment extends Fragment implements IFirstPageFragment, View.OnClickListener {
 
@@ -49,15 +50,18 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
     private RelativeLayout cityRl, msgRl;
     private ImageView findWorkerIv, findJobIv, sendJobIv;
     private TextView cityTv;
-    private String cityId;
-    private String localCityId;
-    private String localCity;
     private CProgressDialog cpd;
-    private boolean loadHot, loadCom;
-    private String userId = "-100";
     private LocationClient locationClient;
     private BDLocationListener bdLocationListener;
-    private IFirstPagePresenter iFirstPagePresenter = new FirstPagePresenter(this);
+    private IFirstPagePresenter firstpagePresenter;
+
+    private double positionX, positionY;
+
+    private String hotJson, comJson, locCity, locId;
+
+    //http://api.gangjianwang.com/Users/updatePosition?u_id=8&ucp_posit_x=126.65771686&ucp_posit_y=45.77322463
+
+    private final int HOT_DONE = 1, COM_DONE = 2, LOC_DONE = 3, ID_DONE = 4;
 
     private Handler handler = new Handler() {
         @Override
@@ -65,15 +69,21 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
             super.handleMessage(msg);
             if (msg != null) {
                 switch (msg.what) {
-                    case 0:
-                        cityTv.setText(localCity);
-                        loadCityData();
+                    case HOT_DONE:
+                        firstpagePresenter.loadComCity(NetConfig.comCityUrl);
                         break;
-                    case 1:
-                        if (loadHot && loadCom)
-                            cpd.dismiss();
+                    case COM_DONE:
+                        locationClient.start();
                         break;
-                    default:
+                    case LOC_DONE:
+                        cityTv.setText(locCity);
+                        firstpagePresenter.getLocId(getActivity().getResources().getStringArray(R.array.lowerletter), locCity, comJson);
+                        break;
+                    case ID_DONE:
+                        cpd.dismiss();
+                        if (UserUtils.isUserLogin(getActivity())) {
+                            firstpagePresenter.changePosition(NetConfig.changePositionUrl + "?u_id=" + UserUtils.readUserData(getActivity()).getId() + "&ucp_posit_x=" + positionX + "&ucp_posit_y=" + positionY);
+                        }
                         break;
                 }
             }
@@ -83,9 +93,9 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (iFirstPagePresenter != null) {
-            iFirstPagePresenter.destroy();
-            iFirstPagePresenter = null;
+        if (firstpagePresenter != null) {
+            firstpagePresenter.destroy();
+            firstpagePresenter = null;
         }
         locationClient.unRegisterLocationListener(bdLocationListener);
     }
@@ -97,7 +107,7 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
         initView();
         initData();
         setListener();
-        loadData();
+        checkLocPermisson();
         return rootView;
     }
 
@@ -116,17 +126,18 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
     }
 
     private void initData() {
+        firstpagePresenter = new FirstPagePresenter(this);
         initLocation();
     }
 
     private void initLocation() {
-        locationClient = new LocationClient(getActivity());
+        locationClient = new LocationClient(getActivity().getApplicationContext());
         bdLocationListener = new MyLocationListener();
         locationClient.registerLocationListener(bdLocationListener);
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
-        int span = 0;
+        int span = 10000;
         option.setScanSpan(span);
         option.setIsNeedAddress(true);
         option.setOpenGps(true);
@@ -139,8 +150,9 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
         locationClient.setLocOption(option);
     }
 
-    private void toLocation() {
-        locationClient.start();
+    private void loadData() {
+        cpd.show();
+        firstpagePresenter.loadHotCity(NetConfig.hotCityUrl);
     }
 
     private void setListener() {
@@ -151,34 +163,19 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
         sendJobIv.setOnClickListener(this);
     }
 
-    private void loadData() {
-        checkLocPermisson();
-    }
-
-    private void loadCityData() {
-        if (TextUtils.isEmpty(Utils.readCache(getActivity(), userId, CacheConfig.hotCity))) {
-            iFirstPagePresenter.loadHotCity(NetConfig.baseCityUrl + NetConfig.hotCityUrl);
-        } else {
-            loadHot = true;
-            handler.sendEmptyMessage(1);
-        }
-        if (TextUtils.isEmpty(Utils.readCache(getActivity(), userId, CacheConfig.comCity))) {
-            iFirstPagePresenter.loadComCity(NetConfig.baseCityUrl + NetConfig.letterCityUrl);
-        } else {
-            loadCom = true;
-            handler.sendEmptyMessage(1);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_frag_first_page_city:
                 Intent cityIntent = new Intent(getActivity(), CityActivity.class);
                 CityBean c = new CityBean();
-                c.setId(localCityId);
-                c.setName(localCity);
-                cityIntent.putExtra(IntentConfig.LOCAL_CITY, c);
+                c.setId(locId);
+                c.setName(locCity);
+                CityBigBean cityBigBean = new CityBigBean();
+                cityBigBean.setCityBean(c);
+                cityBigBean.setComJson(comJson);
+                cityBigBean.setHotJson(hotJson);
+                cityIntent.putExtra("cityBigBean", cityBigBean);
                 startActivityForResult(cityIntent, IntentConfig.CITY_REQUEST);
                 break;
             case R.id.rl_frag_first_page_msg:
@@ -187,10 +184,10 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
                 startActivity(msgIntent);
                 break;
             case R.id.iv_frag_first_page_find_worker:
-                startActivity(new Intent(getActivity(), WorkerKindActivity.class));
+                startActivity(new Intent(getActivity(), SkillActivity.class));
                 break;
             case R.id.iv_frag_first_page_find_job:
-                startActivity(new Intent(getActivity(), JobInfoActivity.class));
+                startActivity(new Intent(getActivity(), TaskActivity.class));
                 break;
             case R.id.iv_frag_first_page_send_job:
                 startActivity(new Intent(getActivity(), PublishJobActivity.class));
@@ -206,10 +203,10 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
             if (permisson != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PermissionConfig.LOCATION);
             } else {
-                toLocation();
+                loadData();
             }
         } else {
-            toLocation();
+            loadData();
         }
     }
 
@@ -220,7 +217,6 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
             CityBean cityBean = (CityBean) data.getSerializableExtra(IntentConfig.CITY);
             if (cityBean != null) {
                 cityTv.setText(cityBean.getName());
-                cityId = cityBean.getId();
             }
         }
     }
@@ -231,7 +227,7 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
         switch (requestCode) {
             case PermissionConfig.LOCATION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    toLocation();
+                    loadData();
                 } else {
                     Utils.toast(getActivity(), "请在系统设置中打开定位权限");
                     getActivity().finish();
@@ -241,43 +237,56 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
     }
 
     @Override
-    public void showLoading() {
-        cpd.show();
+    public void showHotSuccess(String json) {
+        Utils.log(getActivity(), "hotJson=" + json);
+        hotJson = json;
+        handler.sendEmptyMessage(HOT_DONE);
     }
 
     @Override
-    public void showHotJson(String hotJson) {
-        iFirstPagePresenter.saveHotCity(getActivity(), "-100", hotJson, "60");
-        iFirstPagePresenter.loadComCity(NetConfig.baseCityUrl + NetConfig.letterCityUrl);
+    public void showHotFailure(String failure) {
+
     }
 
     @Override
-    public void showComJson(String comJson) {
-        iFirstPagePresenter.saveComCity(getActivity(), "-100", comJson, "60");
+    public void showComSuccess(String json) {
+        Utils.log(getActivity(), "comJson=" + json);
+        comJson = json;
+        handler.sendEmptyMessage(COM_DONE);
     }
 
     @Override
-    public void showSaveHotJsonSuccess() {
-        loadHot = true;
-        handler.sendEmptyMessage(1);
+    public void showComFailure(String failure) {
+
     }
 
     @Override
-    public void showSaveComJsonSuccess() {
-        iFirstPagePresenter.getLocateCityId(getActivity(), userId, localCity);
-        loadCom = true;
-        handler.sendEmptyMessage(1);
+    public void showLocIdSuccess(String id) {
+        locId = id;
+        handler.sendEmptyMessage(ID_DONE);
     }
 
     @Override
-    public void getLocateCityId(String cityId) {
-        localCityId = cityId;
+    public void showLocIdFailure(String failure) {
+
+    }
+
+    @Override
+    public void changePositionSuccess(String json) {
+        Log.e("FirstPageFragment", json);
+    }
+
+    @Override
+    public void changePositionFailure(String failure) {
+        Log.e("FirstPageFragment", failure);
     }
 
     public class MyLocationListener implements BDLocationListener {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
+            positionX = location.getLongitude();
+            positionY = location.getLatitude();
             //获取定位结果
             StringBuffer sb = new StringBuffer(256);
             sb.append("time : ");
@@ -340,8 +349,8 @@ public class FirstPageFragment extends Fragment implements IFirstPageFragment, V
             String str = sb.toString();
             int provinceIndex = str.indexOf("省");
             int cityIndex = str.indexOf("市");
-            localCity = str.substring(provinceIndex + 1, cityIndex);
-            handler.sendEmptyMessage(0);
+            locCity = str.substring(provinceIndex + 1, cityIndex);
+            handler.sendEmptyMessage(LOC_DONE);
         }
 
         @Override

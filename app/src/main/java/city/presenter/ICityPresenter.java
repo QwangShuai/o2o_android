@@ -1,11 +1,10 @@
 package city.presenter;
 
-
-import android.content.Context;
+import city.bean.CityBigBean;
 
 public interface ICityPresenter {
 
-    void load(Context context);
+    void load(String[] letter, CityBigBean cityBigBean);
 
     void destroy();
 }

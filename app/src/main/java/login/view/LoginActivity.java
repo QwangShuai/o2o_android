@@ -26,6 +26,7 @@ import login.bean.UserBean;
 import login.presenter.ILoginPresenter;
 import login.presenter.LoginPresenter;
 import service.GetLoginCodeTimerService;
+import utils.UserUtils;
 import utils.Utils;
 import view.CProgressDialog;
 
@@ -38,6 +39,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
     private GradientDrawable getMovePwdGd, loginGd;
     private CProgressDialog cpd;
     private ILoginPresenter iLoginPresenter = new LoginPresenter(this);
+
+    private UserBean mUserBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -179,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
     @Override
     public void getSecurityCodeFailure(String codeFailure) {
         Utils.toast(LoginActivity.this, codeFailure);
-        Log.e("LoginActivity",codeFailure);
+        Log.e("LoginActivity", codeFailure);
     }
 
     @Override
@@ -195,7 +198,21 @@ public class LoginActivity extends AppCompatActivity implements ILoginActivity, 
 
     @Override
     public void loginSuccess(UserBean userBean) {
-        Utils.log(LoginActivity.this, "userBean = " + userBean.toString());
+        mUserBean = userBean;
+        iLoginPresenter.postOnLine(userBean.getId());
+    }
+
+    @Override
+    public void postOnlineFailure() {
+
+    }
+
+    @Override
+    public void postOnlineSuccess() {
+        mUserBean.setOnline("1");
+        Utils.log(LoginActivity.this, "mUserBean=" + mUserBean.toString());
+        UserUtils.saveUserData(LoginActivity.this, mUserBean);
+        finish();
     }
 
 }

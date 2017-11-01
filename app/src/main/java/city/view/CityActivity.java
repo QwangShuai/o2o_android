@@ -21,6 +21,7 @@ import java.util.List;
 
 import city.adapter.CityAdapter;
 import city.bean.CityBean;
+import city.bean.CityBigBean;
 import city.presenter.CityPresenter;
 import city.presenter.ICityPresenter;
 import config.IntentConfig;
@@ -35,21 +36,16 @@ public class CityActivity extends AppCompatActivity implements ICityActivity, Vi
     private ListView lv;
     private List<CityBean> list;
     private CityAdapter adapter;
-
-    private ICityPresenter iCityPresenter = new CityPresenter(this);
+    private ICityPresenter cityPresenter;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg == null) {
-                Utils.log(CityActivity.this, "msg == null");
-            } else {
+            if (msg != null) {
                 switch (msg.what) {
                     case 1:
                         adapter.notifyDataSetChanged();
-                        break;
-                    default:
                         break;
                 }
             }
@@ -73,9 +69,9 @@ public class CityActivity extends AppCompatActivity implements ICityActivity, Vi
     protected void onDestroy() {
         super.onDestroy();
         handler.removeMessages(1);
-        iCityPresenter.destroy();
-        if (iCityPresenter != null)
-            iCityPresenter = null;
+        cityPresenter.destroy();
+        if (cityPresenter != null)
+            cityPresenter = null;
     }
 
     private void initView() {
@@ -89,13 +85,9 @@ public class CityActivity extends AppCompatActivity implements ICityActivity, Vi
     }
 
     private void initData() {
+        cityPresenter = new CityPresenter(this);
         list = new ArrayList<>();
         adapter = new CityAdapter(this, list);
-        Intent intent = getIntent();
-        if (intent != null) {
-            CityBean c = (CityBean) intent.getSerializableExtra(IntentConfig.LOCAL_CITY);
-            list.add(c);
-        }
     }
 
     private void setData() {
@@ -118,7 +110,14 @@ public class CityActivity extends AppCompatActivity implements ICityActivity, Vi
     }
 
     private void loadData() {
-        iCityPresenter.load(this);
+        Intent intent = getIntent();
+        if (intent != null) {
+            CityBigBean cityBigBean = (CityBigBean) intent.getSerializableExtra("cityBigBean");
+            if (cityBigBean != null) {
+                Utils.log(CityActivity.this, "cityBigBean=" + cityBigBean.toString());
+                cityPresenter.load(getResources().getStringArray(R.array.lowerletter), cityBigBean);
+            }
+        }
     }
 
     @Override

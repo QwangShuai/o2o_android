@@ -3,7 +3,7 @@ package redpacket.presenter;
 
 public interface IRedPacketPresenter {
 
-    void load();
+    void load(String url);
 
     void destroy();
 }

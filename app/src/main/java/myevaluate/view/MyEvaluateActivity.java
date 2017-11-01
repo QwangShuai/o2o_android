@@ -95,8 +95,6 @@ public class MyEvaluateActivity extends AppCompatActivity implements View.OnClic
                     getTv.setTextColor(ColorConfig.gray_a0a0a0);
                     giveTv.setTextColor(ColorConfig.red_ff3e50);
                     break;
-                default:
-                    break;
             }
             Fragment curFragment = fragmentList.get(curState);
             Fragment tarFragment = fragmentList.get(tarState);
@@ -109,7 +107,6 @@ public class MyEvaluateActivity extends AppCompatActivity implements View.OnClic
             }
             transaction.commit();
             curState = tarState;
-            Log.e("MyEvaluate", "curState=" + curState);
         }
 
     }

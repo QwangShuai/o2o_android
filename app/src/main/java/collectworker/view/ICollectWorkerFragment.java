@@ -1,17 +1,12 @@
 package collectworker.view;
 
-
-import java.util.List;
-
-import collectworker.bean.CollectWorkerBean;
-
 public interface ICollectWorkerFragment {
 
-    void showLoading();
+    void loadSuccess(String loadJson);
 
-    void hideLoading();
+    void loadFailure(String failure);
 
-    void showLoadSuccess(List<CollectWorkerBean> collectWorkerBeanList);
+    void cancelCollectSuccess(String cancelCollectJson);
 
-    void showLoadFailure(String failure);
+    void cancelCollectFailure(String failure);
 }

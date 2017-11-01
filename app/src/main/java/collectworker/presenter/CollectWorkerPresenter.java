@@ -3,47 +3,67 @@ package collectworker.presenter;
 
 import android.os.Handler;
 
-import java.util.List;
-
-import collectworker.bean.CollectWorkerBean;
-import collectworker.listener.OnLoadCollectWorkerListener;
 import collectworker.module.CollectWorkerModule;
 import collectworker.module.ICollectWorkerModule;
 import collectworker.view.ICollectWorkerFragment;
+import listener.JsonListener;
 
 public class CollectWorkerPresenter implements ICollectWorkerPresenter {
 
-    private ICollectWorkerFragment iCollectWorkerFragment;
-    private ICollectWorkerModule iCollectWorkerModule;
-    private Handler mHandler;
+    private ICollectWorkerFragment collectWorkerFragment;
+    private ICollectWorkerModule collectWorkerModule;
+    private Handler handler;
 
-    public CollectWorkerPresenter(ICollectWorkerFragment iCollectWorkerFragment) {
-        this.iCollectWorkerFragment = iCollectWorkerFragment;
-        iCollectWorkerModule = new CollectWorkerModule();
-        mHandler = new Handler();
+    public CollectWorkerPresenter(ICollectWorkerFragment collectWorkerFragment) {
+        this.collectWorkerFragment = collectWorkerFragment;
+        collectWorkerModule = new CollectWorkerModule();
+        handler = new Handler();
     }
 
     @Override
-    public void load(String id) {
-        iCollectWorkerFragment.showLoading();
-        iCollectWorkerModule.load(id, new OnLoadCollectWorkerListener() {
+    public void load(String url) {
+        collectWorkerModule.load(url, new JsonListener() {
             @Override
-            public void onLoadSuccess(final List<CollectWorkerBean> collectWorkerBeanList) {
-                mHandler.post(new Runnable() {
+            public void success(final String json) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iCollectWorkerFragment.showLoadSuccess(collectWorkerBeanList);
-                        iCollectWorkerFragment.hideLoading();
+                        collectWorkerFragment.loadSuccess(json);
                     }
                 });
             }
 
             @Override
-            public void onLoadFailure(final String failure) {
-                mHandler.post(new Runnable() {
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iCollectWorkerFragment.showLoadFailure(failure);
+                        collectWorkerFragment.loadFailure(failure);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void cancelCollect(String url) {
+        collectWorkerModule.cancelCollect(url, new JsonListener() {
+            @Override
+            public void success(final String json) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        collectWorkerFragment.cancelCollectSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        collectWorkerFragment.cancelCollectFailure(failure);
                     }
                 });
             }
@@ -52,9 +72,15 @@ public class CollectWorkerPresenter implements ICollectWorkerPresenter {
 
     @Override
     public void destroy() {
-        if (iCollectWorkerModule != null) {
-            iCollectWorkerModule.cancelTask();
-            iCollectWorkerModule = null;
+        if (collectWorkerModule != null) {
+            collectWorkerModule.cancelTask();
+            collectWorkerModule = null;
+        }
+        if (handler != null) {
+            handler = null;
+        }
+        if (collectWorkerFragment != null) {
+            collectWorkerFragment = null;
         }
     }
 }

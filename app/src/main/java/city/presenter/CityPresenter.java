@@ -1,47 +1,48 @@
 package city.presenter;
 
 
-import android.content.Context;
 import android.os.Handler;
 
 import java.util.List;
 
 import city.bean.CityBean;
-import city.listener.LoadCityListener;
+import city.bean.CityBigBean;
+import city.listener.CityListener;
 import city.module.CityModule;
 import city.module.ICityModule;
 import city.view.ICityActivity;
 
 public class CityPresenter implements ICityPresenter {
 
-    private ICityActivity iCityActivity;
-    private ICityModule iCityModule;
-    private Handler mHandler = new Handler();
+    private ICityActivity cityActivity;
+    private ICityModule cityModule;
+    private Handler handler;
 
     public CityPresenter(ICityActivity iCityActivity) {
-        this.iCityActivity = iCityActivity;
-        iCityModule = new CityModule();
+        this.cityActivity = iCityActivity;
+        cityModule = new CityModule();
+        handler = new Handler();
     }
 
     @Override
-    public void load(Context context) {
-        iCityModule.load(context, new LoadCityListener() {
+    public void load(String[] letter, CityBigBean cityBigBean) {
+        cityModule.load(letter, cityBigBean, new CityListener() {
             @Override
             public void loadSuccess(final List<CityBean> cityBeanList) {
-                mHandler.post(new Runnable() {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iCityActivity.showSuccess(cityBeanList);
+                        cityActivity.showSuccess(cityBeanList);
                     }
                 });
             }
 
             @Override
             public void loadFailure(final String failure) {
-                mHandler.post(new Runnable() {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iCityActivity.showFailure(failure);
+                        cityActivity.showFailure(failure);
                     }
                 });
             }
@@ -50,11 +51,14 @@ public class CityPresenter implements ICityPresenter {
 
     @Override
     public void destroy() {
-        if (iCityModule != null)
-            iCityModule = null;
-        if (iCityActivity != null)
-            iCityActivity = null;
-        if (mHandler != null)
-            mHandler = null;
+        if (cityModule != null) {
+            cityModule = null;
+        }
+        if (cityActivity != null) {
+            cityActivity = null;
+        }
+        if (handler != null) {
+            handler = null;
+        }
     }
 }

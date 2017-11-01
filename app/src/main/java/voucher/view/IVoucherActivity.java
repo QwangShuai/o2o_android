@@ -1,15 +1,8 @@
 package voucher.view;
 
-
-import java.util.List;
-
-import voucher.bean.VoucherBean;
-
 public interface IVoucherActivity {
 
-    void showLoading();
+    void loadSuccess(String json);
 
-    void hideLoading();
-
-    void receiveData(List<VoucherBean> voucherBeanList);
+    void loadFailure(String failure);
 }

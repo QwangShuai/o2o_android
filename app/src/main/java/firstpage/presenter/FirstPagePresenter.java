@@ -1,39 +1,46 @@
 package firstpage.presenter;
 
-
-import android.content.Context;
 import android.os.Handler;
 
-import firstpage.listener.LoadComCityListener;
-import firstpage.listener.LoadHotCityListener;
-import firstpage.listener.LocateCityListener;
+import firstpage.listener.ComCityListener;
+import firstpage.listener.HotCityListener;
+import firstpage.listener.LocIdListener;
 import firstpage.module.FirstPageModule;
 import firstpage.module.IFirstPageModule;
 import firstpage.view.IFirstPageFragment;
-import listener.OnLoadComCityListener;
-import listener.OnLoadHotCityListener;
+import listener.JsonListener;
 
 public class FirstPagePresenter implements IFirstPagePresenter {
 
-    private IFirstPageFragment iFirstPageFragment;
-    private IFirstPageModule iFirstPageModule;
-    private Handler mHandler = new Handler();
+    private IFirstPageFragment firstPageFragment;
+    private IFirstPageModule firstPageModule;
+    private Handler handler;
 
-    public FirstPagePresenter(IFirstPageFragment iFirstPageFragment) {
-        this.iFirstPageFragment = iFirstPageFragment;
-        iFirstPageModule = new FirstPageModule();
+    public FirstPagePresenter(IFirstPageFragment firstPageFragment) {
+        this.firstPageFragment = firstPageFragment;
+        firstPageModule = new FirstPageModule();
+        handler = new Handler();
     }
 
     @Override
     public void loadHotCity(String hotUrl) {
-        iFirstPageFragment.showLoading();
-        iFirstPageModule.loadHotCityData(hotUrl, new LoadHotCityListener() {
+        firstPageModule.loadHotCity(hotUrl, new HotCityListener() {
             @Override
-            public void loadHotCitySuccess(final String hotJson) {
-                mHandler.post(new Runnable() {
+            public void success(final String hotCityJson) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iFirstPageFragment.showHotJson(hotJson);
+                        firstPageFragment.showHotSuccess(hotCityJson);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        firstPageFragment.showHotFailure(failure);
                     }
                 });
             }
@@ -42,13 +49,23 @@ public class FirstPagePresenter implements IFirstPagePresenter {
 
     @Override
     public void loadComCity(String comUrl) {
-        iFirstPageModule.loadComCityData(comUrl, new LoadComCityListener() {
+        firstPageModule.loadComCity(comUrl, new ComCityListener() {
             @Override
-            public void loadComCitySuccess(final String comJson) {
-                mHandler.post(new Runnable() {
+            public void success(final String comCityJson) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iFirstPageFragment.showComJson(comJson);
+                        firstPageFragment.showComSuccess(comCityJson);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        firstPageFragment.showComFailure(failure);
                     }
                 });
             }
@@ -56,14 +73,24 @@ public class FirstPagePresenter implements IFirstPagePresenter {
     }
 
     @Override
-    public void saveHotCity(Context context, String userId, String hotJson, String cacheTime) {
-        iFirstPageModule.saveHotCityData(context, userId, hotJson, cacheTime, new OnLoadHotCityListener() {
+    public void getLocId(String[] letter, String locCity, String comJson) {
+        firstPageModule.getLocId(letter, locCity, comJson, new LocIdListener() {
             @Override
-            public void hotResult() {
-                mHandler.post(new Runnable() {
+            public void success(final String id) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iFirstPageFragment.showSaveHotJsonSuccess();
+                        firstPageFragment.showLocIdSuccess(id);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        firstPageFragment.showLocIdFailure(failure);
                     }
                 });
             }
@@ -71,47 +98,41 @@ public class FirstPagePresenter implements IFirstPagePresenter {
     }
 
     @Override
-    public void saveComCity(Context context, String userId, String comJson, String cacheTime) {
-        iFirstPageModule.saveComCityData(context, userId, comJson, cacheTime, new OnLoadComCityListener() {
+    public void changePosition(String url) {
+        firstPageModule.changePosition(url, new JsonListener() {
             @Override
-            public void comResult() {
-                mHandler.post(new Runnable() {
+            public void success(final String json) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iFirstPageFragment.showSaveComJsonSuccess();
+                        firstPageFragment.changePositionSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        firstPageFragment.changePositionFailure(failure);
                     }
                 });
             }
         });
     }
-
-    @Override
-    public void getLocateCityId(Context context, String userId, String cityName) {
-        iFirstPageModule.locateCity(context, userId, cityName, new LocateCityListener() {
-            @Override
-            public void locateCitySuccess(final String locateCity) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        iFirstPageFragment.getLocateCityId(locateCity);
-                    }
-                });
-            }
-        });
-    }
-
 
     @Override
     public void destroy() {
-        if (iFirstPageModule != null) {
-            iFirstPageModule.cancelTask();
-            iFirstPageModule = null;
+        if (firstPageModule != null) {
+            firstPageModule.cancelTask();
+            firstPageModule = null;
         }
-        if (iFirstPageFragment != null) {
-            iFirstPageFragment = null;
+        if (handler != null) {
+            handler = null;
         }
-        if (mHandler != null) {
-            mHandler = null;
+        if (firstPageFragment != null) {
+            firstPageFragment = null;
         }
     }
 }

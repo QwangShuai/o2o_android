@@ -2,6 +2,9 @@ package publishjob.adapter;
 
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +17,19 @@ import com.gjzg.R;
 
 import java.util.List;
 
-import listener.ListItemClickHelp;
-import publishjob.bean.PublishKindBean;
+import bean.PublishWorkerBean;
+import publishjob.listener.PublishJobClickHelp;
 
 public class PublishKindAdapter extends BaseAdapter {
 
     private Context context;
-    private List<PublishKindBean> list;
-    private ListItemClickHelp clickHelp;
+    private List<PublishWorkerBean> list;
+    private PublishJobClickHelp publishJobClickHelp;
 
-    public PublishKindAdapter(Context context, List<PublishKindBean> list, ListItemClickHelp clickHelp) {
+    public PublishKindAdapter(Context context, List<PublishWorkerBean> list, PublishJobClickHelp publishJobClickHelp) {
         this.context = context;
         this.list = list;
-        this.clickHelp = clickHelp;
+        this.publishJobClickHelp = publishJobClickHelp;
     }
 
     @Override
@@ -54,39 +57,100 @@ public class PublishKindAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        PublishKindBean publishKindBean = list.get(position);
-        if (publishKindBean != null) {
-            if (publishKindBean.getKind().equals("0")) {
-                holder.kindTv.setText("选择招聘工种");
-            } else {
-                holder.kindTv.setText(publishKindBean.getKind());
-            }
-            if (publishKindBean.getStartTime().equals("0")) {
-                holder.startTimeTv.setText("开始时间");
-            } else {
-                holder.startTimeTv.setText(publishKindBean.getStartTime());
-            }
-            if (publishKindBean.getEndTime().equals("0")) {
-                holder.endTimeTv.setText("结束时间");
-            } else {
-                holder.endTimeTv.setText(publishKindBean.getEndTime());
-            }
-            if (publishKindBean.getAmount().equals("0")) {
-                holder.amountEt.setHint("输入招工人数");
-            } else {
-                holder.amountEt.setText(publishKindBean.getAmount());
-            }
-            if (publishKindBean.getSalary().equals("0")) {
-                holder.salaryEt.setHint("输入工人工资");
-            } else {
-                holder.salaryEt.setText(publishKindBean.getSalary());
-            }
+        final PublishWorkerBean publishWorkerBean = list.get(position);
+        if (TextUtils.isEmpty(publishWorkerBean.getKind())) {
+            holder.kindTv.setText("选择招聘工种");
+        } else {
+            holder.kindTv.setText(publishWorkerBean.getKind());
+        }
+        if (TextUtils.isEmpty(publishWorkerBean.getStartTime())) {
+            holder.startTimeTv.setText("开始时间");
+        } else {
+            holder.startTimeTv.setText(publishWorkerBean.getStartTime());
+        }
+        if (TextUtils.isEmpty(publishWorkerBean.getEndTime())) {
+            holder.endTimeTv.setText("结束时间");
+        } else {
+            holder.endTimeTv.setText(publishWorkerBean.getEndTime());
         }
         if (position == 0) {
             holder.deleteRl.setVisibility(View.GONE);
         } else {
             holder.deleteRl.setVisibility(View.VISIBLE);
         }
+        final int viewPosition = position;
+        final int kindId = holder.kindTv.getId();
+        final int startTimeId = holder.startTimeTv.getId();
+        final int endTimeId = holder.endTimeTv.getId();
+        final int deleteId = holder.deleteRl.getId();
+        holder.kindTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishJobClickHelp.onClick(kindId, viewPosition);
+            }
+        });
+        holder.startTimeTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishJobClickHelp.onClick(startTimeId, viewPosition);
+            }
+        });
+        holder.endTimeTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishJobClickHelp.onClick(endTimeId, viewPosition);
+            }
+        });
+        holder.deleteRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishJobClickHelp.onClick(deleteId, viewPosition);
+            }
+        });
+        if (holder.amountEt.getTag() instanceof TextWatcher) {
+            holder.amountEt.removeTextChangedListener((TextWatcher) holder.amountEt.getTag());
+        }
+        holder.amountEt.setText(publishWorkerBean.getAmount());
+        TextWatcher amountTw = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                publishWorkerBean.setAmount(s.toString());
+            }
+        };
+        holder.amountEt.addTextChangedListener(amountTw);
+        holder.amountEt.setTag(amountTw);
+        if (holder.salaryEt.getTag() instanceof TextWatcher) {
+            holder.salaryEt.removeTextChangedListener((TextWatcher) holder.salaryEt.getTag());
+        }
+        holder.salaryEt.setText(publishWorkerBean.getSalary());
+        TextWatcher salaryTw = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                publishWorkerBean.setSalary(s.toString());
+            }
+        };
+        holder.salaryEt.addTextChangedListener(salaryTw);
+        holder.salaryEt.setTag(salaryTw);
         return convertView;
     }
 

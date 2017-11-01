@@ -11,7 +11,6 @@ public class PersonDetailBean {
     private String address;
     private String household;
     private String brief;
-    private List<RoleBean> roleBeanList;
     private int count;
     private List<EvaluateBean> evaluateBeanList;
 
@@ -61,14 +60,6 @@ public class PersonDetailBean {
 
     public void setBrief(String brief) {
         this.brief = brief;
-    }
-
-    public List<RoleBean> getRoleBeanList() {
-        return roleBeanList;
-    }
-
-    public void setRoleBeanList(List<RoleBean> roleBeanList) {
-        this.roleBeanList = roleBeanList;
     }
 
     public int getCount() {

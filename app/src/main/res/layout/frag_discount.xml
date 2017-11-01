@@ -12,28 +12,18 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/fl"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <refreshload.PullToRefreshLayout
-            android:id="@+id/ptrl"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="敬请期待"
+            android:textColor="@color/black_252323"
+            android:textSize="@dimen/y14" />
 
-            <include layout="@layout/head" />
-
-            <refreshload.PullableListView
-                android:id="@+id/plv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@null" />
-
-            <include layout="@layout/foot" />
-
-        </refreshload.PullToRefreshLayout>
-
-    </FrameLayout>
+    </RelativeLayout>
 
 </LinearLayout>

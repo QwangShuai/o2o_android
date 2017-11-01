@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="persondetailinfo.view.PersonDetailActivity">
+    tools:context="persondetail.view.PersonDetailActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -19,15 +19,14 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_person_detail_title"
-            style="@style/tv_top_title" />
+            style="@style/tv_top_title"
+            android:text="王小二" />
 
     </RelativeLayout>
 
     <ListView
         android:id="@+id/lv_person_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

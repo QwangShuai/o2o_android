@@ -2,7 +2,6 @@ package city.bean;
 
 import java.io.Serializable;
 
-//城市
 public class CityBean implements Serializable{
 
     private String id;

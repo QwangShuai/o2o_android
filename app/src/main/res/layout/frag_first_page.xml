@@ -76,35 +76,27 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_frag_first_page_find_worker"
+            style="@style/iv_first_page"
+            android:src="@mipmap/find_worker" />
 
-            <ImageView
-                android:id="@+id/iv_frag_first_page_find_worker"
-                style="@style/iv_first_page"
-                android:layout_marginTop="@dimen/y9"
-                android:src="@mipmap/find_worker" />
+        <ImageView
+            android:id="@+id/iv_frag_first_page_find_job"
+            style="@style/iv_first_page"
+            android:src="@mipmap/find_job" />
 
-            <ImageView
-                android:id="@+id/iv_frag_first_page_find_job"
-                style="@style/iv_first_page"
-                android:layout_marginTop="@dimen/y6"
-                android:src="@mipmap/find_job" />
+        <ImageView
+            android:id="@+id/iv_frag_first_page_send_job"
+            style="@style/iv_first_page"
+            android:layout_marginBottom="@dimen/y5"
+            android:src="@mipmap/send_job" />
 
-            <ImageView
-                android:id="@+id/iv_frag_first_page_send_job"
-                style="@style/iv_first_page"
-                android:layout_marginTop="@dimen/y6"
-                android:src="@mipmap/send_job" />
-
-        </LinearLayout>
-
-    </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>
