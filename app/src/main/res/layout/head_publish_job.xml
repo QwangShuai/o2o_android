@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="工程名称"
+            android:maxLength="255"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/x15" />
 
@@ -56,6 +57,7 @@
             android:background="@null"
             android:gravity="start"
             android:hint="描述一下工作内容和工作渠道"
+            android:maxLength="255"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/x15" />
 
@@ -141,6 +143,7 @@
             android:background="@null"
             android:gravity="start"
             android:hint="请填写详细地址，不少于5个字"
+            android:maxLength="80"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/x15" />
 

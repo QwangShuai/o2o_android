@@ -1,6 +1,6 @@
 package mine.view;
 
-import usermanage.bean.UserInfoBean;
+import com.gjzg.bean.UserInfoBean;
 
 /**
  * Created by Administrator on 2017/10/24.

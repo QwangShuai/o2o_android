@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import config.NetConfig;
+import com.gjzg.config.NetConfig;
 import idcard.listener.IdCardListener;
 import okhttp3.Call;
 import okhttp3.Callback;

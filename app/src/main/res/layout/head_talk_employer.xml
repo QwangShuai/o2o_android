@@ -20,7 +20,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/y10">
 
-            <view.CImageView
+            <com.gjzg.view.CImageView
                 android:id="@+id/iv_head_talk_employer_icon"
                 android:layout_width="@dimen/y35"
                 android:layout_height="@dimen/y35"
@@ -72,12 +72,13 @@
 
             </LinearLayout>
 
-            <view.CImageView
+            <com.gjzg.view.CImageView
                 android:id="@+id/iv_head_talk_employer_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/y30"
+                android:layout_height="@dimen/y30"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/custom_service" />
+                android:scaleType="fitXY"
+                android:src="@mipmap/phone_dail" />
 
         </LinearLayout>
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="collect.view.CollectActivity">
+    tools:mContext=".activity.CollectActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 

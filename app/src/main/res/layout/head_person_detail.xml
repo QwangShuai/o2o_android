@@ -11,7 +11,7 @@
         android:background="@color/gray_c4ced3"
         android:padding="@dimen/y5">
 
-        <view.CImageView
+        <com.gjzg.view.CImageView
             android:id="@+id/iv_head_person_detail"
             android:layout_width="@dimen/y35"
             android:layout_height="@dimen/y35"

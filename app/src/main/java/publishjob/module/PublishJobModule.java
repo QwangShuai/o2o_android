@@ -1,7 +1,5 @@
 package publishjob.module;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.NetConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;

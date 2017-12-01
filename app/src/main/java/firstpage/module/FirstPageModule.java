@@ -6,11 +6,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import config.VarConfig;
+import com.gjzg.config.VarConfig;
 import firstpage.listener.ComCityListener;
 import firstpage.listener.HotCityListener;
 import firstpage.listener.LocIdListener;
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;

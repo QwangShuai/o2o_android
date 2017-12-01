@@ -3,59 +3,110 @@ package complain.presenter;
 
 import android.os.Handler;
 
-import java.util.List;
-
-import complain.bean.ComplainIssueBean;
-import complain.listener.OnCplIsListener;
+import com.gjzg.bean.ToComplainBean;
 import complain.module.ComplainModule;
 import complain.module.IComplainModule;
 import complain.view.IComplainActivity;
+import com.gjzg.listener.JsonListener;
 
 public class ComplainPresenter implements IComplainPresenter {
 
-    private IComplainActivity iComplainActivity;
-    private IComplainModule iComplainModule;
-    private Handler mHandler;
+    private IComplainActivity complainActivity;
+    private IComplainModule complainModule;
+    private Handler handler;
 
-    public ComplainPresenter(IComplainActivity iComplainActivity) {
-        this.iComplainActivity = iComplainActivity;
-        iComplainModule = new ComplainModule();
-        mHandler = new Handler();
+    public ComplainPresenter(IComplainActivity complainActivity) {
+        this.complainActivity = complainActivity;
+        complainModule = new ComplainModule();
+        handler = new Handler();
     }
 
     @Override
-    public void loadCplIs(String typeId) {
-        iComplainActivity.showLoading();
-        iComplainModule.load(typeId, new OnCplIsListener() {
+    public void userInfo(String url) {
+        complainModule.userInfo(url, new JsonListener() {
             @Override
-            public void success(final List<ComplainIssueBean> complainIssueBeanList) {
-                mHandler.post(new Runnable() {
+            public void success(final String json) {
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        iComplainActivity.showLoadIssueSuccess(complainIssueBeanList);
-                        iComplainActivity.hideLoading();
+                        complainActivity.userInfoSuccess(json);
                     }
                 });
             }
 
             @Override
-            public void failure(String failure) {
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        complainActivity.userInfoFailure(failure);
+                    }
+                });
+            }
+        });
+    }
 
+    @Override
+    public void userIssue(String url) {
+        complainModule.userIssue(url, new JsonListener() {
+            @Override
+            public void success(final String json) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        complainActivity.userIssueSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        complainActivity.userIssueFailure(failure);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void submit(String url, ToComplainBean toComplainBean) {
+        complainModule.submit(url, toComplainBean, new JsonListener() {
+            @Override
+            public void success(final String json) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        complainActivity.submitSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        complainActivity.submitFailure(failure);
+                    }
+                });
             }
         });
     }
 
     @Override
     public void destory() {
-        if (iComplainModule != null) {
-            iComplainModule.cancelTask();
-            iComplainModule = null;
+        if (complainModule != null) {
+            complainModule.cancelTask();
+            complainModule = null;
         }
-        if (iComplainActivity != null) {
-            iComplainActivity = null;
+        if (complainActivity != null) {
+            complainActivity = null;
         }
-        if (mHandler != null) {
-            mHandler = null;
+        if (handler != null) {
+            handler = null;
         }
     }
 }

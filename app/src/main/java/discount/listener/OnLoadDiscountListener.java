@@ -3,7 +3,7 @@ package discount.listener;
 
 import java.util.List;
 
-import discount.bean.DiscountBean;
+import com.gjzg.bean.DiscountBean;
 
 public interface OnLoadDiscountListener {
 

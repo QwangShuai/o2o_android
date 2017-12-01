@@ -5,7 +5,7 @@ import android.os.Handler;
 import giveevaluate.module.GiveEvaluateModule;
 import giveevaluate.module.IGiveEvaluateModule;
 import giveevaluate.view.IGiveEvaluateFragment;
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 /**
  * Created by Administrator on 2017/10/29.

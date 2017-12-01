@@ -13,7 +13,7 @@
         android:background="@drawable/sl_item_skills"
         android:orientation="horizontal">
 
-        <view.CImageView
+        <com.gjzg.view.CImageView
             android:id="@+id/iv_item_task_icon"
             android:layout_width="@dimen/y35"
             android:layout_height="@dimen/y35"
@@ -62,6 +62,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:gravity="right"
                 android:orientation="horizontal">
 
                 <ImageView

@@ -1,6 +1,6 @@
 package city.presenter;
 
-import city.bean.CityBigBean;
+import com.gjzg.bean.CityBigBean;
 
 public interface ICityPresenter {
 

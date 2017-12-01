@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_c4ced3"
     android:orientation="vertical">
 
     <RelativeLayout style="@style/rl_top_bar">
@@ -15,7 +16,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/x1">
+        android:layout_marginBottom="@dimen/y5"
+        android:layout_marginTop="1dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,15 +30,12 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white">
 
-                <view.CImageView
+                <com.gjzg.view.CImageView
                     android:id="@+id/iv_frag_me_login_icon"
                     android:layout_width="@dimen/y34"
                     android:layout_height="@dimen/y34"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="@dimen/y9"
-                    android:layout_marginLeft="@dimen/y15"
-                    android:layout_marginRight="@dimen/y15"
-                    android:layout_marginTop="@dimen/y9"
+                    android:layout_margin="@dimen/y10"
                     android:scaleType="fitXY"
                     android:src="@mipmap/person_face_default" />
 
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/iv_frag_me_login_icon"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/tv_mine_login"
@@ -80,36 +80,19 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/y15"
                     android:layout_toRightOf="@+id/iv_frag_me_login_icon"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/tv_frag_me_login_name"
-                        android:layout_width="@dimen/y50"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:singleLine="true"
-                        android:textColor="@color/black_252323"
-                        android:textSize="@dimen/y9" />
-
-                    <ImageView
-                        android:id="@+id/iv_frag_me_login_sex"
-                        android:layout_width="@dimen/y8"
-                        android:layout_height="@dimen/y8"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/y5"
-                        android:layout_toRightOf="@+id/tv_frag_me_login_name"
-                        android:scaleType="fitXY" />
+                    android:visibility="invisible">
 
                     <ImageView
                         android:id="@+id/iv_frag_me_login_online"
                         android:layout_width="@dimen/y26"
-                        android:layout_height="@dimen/y14"
+                        android:layout_height="@dimen/y13"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:scaleType="fitXY"
                         android:src="@mipmap/user_on_line" />
 
                     <RelativeLayout
+                        android:id="@+id/rl_frag_me_login_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/y5"
@@ -132,6 +115,37 @@
                             android:textSize="@dimen/y8" />
 
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/rl_frag_me_login_tip"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_frag_me_login_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textColor="@color/black_252323"
+                            android:textSize="@dimen/y9" />
+
+                        <ImageView
+                            android:id="@+id/iv_frag_me_login_sex"
+                            android:layout_width="@dimen/y8"
+                            android:layout_height="@dimen/y8"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/y5"
+                            android:layout_marginRight="@dimen/y5"
+                            android:scaleType="fitXY" />
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -228,10 +242,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/y8"
+                    android:layout_margin="@dimen/y5"
                     android:text="我的资产"
                     android:textColor="@color/blue_2681fc"
-                    android:textSize="@dimen/y11" />
+                    android:textSize="@dimen/y10" />
 
                 <View
                     android:layout_width="match_parent"
@@ -264,7 +278,8 @@
 
                     <RelativeLayout
                         android:id="@+id/rl_mine_voucher"
-                        style="@style/rl_main">
+                        style="@style/rl_main"
+                        android:visibility="invisible">
 
                         <LinearLayout style="@style/ll_main">
 
@@ -280,9 +295,13 @@
 
                     </RelativeLayout>
 
-                    <RelativeLayout style="@style/rl_main" />
+                    <RelativeLayout
+                        style="@style/rl_main"
+                        android:visibility="invisible" />
 
-                    <RelativeLayout style="@style/rl_main" />
+                    <RelativeLayout
+                        style="@style/rl_main"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
 
@@ -309,6 +328,24 @@
             <LinearLayout style="@style/ll_mine_service_out">
 
                 <LinearLayout
+                    android:id="@+id/ll_mine_service_term"
+                    style="@style/ll_mine_service_in">
+
+                    <ImageView
+                        style="@style/iv_mine_service"
+                        android:src="@mipmap/service_clause" />
+
+                    <TextView
+                        style="@style/tv_mine_service"
+                        android:text="服务条款" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_mine_service_out">
+
+                <LinearLayout
                     android:id="@+id/ll_mine_setting"
                     style="@style/ll_mine_service_in">
 
@@ -319,6 +356,24 @@
                     <TextView
                         style="@style/tv_mine_service"
                         android:text="设置" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/ll_mine_service_out">
+
+                <LinearLayout
+                    android:id="@+id/ll_mine_customer_service"
+                    style="@style/ll_mine_service_in">
+
+                    <ImageView
+                        style="@style/iv_mine_service"
+                        android:src="@mipmap/custom_service" />
+
+                    <TextView
+                        style="@style/tv_mine_service"
+                        android:text="客服" />
 
                 </LinearLayout>
 

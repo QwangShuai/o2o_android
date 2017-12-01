@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <view.CImageView
+            <com.gjzg.view.CImageView
                 android:id="@+id/iv_item_worker_manage_icon"
                 android:layout_width="@dimen/y35"
                 android:layout_height="@dimen/y35"

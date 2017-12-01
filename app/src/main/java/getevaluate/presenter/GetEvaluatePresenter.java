@@ -2,12 +2,10 @@ package getevaluate.presenter;
 
 import android.os.Handler;
 
-import java.util.List;
-
 import getevaluate.module.GetEvaluateModule;
 import getevaluate.module.IGetEvaluateModule;
 import getevaluate.view.IGetEvaluateFragment;
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 /**
  * Created by Administrator on 2017/10/25.

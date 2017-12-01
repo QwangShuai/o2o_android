@@ -32,8 +32,10 @@
             android:ellipsize="end"
             android:gravity="right"
             android:hint="请输入昵称"
+            android:maxLength="25"
             android:singleLine="true"
             android:textColor="@color/black_252323"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/y10" />
 
     </LinearLayout>
@@ -108,8 +110,10 @@
             android:ellipsize="end"
             android:gravity="right"
             android:hint="请输入身份证号"
+            android:maxLength="18"
             android:singleLine="true"
             android:textColor="@color/black_252323"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/y10" />
 
     </LinearLayout>
@@ -174,8 +178,10 @@
             android:ellipsize="end"
             android:gravity="right"
             android:hint="请填写详细地址"
+            android:maxLength="80"
             android:singleLine="true"
             android:textColor="@color/black_252323"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/y10" />
 
     </LinearLayout>
@@ -208,8 +214,10 @@
             android:ellipsize="end"
             android:gravity="right"
             android:hint="请简要描述自己"
+            android:maxLength="255"
             android:singleLine="true"
             android:textColor="@color/black_252323"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/y10" />
 
     </LinearLayout>

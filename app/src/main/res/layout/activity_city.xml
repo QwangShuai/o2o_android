@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="city.view.CityActivity">
+    tools:mContext=".activity.CityActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <view.SlideBar
+        <com.gjzg.view.SlideBar
             android:id="@+id/sb_city"
             android:layout_width="@dimen/y10"
             android:layout_height="wrap_content"

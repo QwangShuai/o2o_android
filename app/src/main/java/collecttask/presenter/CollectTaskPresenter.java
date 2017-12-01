@@ -6,7 +6,7 @@ import android.os.Handler;
 import collecttask.module.CollectTaskModule;
 import collecttask.module.ICollectTaskModule;
 import collecttask.view.ICollectTaskFragment;
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 public class CollectTaskPresenter implements ICollectTaskPresenter {
 

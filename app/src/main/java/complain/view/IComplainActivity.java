@@ -1,18 +1,16 @@
 package complain.view;
 
-
-import java.util.List;
-
-import complain.bean.ComplainIssueBean;
-
 public interface IComplainActivity {
 
-    void showLoading();
+    void userInfoSuccess(String json);
 
-    void hideLoading();
+    void userInfoFailure(String failure);
 
-    void showLoadIssueSuccess(List<ComplainIssueBean> complainIssueBeanList);
+    void userIssueSuccess(String json);
 
-    void showLoadIssueFailure(String failure);
+    void userIssueFailure(String failure);
 
+    void submitSuccess(String json);
+
+    void submitFailure(String failure);
 }

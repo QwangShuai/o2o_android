@@ -8,7 +8,7 @@ import firstpage.listener.LocIdListener;
 import firstpage.module.FirstPageModule;
 import firstpage.module.IFirstPageModule;
 import firstpage.view.IFirstPageFragment;
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 public class FirstPagePresenter implements IFirstPagePresenter {
 

@@ -7,8 +7,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import config.NetConfig;
-import config.VarConfig;
+import com.gjzg.config.NetConfig;
+import com.gjzg.config.VarConfig;
 import mine.listener.MineListener;
 import mine.listener.OnLineListener;
 import okhttp3.Call;
@@ -18,7 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import utils.DataUtils;
+import com.gjzg.utils.DataUtils;
 
 /**
  * Created by Administrator on 2017/10/24.

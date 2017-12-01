@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <view.CImageView
+            <com.gjzg.view.CImageView
                 android:id="@+id/iv_item_employer_manage_icon"
                 android:layout_width="@dimen/y35"
                 android:layout_height="@dimen/y35"
@@ -102,15 +102,6 @@
                     android:padding="@dimen/y5"
                     android:text="取消发布" />
 
-                <TextView
-                    android:id="@+id/tv_item_employer_manage_wait_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/y5"
-                    android:background="@drawable/sl_item_worker_manage_button"
-                    android:padding="@dimen/y5"
-                    android:text="修改" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -141,7 +132,7 @@
                 android:visibility="invisible">
 
                 <TextView
-                    android:id="@+id/tv_item_worker_manage_done_evaluate"
+                    android:id="@+id/tv_item_employer_manage_done_del"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/y5"

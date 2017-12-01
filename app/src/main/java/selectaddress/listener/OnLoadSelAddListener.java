@@ -3,7 +3,7 @@ package selectaddress.listener;
 
 import java.util.List;
 
-import selectaddress.bean.SelectAddressBean;
+import com.gjzg.bean.SelectAddressBean;
 
 public interface OnLoadSelAddListener {
 

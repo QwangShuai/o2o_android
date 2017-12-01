@@ -1,18 +1,15 @@
 package workermanage.module;
 
 
-import android.text.TextUtils;
-
 import java.io.IOException;
 
-import config.VarConfig;
-import listener.JsonListener;
+import com.gjzg.config.VarConfig;
+import com.gjzg.listener.JsonListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import utils.DataUtils;
 
 public class WorkerManageModule implements IWorkerManageModule {
 

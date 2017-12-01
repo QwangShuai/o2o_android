@@ -2,7 +2,7 @@ package talkworker.presenter;
 
 import android.os.Handler;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import talkworker.module.ITalkWorkerModule;
 import talkworker.module.TalkWorkerModule;
 import talkworker.view.ITalkWorkerActivity;
@@ -47,31 +47,6 @@ public class TalkWorkerPresenter implements ITalkWorkerPresenter {
                                 talkWorkerActivity.loadFailure(failure);
                             }
                         });
-                    }
-                });
-            }
-        });
-    }
-
-    @Override
-    public void getSkillJson(String url) {
-        talkWorkerModule.getSkillJson(url, new JsonListener() {
-            @Override
-            public void success(final String json) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        talkWorkerActivity.getSkillSuccess(json);
-                    }
-                });
-            }
-
-            @Override
-            public void failure(final String failure) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        talkWorkerActivity.getSkillFailure(failure);
                     }
                 });
             }

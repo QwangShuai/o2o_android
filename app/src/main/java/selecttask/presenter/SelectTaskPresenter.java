@@ -2,7 +2,7 @@ package selecttask.presenter;
 
 import android.os.Handler;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import selecttask.module.ISelectTaskModule;
 import selecttask.module.SelectTaskModule;
 import selecttask.view.ISelectTaskActivity;

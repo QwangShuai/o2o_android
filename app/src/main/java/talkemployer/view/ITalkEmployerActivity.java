@@ -14,4 +14,8 @@ public interface ITalkEmployerActivity {
     void skillSuccess(String json);
 
     void skillFailure(String failure);
+
+    void inviteSuccess(String json);
+
+    void inviteFailure(String json);
 }

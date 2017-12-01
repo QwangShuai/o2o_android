@@ -2,7 +2,7 @@ package talkemployer.presenter;
 
 import android.os.Handler;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import talkemployer.module.ITalkEmployerModule;
 import talkemployer.module.TalkEmployerModule;
 import talkemployer.view.ITalkEmployerActivity;
@@ -13,12 +13,12 @@ import talkemployer.view.ITalkEmployerActivity;
 
 public class TalkEmployerPresenter implements ITalkEmployerPresenter {
 
-    private ITalkEmployerActivity talkActivity;
+    private ITalkEmployerActivity talkEmployerActivity;
     private ITalkEmployerModule talkEmployerModule;
     private Handler handler;
 
-    public TalkEmployerPresenter(ITalkEmployerActivity talkActivity) {
-        this.talkActivity = talkActivity;
+    public TalkEmployerPresenter(ITalkEmployerActivity talkEmployerActivity) {
+        this.talkEmployerActivity = talkEmployerActivity;
         talkEmployerModule = new TalkEmployerModule();
         handler = new Handler();
     }
@@ -31,7 +31,7 @@ public class TalkEmployerPresenter implements ITalkEmployerPresenter {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        talkActivity.success(json);
+                        talkEmployerActivity.success(json);
                     }
                 });
             }
@@ -41,7 +41,7 @@ public class TalkEmployerPresenter implements ITalkEmployerPresenter {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        talkActivity.failure(failure);
+                        talkEmployerActivity.failure(failure);
                     }
                 });
             }
@@ -56,7 +56,7 @@ public class TalkEmployerPresenter implements ITalkEmployerPresenter {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        talkActivity.skillSuccess(json);
+                        talkEmployerActivity.skillSuccess(json);
                     }
                 });
             }
@@ -66,7 +66,32 @@ public class TalkEmployerPresenter implements ITalkEmployerPresenter {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        talkActivity.skillFailure(failure);
+                        talkEmployerActivity.skillFailure(failure);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void invite(String url) {
+        talkEmployerModule.invite(url, new JsonListener() {
+            @Override
+            public void success(final String json) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        talkEmployerActivity.inviteSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        talkEmployerActivity.inviteFailure(failure);
                     }
                 });
             }
@@ -82,8 +107,8 @@ public class TalkEmployerPresenter implements ITalkEmployerPresenter {
         if (handler != null) {
             handler = null;
         }
-        if (talkActivity != null) {
-            talkActivity = null;
+        if (talkEmployerActivity != null) {
+            talkEmployerActivity = null;
         }
     }
 }

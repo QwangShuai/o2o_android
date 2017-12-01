@@ -20,7 +20,7 @@
         android:background="@color/white_ffffff"
         android:orientation="horizontal">
 
-        <view.CImageView
+        <com.gjzg.view.CImageView
             android:id="@+id/civ_item_person_detail_3_icon"
             android:layout_width="@dimen/y35"
             android:layout_height="@dimen/y35"

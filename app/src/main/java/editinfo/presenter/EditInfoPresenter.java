@@ -5,13 +5,14 @@ import android.os.Handler;
 
 import java.util.List;
 
-import bean.SkillBean;
+import com.gjzg.bean.SkillsBean;
 import editinfo.listener.AddSkillListener;
 import editinfo.listener.SubmitListener;
 import editinfo.module.EditInfoModule;
 import editinfo.module.IEditInfoModule;
 import editinfo.view.IEditInfoFragment;
-import usermanage.bean.UserInfoBean;
+import com.gjzg.bean.UserInfoBean;
+import com.gjzg.listener.JsonListener;
 
 public class EditInfoPresenter implements IEditInfoPresenter {
 
@@ -26,16 +27,39 @@ public class EditInfoPresenter implements IEditInfoPresenter {
     }
 
     @Override
-    public void load(String url) {
-        editInfoFragment.showLoading();
-        editInfoModule.load(url, new AddSkillListener() {
+    public void skill(String url) {
+        editInfoModule.skill(url, new JsonListener() {
             @Override
-            public void success(final List<SkillBean> skillBeanList) {
+            public void success(final String json) {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        editInfoFragment.showAddSkillSuccess(skillBeanList);
-                        editInfoFragment.hideLoading();
+                        editInfoFragment.skillSuccess(json);
+                    }
+                });
+            }
+
+            @Override
+            public void failure(final String failure) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        editInfoFragment.skillFailure(failure);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void load(String url) {
+        editInfoModule.load(url, new AddSkillListener() {
+            @Override
+            public void success(final List<SkillsBean> skillsBeanList) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        editInfoFragment.showAddSkillSuccess(skillsBeanList);
                     }
                 });
             }
@@ -46,7 +70,6 @@ public class EditInfoPresenter implements IEditInfoPresenter {
                     @Override
                     public void run() {
                         editInfoFragment.showAddSkillFailure(failure);
-                        editInfoFragment.hideLoading();
                     }
                 });
             }
@@ -55,7 +78,6 @@ public class EditInfoPresenter implements IEditInfoPresenter {
 
     @Override
     public void submit(UserInfoBean userInfoBean) {
-        editInfoFragment.showLoading();
         editInfoModule.submit(userInfoBean, new SubmitListener() {
             @Override
             public void success(final String success) {
@@ -63,7 +85,6 @@ public class EditInfoPresenter implements IEditInfoPresenter {
                     @Override
                     public void run() {
                         editInfoFragment.showSubmitSuccess(success);
-                        editInfoFragment.hideLoading();
                     }
                 });
             }
@@ -74,7 +95,6 @@ public class EditInfoPresenter implements IEditInfoPresenter {
                     @Override
                     public void run() {
                         editInfoFragment.showSubmitFailure(failure);
-                        editInfoFragment.hideLoading();
                     }
                 });
             }

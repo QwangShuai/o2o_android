@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import city.bean.CityBean;
-import city.bean.CityBigBean;
+import com.gjzg.bean.CityBean;
+import com.gjzg.bean.CityBigBean;
 import city.listener.CityListener;
 
 public class CityModule implements ICityModule {

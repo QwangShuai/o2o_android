@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import config.NetConfig;
+import com.gjzg.config.NetConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;

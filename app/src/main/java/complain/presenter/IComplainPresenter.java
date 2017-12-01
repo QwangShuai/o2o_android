@@ -1,9 +1,15 @@
 package complain.presenter;
 
 
+import com.gjzg.bean.ToComplainBean;
+
 public interface IComplainPresenter {
 
-    void loadCplIs(String typeId);
+    void userInfo(String url);
+
+    void userIssue(String url);
+
+    void submit(String url, ToComplainBean toComplainBean);
 
     void destory();
 }

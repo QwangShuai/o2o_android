@@ -1,7 +1,7 @@
 package voucher.module;
 
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 public interface IVoucherModule {
 

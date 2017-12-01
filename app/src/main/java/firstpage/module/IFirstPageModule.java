@@ -3,7 +3,7 @@ package firstpage.module;
 import firstpage.listener.ComCityListener;
 import firstpage.listener.HotCityListener;
 import firstpage.listener.LocIdListener;
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 public interface IFirstPageModule {
 

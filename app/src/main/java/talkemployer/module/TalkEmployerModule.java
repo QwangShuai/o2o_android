@@ -2,7 +2,7 @@ package talkemployer.module;
 
 import java.io.IOException;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -16,7 +16,7 @@ import okhttp3.Response;
 public class TalkEmployerModule implements ITalkEmployerModule {
 
     private OkHttpClient okHttpClient;
-    private Call call, skillCall;
+    private Call call, skillCall, inviteCall;
 
     public TalkEmployerModule() {
         okHttpClient = new OkHttpClient();
@@ -67,6 +67,25 @@ public class TalkEmployerModule implements ITalkEmployerModule {
     }
 
     @Override
+    public void invite(String url, final JsonListener jsonListener) {
+        Request inviteRequest = new Request.Builder().url(url).get().build();
+        inviteCall = okHttpClient.newCall(inviteRequest);
+        inviteCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                jsonListener.failure(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    jsonListener.success(response.body().string());
+                }
+            }
+        });
+    }
+
+    @Override
     public void cancelTask() {
         if (call != null) {
             call.cancel();
@@ -75,6 +94,10 @@ public class TalkEmployerModule implements ITalkEmployerModule {
         if (skillCall != null) {
             skillCall.cancel();
             skillCall = null;
+        }
+        if (inviteCall != null) {
+            inviteCall.cancel();
+            inviteCall = null;
         }
         if (okHttpClient != null) {
             okHttpClient = null;

@@ -27,7 +27,8 @@
             android:layout_marginLeft="@dimen/y10"
             android:layout_marginTop="@dimen/y6"
             android:textColor="@color/gray_c4ced3"
-            android:textSize="@dimen/y8" />
+            android:textSize="@dimen/y8"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_item_detail_time"

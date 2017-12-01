@@ -10,5 +10,7 @@ public interface ITalkEmployerPresenter {
 
     void loadSkill(String url);
 
+    void invite(String url);
+
     void destroy();
 }

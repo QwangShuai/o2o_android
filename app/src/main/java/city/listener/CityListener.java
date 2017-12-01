@@ -3,7 +3,7 @@ package city.listener;
 
 import java.util.List;
 
-import city.bean.CityBean;
+import com.gjzg.bean.CityBean;
 
 public interface CityListener {
 

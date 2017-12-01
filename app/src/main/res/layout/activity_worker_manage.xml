@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="workermanage.view.WorkerManageActivity">
+    tools:mContext=".activity.WorkerManageActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <refreshload.PullToRefreshLayout
+        <com.gjzg.view.PullToRefreshLayout
             android:id="@+id/ptrl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -91,7 +91,7 @@
 
             <include layout="@layout/head" />
 
-            <refreshload.PullableListView
+            <com.gjzg.view.PullableListView
                 android:id="@+id/plv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -99,7 +99,7 @@
 
             <include layout="@layout/foot" />
 
-        </refreshload.PullToRefreshLayout>
+        </com.gjzg.view.PullToRefreshLayout>
 
     </FrameLayout>
 

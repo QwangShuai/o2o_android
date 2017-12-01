@@ -5,7 +5,7 @@ import android.os.Handler;
 
 import java.util.List;
 
-import selectaddress.bean.SelectAddressBean;
+import com.gjzg.bean.SelectAddressBean;
 import selectaddress.listener.OnLoadSelAddListener;
 import selectaddress.module.ISelectAddressModule;
 import selectaddress.module.SelectAddressModule;

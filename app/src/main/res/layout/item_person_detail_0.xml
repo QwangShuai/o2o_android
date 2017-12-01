@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <view.CImageView
+    <com.gjzg.view.CImageView
         android:id="@+id/civ_item_person_detail_0_icon"
         android:layout_width="@dimen/y35"
         android:layout_height="@dimen/y35"

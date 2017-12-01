@@ -1,77 +1,87 @@
 package complain.module;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import complain.bean.ComplainIssueBean;
-import complain.listener.OnCplIsListener;
-import config.NetConfig;
+import com.gjzg.bean.ToComplainBean;
+import com.gjzg.listener.JsonListener;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
-import utils.Utils;
 
 public class ComplainModule implements IComplainModule {
 
     private OkHttpClient okHttpClient;
-    private Call call;
+    private Call call, userInfoCall, submitCall;
 
     public ComplainModule() {
         okHttpClient = new OkHttpClient();
     }
 
     @Override
-    public void load(String typeId, final OnCplIsListener onCplIsListener) {
-        Request request = new Request.Builder().url(Utils.getUserCplIsUrl(NetConfig.useCplIs, typeId)).get().build();
-        call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
+    public void userInfo(String url, final JsonListener jsonListener) {
+        Request userInfoRequest = new Request.Builder().url(url).get().build();
+        userInfoCall = okHttpClient.newCall(userInfoRequest);
+        userInfoCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                jsonListener.failure(e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String result = response.body().string();
-                    String json = Utils.cutJson(result);
-                    try {
-                        JSONObject objBean = new JSONObject(json);
-                        if (objBean.optInt("code") == 1) {
-                            JSONArray arrData = objBean.optJSONArray("data");
-                            if (arrData != null) {
-                                List<ComplainIssueBean> cplIsList = new ArrayList<>();
-                                for (int i = 0; i < arrData.length(); i++) {
-                                    JSONObject obj = arrData.optJSONObject(i);
-                                    if (obj != null) {
-                                        JSONArray arr = obj.optJSONArray("data");
-                                        if (arr != null) {
-                                            for (int j = 0; j < arr.length(); j++) {
-                                                JSONObject o = arr.optJSONObject(j);
-                                                if (o != null) {
-                                                    ComplainIssueBean cplIs = new ComplainIssueBean();
-                                                    cplIs.setId(o.optString("ct_id"));
-                                                    cplIs.setName(o.optString("ct_name"));
-                                                    cplIsList.add(cplIs);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                onCplIsListener.success(cplIsList);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    jsonListener.success(response.body().string());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void userIssue(String url, final JsonListener jsonListener) {
+        Request request = new Request.Builder().url(url).get().build();
+        call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                jsonListener.failure(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    jsonListener.success(response.body().string());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void submit(String url, ToComplainBean toComplainBean, final JsonListener jsonListener) {
+        RequestBody submitBody = new FormBody.Builder()
+                .add("c_author", toComplainBean.getAuthorId())
+                .add("c_against", toComplainBean.getAgainstId())
+                .add("ct_id", toComplainBean.getCtId())
+                .add("c_desc", toComplainBean.getContent())
+                .build();
+        Request submitRequest = new Request.Builder()
+                .url(url)
+                .post(submitBody)
+                .build();
+        submitCall = okHttpClient.newCall(submitRequest);
+        submitCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                jsonListener.failure(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    jsonListener.success(response.body().string());
                 }
             }
         });
@@ -82,6 +92,10 @@ public class ComplainModule implements IComplainModule {
         if (call != null) {
             call.cancel();
             call = null;
+        }
+        if (userInfoCall != null) {
+            userInfoCall.cancel();
+            userInfoCall = null;
         }
         if (okHttpClient != null) {
             okHttpClient = null;

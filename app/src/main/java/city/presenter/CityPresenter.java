@@ -5,8 +5,8 @@ import android.os.Handler;
 
 import java.util.List;
 
-import city.bean.CityBean;
-import city.bean.CityBigBean;
+import com.gjzg.bean.CityBean;
+import com.gjzg.bean.CityBigBean;
 import city.listener.CityListener;
 import city.module.CityModule;
 import city.module.ICityModule;

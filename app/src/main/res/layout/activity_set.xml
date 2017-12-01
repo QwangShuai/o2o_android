@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="set.view.SetActivity">
+    tools:mContext=".activity.SetActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -42,10 +42,46 @@
                 android:clickable="true">
 
                 <TextView
-                    style="@style/tv_set"
-                    android:text="清除缓存" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/y5"
+                    android:layout_weight="1"
+                    android:text="清除缓存"
+                    android:textSize="@dimen/x15" />
 
-                <ImageView style="@style/iv_set" />
+                <ImageView
+                    android:layout_width="@dimen/y10"
+                    android:layout_height="@dimen/y10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/y5"
+                    android:src="@mipmap/arrow_r" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_set_cache_message_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/y5"
+                android:background="@drawable/sl_press"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/y5"
+                    android:layout_weight="1"
+                    android:text="消息提示"
+                    android:textSize="@dimen/x15" />
+
+                <ImageView
+                    android:layout_width="@dimen/y10"
+                    android:layout_height="@dimen/y10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/y5"
+                    android:src="@mipmap/arrow_r" />
 
             </RelativeLayout>
 
@@ -58,10 +94,20 @@
                 android:clickable="true">
 
                 <TextView
-                    style="@style/tv_set"
-                    android:text="关于我们" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/y5"
+                    android:layout_weight="1"
+                    android:text="关于我们"
+                    android:textSize="@dimen/x15" />
 
-                <ImageView style="@style/iv_set" />
+                <ImageView
+                    android:layout_width="@dimen/y10"
+                    android:layout_height="@dimen/y10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/y5"
+                    android:src="@mipmap/arrow_r" />
 
             </RelativeLayout>
 

@@ -8,7 +8,7 @@
         android:layout_width="@dimen/y200"
         android:layout_height="@dimen/y200"
         android:layout_gravity="center_horizontal"
-        android:background="@color/white_ffffff">
+        android:background="@drawable/sl_detail_menu">
 
         <TextView
             android:id="@+id/tv_dialog_scn_title"

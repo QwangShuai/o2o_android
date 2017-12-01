@@ -1,6 +1,6 @@
 package persondetail.module;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 /**
  * Created by Administrator on 2017/10/29.

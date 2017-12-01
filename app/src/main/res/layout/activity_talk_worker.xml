@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="talkworker.view.TalkWorkerActivity">
+    tools:mContext=".activity.TalkWorkerActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -37,7 +37,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/y10">
 
-            <view.CImageView
+            <com.gjzg.view.CImageView
                 android:id="@+id/iv_talk_worker_icon"
                 android:layout_width="@dimen/y35"
                 android:layout_height="@dimen/y35"
@@ -97,13 +97,13 @@
 
             </LinearLayout>
 
-            <view.CImageView
+            <com.gjzg.view.CImageView
                 android:id="@+id/iv_talk_worker_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/y30"
+                android:layout_height="@dimen/y30"
                 android:layout_gravity="center_vertical"
                 android:scaleType="fitXY"
-                android:src="@mipmap/custom_service" />
+                android:src="@mipmap/phone_dail" />
 
         </LinearLayout>
 
@@ -171,6 +171,86 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:id="@+id/rl_talk_worker_no_yourself"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/y5"
+            android:background="@drawable/sl_talk_worker_1"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:text="您不能招工自己"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/y10" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_talk_worker_talk_to_you"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/y5"
+            android:background="@drawable/sl_talk_worker_1"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:text="此工人正在与您洽谈"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/y10" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_talk_worker_doing_for_you"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/y5"
+            android:background="@drawable/sl_talk_worker_1"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:text="此工人正在您的任务中工作"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/y10" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_talk_worker_busy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/y5"
+            android:background="@drawable/sl_talk_worker_1"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/y5"
+                android:layout_marginTop="@dimen/y5"
+                android:text="此工人正在工作中"
+                android:textColor="@color/white_ffffff"
+                android:textSize="@dimen/y10" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/rl_talk_worker_wait"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -185,26 +265,6 @@
                 android:layout_marginBottom="@dimen/y5"
                 android:layout_marginTop="@dimen/y5"
                 android:text="我要招工"
-                android:textColor="@color/white_ffffff"
-                android:textSize="@dimen/y10" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_talk_worker_doing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/y5"
-            android:background="@drawable/sl_talk_worker_1"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="@dimen/y5"
-                android:layout_marginTop="@dimen/y5"
-                android:text="此工人正在工作中"
                 android:textColor="@color/white_ffffff"
                 android:textSize="@dimen/y10" />
 

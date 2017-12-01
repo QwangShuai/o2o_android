@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_ffffff"
     android:orientation="vertical"
-    tools:context="aboutus.view.AboutUsActivity">
+    tools:mContext=".activity.AboutUsActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -69,9 +69,12 @@
         android:layout_height="@dimen/y5"
         android:background="@color/gray_c4ced3" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/ll_about_us_official_website"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/sl_press"
+        android:orientation="horizontal"
         android:padding="@dimen/y5">
 
         <TextView
@@ -79,17 +82,29 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="官方网站：www.gangjianwang.com"
+            android:text="官方网站："
             android:textColor="@color/blue_2681fc"
             android:textSize="@dimen/y10" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_about_us_official_website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/blue_2681fc"
+            android:textSize="@dimen/y10" />
+
+    </LinearLayout>
 
     <View style="@style/v_split" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/ll_about_us_service_telephone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/sl_press"
+        android:orientation="horizontal"
         android:padding="@dimen/y5">
 
         <TextView
@@ -97,11 +112,20 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="客服电话：0451-58567363"
+            android:text="客服电话："
             android:textColor="@color/blue_2681fc"
             android:textSize="@dimen/y10" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_about_us_service_telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/blue_2681fc"
+            android:textSize="@dimen/y10" />
+
+    </LinearLayout>
 
     <View style="@style/v_split" />
 

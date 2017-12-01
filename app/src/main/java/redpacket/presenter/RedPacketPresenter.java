@@ -2,7 +2,7 @@ package redpacket.presenter;
 
 import android.os.Handler;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import redpacket.module.IRedPacketModule;
 import redpacket.module.RedPacketModule;
 import redpacket.view.IRedPacketActivity;

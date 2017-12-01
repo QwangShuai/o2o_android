@@ -10,11 +10,8 @@ public interface ITalkWorkerActivity {
 
     void loadFailure(String failure);
 
-    void getSkillSuccess(String json);
-
-    void getSkillFailure(String failure);
-
     void checkSuccess(String json);
 
     void checkFailure(String failure);
+
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="selectaddress.view.SelectAddressActivity">
+    tools:mContext=".activity.SelectAddressActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 

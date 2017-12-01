@@ -1,6 +1,6 @@
 package redpacket.module;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 
 public interface IRedPacketModule {
 

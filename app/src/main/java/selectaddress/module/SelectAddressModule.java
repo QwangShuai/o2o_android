@@ -2,7 +2,6 @@ package selectaddress.module;
 
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,14 +11,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.NetConfig;
-import config.StateConfig;
+import com.gjzg.config.NetConfig;
+import com.gjzg.config.StateConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import selectaddress.bean.SelectAddressBean;
+import com.gjzg.bean.SelectAddressBean;
 import selectaddress.listener.OnLoadSelAddListener;
 
 public class SelectAddressModule implements ISelectAddressModule {
@@ -34,7 +33,6 @@ public class SelectAddressModule implements ISelectAddressModule {
     @Override
     public void load(String id, final OnLoadSelAddListener onLoadSelAddListener) {
         String url = NetConfig.selectAddressBaseUrl + id;
-        Log.e("SelectAddressActivity", "url=" + url);
         Request request = new Request.Builder().url(url).get().build();
         call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {

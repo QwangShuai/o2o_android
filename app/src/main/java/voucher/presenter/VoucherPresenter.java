@@ -3,7 +3,7 @@ package voucher.presenter;
 
 import android.os.Handler;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import voucher.module.IVoucherModule;
 import voucher.module.VoucherModule;
 import voucher.view.IVoucherActivity;

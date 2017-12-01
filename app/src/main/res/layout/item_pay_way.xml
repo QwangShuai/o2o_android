@@ -31,6 +31,7 @@
             android:textSize="@dimen/y12" />
 
         <ImageView
+            android:src="@mipmap/point_gray"
             android:id="@+id/iv_item_pay_way_check"
             android:layout_width="@dimen/y15"
             android:layout_height="@dimen/y15"

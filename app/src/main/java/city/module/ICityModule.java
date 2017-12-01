@@ -1,6 +1,6 @@
 package city.module;
 
-import city.bean.CityBigBean;
+import com.gjzg.bean.CityBigBean;
 import city.listener.CityListener;
 
 public interface ICityModule {

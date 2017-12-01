@@ -7,7 +7,7 @@ import mine.listener.OnLineListener;
 import mine.module.IMineModule;
 import mine.module.MineModule;
 import mine.view.IMineFragment;
-import usermanage.bean.UserInfoBean;
+import com.gjzg.bean.UserInfoBean;
 
 /**
  * Created by Administrator on 2017/10/24.

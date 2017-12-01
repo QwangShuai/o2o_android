@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_c4ced3"
     android:orientation="vertical"
-    tools:context="withdraw.view.WithDrawActivity">
+    tools:mContext=".activity.WithDrawActivity">
 
     <RelativeLayout style="@style/rl_top_bar">
 
@@ -76,6 +76,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:hint="收款人储蓄卡号"
+            android:inputType="number"
             android:padding="@dimen/y5"
             android:textColor="@color/black_252323"
             android:textColorHint="@color/gray_a0a0a0"
@@ -85,10 +86,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_with_draw_bank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:background="@color/white_ffffff"
+        android:background="@drawable/sl_press"
         android:orientation="horizontal">
 
         <TextView
@@ -143,22 +145,13 @@
             android:background="@null"
             android:ellipsize="end"
             android:hint="请输入金额"
+            android:inputType="number"
             android:padding="@dimen/y5"
             android:singleLine="true"
             android:textColor="@color/black_252323"
             android:textColorHint="@color/gray_a0a0a0"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/y10" />
-
-        <TextView
-            android:id="@+id/tv_with_draw_limit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/y5"
-            android:layout_marginRight="@dimen/y5"
-            android:text="限额说明"
-            android:textColor="@color/blue_2681fc"
-            android:textSize="@dimen/y8" />
 
     </LinearLayout>
 

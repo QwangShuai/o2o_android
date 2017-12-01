@@ -2,7 +2,7 @@ package persondetail.presenter;
 
 import android.os.Handler;
 
-import listener.JsonListener;
+import com.gjzg.listener.JsonListener;
 import persondetail.module.IPersonDetailModule;
 import persondetail.module.PersonDetailModule;
 import persondetail.view.IPersonDetailActivity;

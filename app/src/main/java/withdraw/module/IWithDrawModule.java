@@ -1,7 +1,7 @@
 package withdraw.module;
 
-import bean.WithDrawBean;
-import listener.JsonListener;
+import com.gjzg.bean.WithDrawBean;
+import com.gjzg.listener.JsonListener;
 
 /**
  * Created by Administrator on 2017/10/24.
